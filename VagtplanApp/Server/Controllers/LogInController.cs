@@ -21,5 +21,7 @@ namespace VagtplanApp.Server.Controllers.LogInController
         {
             return mRepo.GetAll();
         }
+
+        // Tilføj her flere metoder hvis nødvendigt.
     }
 }

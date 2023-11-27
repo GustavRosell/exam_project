@@ -12,6 +12,11 @@ namespace VagtplanApp.Server.Controllers
     {
         private IPersonRepository mRepo;
 
+        // Konstruktør til at injicere repository
+        public PersonController(IPersonRepository repo)
+        {
+            mRepo = repo;
+        }
 
         // GetAll
         [HttpGet]
