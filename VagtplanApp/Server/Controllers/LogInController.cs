@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VagtplanApp.Server.Repositories.LogInRepo;
+using VagtplanApp.Server.Repositories;
 using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Server.Controllers.LogInController
@@ -21,5 +21,7 @@ namespace VagtplanApp.Server.Controllers.LogInController
         {
             return mRepo.GetAll();
         }
+
+        // Tilføj her flere metoder hvis nødvendigt.
     }
 }
