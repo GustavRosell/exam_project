@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.ResponseCompression;
 using MongoDB.Driver;
+using VagtplanApp.Server.Repositories.LogInRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+//?????????????
+builder.Services.AddSingleton<ILogInRepository, LogInRepository>();
 
 var app = builder.Build();
 
