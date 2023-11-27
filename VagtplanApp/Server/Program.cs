@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.ResponseCompression;
 using MongoDB.Driver;
-using VagtplanApp.Server.Repositories.LogInRepo;
+using VagtplanApp.Server.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

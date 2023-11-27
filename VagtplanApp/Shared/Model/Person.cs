@@ -19,5 +19,6 @@ namespace VagtplanApp.Shared.Model
         public string By { get; set; }
         public string Land { get; set; }
         public string Køn { get; set; }
+        public bool isKoordinator { get; set; }
     }
 }

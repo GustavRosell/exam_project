@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using System.Collections.Concurrent;
 using VagtplanApp.Shared.Model;
 
-namespace VagtplanApp.Server.Repositories.LogInRepo
+namespace VagtplanApp.Server.Repositories
 {
     public class LogInRepository : ILogInRepository
     {
@@ -18,13 +18,13 @@ namespace VagtplanApp.Server.Repositories.LogInRepo
 
         public List<LogIn> GetAll()
         {
-
-            // Finder alle shelters i MongoDB-samlingen og gemmer dem i en liste
+            // Finder alle log-ins i MongoDB-samlingen og gemmer dem i en liste
             var LogInList = LogInCollection.Find(new BsonDocument()).ToList();
 
-            // Returnere listen af bookings
+            // Returnere listen af log-ins.
             return LogInList;
         }
 
+        // Tilføj her flere metoder hvis nødvendigt.
     }
 }
