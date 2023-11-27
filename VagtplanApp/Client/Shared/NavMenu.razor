@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject PersonService personService;
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">VagtplanApp</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -16,6 +18,27 @@
         </div>
     </nav>
 </div>
+
+
+<!-- Tester fremvisning af brugerrolle sider -->
+@if (personService.IsKoordinator())
+{
+    <div class="nav-item">
+        <NavLink class="nav-link" href="/indtast-koordinator-sider">
+            Koordinator sider
+        </NavLink>
+    </div>
+}
+else
+{
+    <div class="nav-item">
+        <NavLink class="nav-link" href="/indtast-frivillig-sider">
+            Frivillig sider
+        </NavLink>
+    </div>
+}
+
+<!-- Tester fremvisning af brugerrolle sider -->
 
 @code {
     private bool collapseNavMenu = true;
