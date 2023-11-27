@@ -1,1 +1,97 @@
-﻿
+﻿@page "/"
+@page "/login"
+@using VagtplanApp.Shared.Model;
+@using VagtplanApp.Client.Shared;
+
+
+<h3>Log ind</h3>
+
+<EditForm Model="@loginModel" OnValidSubmit="@HåndterLogin">
+    <DataAnnotationsValidator /> <!--Gør at vores form kan læse annotations som [Required] og [EmailAddress] fra vores klasser-->
+    <ValidationSummary /> 
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <InputText id="email" class="form-control" @bind-Value="@loginModel.Email" />   
+    </div>
+
+    <div class="form-group">
+        <label for="password">Adgangskode:</label>
+        <InputText id="password" type="password" class="form-control" @bind-Value="@loginModel.Password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Log ind</button>
+
+</EditForm>
+
+<button class="btn btn-secondary" @onclick="VisModal"> Opret bruger</button>
+
+<ModalDialog @ref="modalRef" Title="Opret ny person">
+    <EditForm Model="@nyPerson" OnValidSubmit="@OpretNyPerson">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <InputText id="email" class="form-control" @bind-Value="@nyPerson.Email" />
+        </div>
+
+        <div class="form-group">
+            <label for="forNavn">Fornavn:</label>
+            <InputText id="forNavn" class="form-control" @bind-Value="@nyPerson.ForNavn" />
+        </div>
+
+        <div class="form-group">
+            <label for="efterNavn">Efternavn:</label>
+            <InputText id="efterNavn" class="form-control" @bind-Value="@nyPerson.EfterNavn" />
+        </div>
+
+        <div class="form-group">
+            <label for="fødselsDato">Fødselsdato:</label>
+            <InputDate id="fødselsDato" class="form-control" @bind-Value="@nyPerson.FødselsDato" />
+        </div>
+
+        <div class="form-group">
+            <label for="by">By:</label>
+            <InputText id="by" class="form-control" @bind-Value="@nyPerson.By" />
+        </div>
+
+        <div class="form-group">
+            <label for="land">Land:</label>
+            <InputText id="land" class="form-control" @bind-Value="@nyPerson.Land" />
+        </div>
+
+        <div class="form-group">
+            <label for="køn">Køn:</label>
+            <InputSelect id="køn" class="form-control" @bind-Value="@nyPerson.Køn">
+                <option value="">Vælg køn...</option>
+                <option value="Mand">Mand</option>
+                <option value="Kvinde">Kvinde</option>
+                <option value="Andet">Andet</option>
+            </InputSelect>
+        </div>
+
+        <button type="submit" class="btn btn-success">Opret</button>
+    </EditForm>
+</ModalDialog>
+
+@code {
+    private LogIn loginModel = new LogIn();
+    private Person nyPerson = new Person();
+
+    private ModalDialog modalRef { get; set; }
+
+    private void OpretNyPerson()
+    {
+        // Implementer logikken for at oprette en ny person her
+    }
+
+    private void VisModal()
+    {
+        modalRef.Open();
+    }
+
+    private void HåndterLogin()
+    {
+    }
+}
