@@ -32,6 +32,13 @@ namespace VagtplanApp.Client.Services
             return CurrentUser != null && CurrentUser.isKoordinator;
         }
 
+
+        public Person getPerson(string email, string password)
+        {
+            return null;
+        }
+
+
         // Andre nødvendige metoder
     }
 }

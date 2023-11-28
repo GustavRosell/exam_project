@@ -10,7 +10,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 //????????????????????
-builder.Services.AddSingleton<ILogInRepository, LogInRepository>();
 builder.Services.AddSingleton<IPersonRepository, PersonRepository>();
 
 var app = builder.Build();

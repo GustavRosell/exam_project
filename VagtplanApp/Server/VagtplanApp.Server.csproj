@@ -23,14 +23,12 @@
     <None Remove="Controllers\" />
     <None Remove="Repositories\" />
     <None Remove="Repositories\PersonRepo\" />
-    <None Remove="Repositories\LogInRepo\" />
     <None Remove="Repositories\VagtRepo\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Repositories\" />
     <Folder Include="Repositories\PersonRepo\" />
-    <Folder Include="Repositories\LogInRepo\" />
     <Folder Include="Repositories\VagtRepo\" />
   </ItemGroup>
 </Project>
