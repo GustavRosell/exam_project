@@ -38,6 +38,11 @@
         </div>
 
         <div class="form-group">
+            <label for="adgangskode">Adgangskode:</label>
+            <InputText id="adgangskode" type="password" class="form-control" @bind-Value="@nyPerson.Password" />
+        </div>
+
+        <div class="form-group">
             <label for="tlfnr">Telefonnummer:</label>
             <InputNumber id="tlfnr" class="form-control" @bind-Value="@nyPerson.Telefonnummer" />
 
@@ -68,6 +73,14 @@
             </InputSelect>
         </div>
 
+        <div class="form-group">
+            <label for="rolle">Rolle:</label>
+            <InputRadioGroup id="rolle" class="form-control" @bind-Value="@nyPerson.isKoordinator">
+            <InputRadio id="isFrivillig" Value="false"/> Frivillig
+            <InputRadio is="isKoordinator" Value="true"/> Koordinator
+            </InputRadioGroup>
+        </div>
+
         <button type="submit" class="btn btn-success">Opret</button>
     </EditForm>
 </ModalDialog>
@@ -84,6 +97,7 @@
     private async Task OpretPerson()
     {
         await mService.AddPerson(nyPerson);
+        modalRef.Close();
     }
 
     private void VisModal()
