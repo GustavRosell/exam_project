@@ -6,6 +6,7 @@ namespace VagtplanApp.Shared.Model
 {
     public class LogIn
     {
+        // Felter
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

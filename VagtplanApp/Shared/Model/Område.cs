@@ -7,7 +7,6 @@ namespace VagtplanApp.Shared.Model
     public class Område
     {
         // Felter
-
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; private set; }

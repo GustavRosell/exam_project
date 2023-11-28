@@ -12,11 +12,6 @@ builder.Services.AddRazorPages();
 //?????????????
 builder.Services.AddSingleton<ILogInRepository, LogInRepository>();
 
-
-// Tilføjer Person Service
-builder.Services.AddScoped<IPersonService, PersonService>();
-
-
 var app = builder.Build();
 
 // Konfigurerer HTTP request pipeline.
