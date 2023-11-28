@@ -7,8 +7,8 @@
 <h3>Log ind</h3>
 
 <EditForm Model="@loginModel" OnValidSubmit="@HåndterLogin">
-    <DataAnnotationsValidator /> <!--Gør at vores form kan læse annotations som [Required] og [EmailAddress] fra vores klasser-->
-    <ValidationSummary /> 
+    <DataAnnotationsValidator /> <!--vores form kan læse annotations som [Required] og [EmailAddress] fra vores klasser-->
+    <ValidationSummary /> <!--Skriver fejlen fra annotations-->
     <div class="form-group">
         <label for="email">Email:</label>
         <InputText id="email" class="form-control" @bind-Value="@loginModel.Email" />   
@@ -37,6 +37,12 @@
         </div>
 
         <div class="form-group">
+            <label for="tlfnr">Telefonnummer:</label>
+            <InputText id="tlfnr" class="form-control" @bind-Value="@nyPerson.Telefonnummer.ToString()" />
+        </div>
+
+
+        <div class="form-group">
             <label for="forNavn">Fornavn:</label>
             <InputText id="forNavn" class="form-control" @bind-Value="@nyPerson.ForNavn" />
         </div>
@@ -49,16 +55,6 @@
         <div class="form-group">
             <label for="fødselsDato">Fødselsdato:</label>
             <InputDate id="fødselsDato" class="form-control" @bind-Value="@nyPerson.FødselsDato" />
-        </div>
-
-        <div class="form-group">
-            <label for="by">By:</label>
-            <InputText id="by" class="form-control" @bind-Value="@nyPerson.By" />
-        </div>
-
-        <div class="form-group">
-            <label for="land">Land:</label>
-            <InputText id="land" class="form-control" @bind-Value="@nyPerson.Land" />
         </div>
 
         <div class="form-group">
