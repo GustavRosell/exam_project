@@ -18,7 +18,7 @@ namespace VagtplanApp.Client.Services
 
         public async Task<bool> AddPerson(Person person)
         {
-            var response = await httpClient.PostAsJsonAsync("person", person);
+            var response = await httpClient.PostAsJsonAsync("/api/persons/add", person);
             return response.IsSuccessStatusCode;
         }
 

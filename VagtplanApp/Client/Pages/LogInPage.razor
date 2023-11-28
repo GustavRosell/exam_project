@@ -2,7 +2,8 @@
 @page "/login"
 @using VagtplanApp.Shared.Model;
 @using VagtplanApp.Client.Shared;
-
+@using VagtplanApp.Client.Services;
+@inject HttpClient Http;
 
 <h3>Log ind</h3>
 
@@ -11,7 +12,7 @@
     <ValidationSummary /> <!--Skriver fejlen fra annotations-->
     <div class="form-group">
         <label for="email">Email:</label>
-        <InputText id="email" class="form-control" @bind-Value="@loginModel.Email" />   
+        <InputText id="email" class="form-control" @bind-Value="@loginModel.Email" />
     </div>
 
     <div class="form-group">
@@ -26,7 +27,7 @@
 <button class="btn btn-secondary" @onclick="VisModal"> Opret bruger</button>
 
 <ModalDialog @ref="modalRef" Title="Opret ny person">
-    <EditForm Model="@nyPerson" OnValidSubmit="@OpretNyPerson">
+    <EditForm Model="@nyPerson" OnValidSubmit="@OpretPerson">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -38,9 +39,9 @@
 
         <div class="form-group">
             <label for="tlfnr">Telefonnummer:</label>
-            <InputText id="tlfnr" class="form-control" @bind-Value="@nyPerson.Telefonnummer.ToString()" />
-        </div>
+            <InputNumber id="tlfnr" class="form-control" @bind-Value="@nyPerson.Telefonnummer" />
 
+        </div>
 
         <div class="form-group">
             <label for="forNavn">Fornavn:</label>
@@ -74,12 +75,15 @@
 @code {
     private LogIn loginModel = new LogIn();
     private Person nyPerson = new Person();
-
     private ModalDialog modalRef { get; set; }
 
-    private void OpretNyPerson()
+    [Inject]
+    private IPersonService mService { get; set; }
+
+
+    private async Task OpretPerson()
     {
-        // Implementer logikken for at oprette en ny person her
+        await mService.AddPerson(nyPerson);
     }
 
     private void VisModal()

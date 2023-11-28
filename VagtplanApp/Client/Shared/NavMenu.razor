@@ -1,5 +1,5 @@
 ﻿@using VagtplanApp.Client.Services;
-@inject PersonService personService;
+@inject HttpClient Http;
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -22,7 +22,7 @@
 
 
 <!-- Tester fremvisning af brugerrolle sider -->
-@if (personService.IsKoordinator())
+@if (mService.IsKoordinator())
 {
     <div class="nav-item">
         <NavLink class="nav-link" href="/indtast-koordinator-sider">
@@ -42,6 +42,8 @@ else
 <!-- Tester fremvisning af brugerrolle sider -->
 
 @code {
+    [Inject]
+    private IPersonService mService { get; set; }
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;

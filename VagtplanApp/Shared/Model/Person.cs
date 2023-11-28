@@ -9,8 +9,8 @@ namespace VagtplanApp.Shared.Model
         // Felter
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; private set; }
-        public string Email { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24);
+        public string Email { get; set; } 
         public int Telefonnummer { get; set; }
         public string ForNavn { get; set; }
         public string EfterNavn { get; set; }

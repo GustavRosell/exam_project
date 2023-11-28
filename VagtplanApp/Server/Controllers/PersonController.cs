@@ -6,7 +6,7 @@ using VagtplanApp.Shared.Model;
 namespace VagtplanApp.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/persons")]
 
     public class PersonController : ControllerBase
     {
@@ -20,6 +20,7 @@ namespace VagtplanApp.Server.Controllers
 
         // GetAll
         [HttpGet]
+        [Route("getall")]
         public List<Person> GetAll()
         {
             return mRepo.GetAll();
@@ -27,6 +28,7 @@ namespace VagtplanApp.Server.Controllers
 
         // Add Person
         [HttpPost]
+        [Route("add")]
         public async Task CreatePerson([FromBody] Person person) // FromBody indikerer at data for booking forventes at blive sendt som en JSON
         {
             await mRepo.AddPerson(person);
