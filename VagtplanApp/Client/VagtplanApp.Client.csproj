@@ -26,12 +26,10 @@
 
   <ItemGroup>
     <None Remove="Service\" />
-    <None Remove="Service\LogInService\" />
     <None Remove="Service\PersonService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\" />
-    <Folder Include="Service\LogInService\" />
     <Folder Include="Service\PersonService\" />
   </ItemGroup>
 </Project>

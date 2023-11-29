@@ -5,7 +5,7 @@ namespace VagtplanApp.Shared.Model
     {
         // Felter
 
-        public string AnsvarsOmråder { get; set; }
+        public string? AnsvarsOmråder { get; set; }
 
     }
 }

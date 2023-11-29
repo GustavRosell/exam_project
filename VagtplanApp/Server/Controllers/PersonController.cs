@@ -34,5 +34,22 @@ namespace VagtplanApp.Server.Controllers
             await mRepo.AddPerson(person);
         }
 
+        // Get Email --> til login
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] Person loginPerson)
+        {
+            var person = await mRepo.GetPersonByEmail(loginPerson.Email);
+            if (person != null && person.Password == loginPerson.Password)
+            {
+                // Succesfuld login
+                return Ok(new { Email = person.Email, IsKoordinator = person.isKoordinator });
+            }
+            else
+            {
+                // Login mislykkedes
+                return Unauthorized();
+            }
+        }
+
     }
 }

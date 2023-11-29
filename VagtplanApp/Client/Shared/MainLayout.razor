@@ -1,37 +1,32 @@
 ﻿@inherits LayoutComponentBase
+@inject IPersonService PersonService
 @inject NavigationManager NavigationManager
 
-@using VagtplanApp.Client.Pages;
-
 <div class="page">
-    @if (!IsLoginPage()) // Hvis vi ikke er på login siden, så viser vi sidebar
+    @if (PersonService.IsUserLoggedIn())
     {
         <div class="sidebar">
             <NavMenu />
         </div>
+        <div class="top-row px-4">
+            <button @onclick="Logout">Log Out</button>
+        </div>
     }
 
-    <!-- Den øverste "bar" med "log out" == fører bare til login page !.PT.! (skal man logge ud..?)-->
     <main>
-        <div class="top-row px-4">
-            <a href="login">Log Out</a> <!-- FIX LIGE METODE KALD TIL LOG UD FRA LogInPage -->
-        </div>
-
-
-        <!-- Aner ikk hvad det her gør, er her når man laver blazor-projektet og det fjerner absolut alting -->
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
 
-
-<!-- isLoginPage == /login path -->
 @code {
-    private bool IsLoginPage()
+
+    // Metode til logud i top bar
+    private async Task Logout()
     {
-        string currentUrl = NavigationManager.Uri;
-        return currentUrl.Contains("/login");
+        await PersonService.Logout();
+        NavigationManager.NavigateTo("/login");
+        // evt tilføj , forceLoad: true hvis det ikk virker efter /login
     }
 }
-

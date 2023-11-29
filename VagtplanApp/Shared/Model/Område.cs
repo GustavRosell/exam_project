@@ -9,7 +9,7 @@ namespace VagtplanApp.Shared.Model
         // Felter
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; private set; }
+        public string? Id { get; private set; }
 
         public string OmrådeNavn { get; private set; }
 

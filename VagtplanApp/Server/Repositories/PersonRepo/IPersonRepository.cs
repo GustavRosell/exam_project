@@ -6,6 +6,7 @@ namespace VagtplanApp.Server.Repositories
     {
         List<Person> GetAll();
         Task AddPerson(Person person);
+        Task<Person> GetPersonByEmail(string email);
 
         // Tilføj senere f.eks: slet person
     }

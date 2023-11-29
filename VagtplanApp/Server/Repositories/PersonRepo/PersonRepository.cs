@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Concurrent;
+using System.Net.Http;
 using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Server.Repositories
@@ -31,6 +32,12 @@ namespace VagtplanApp.Server.Repositories
         public async Task AddPerson(Person person)
         {
             await PersonCollection.InsertOneAsync(person);
+        }
+
+        // get person ved email
+        public async Task<Person> GetPersonByEmail(string email)
+        {
+            return await PersonCollection.Find(p => p.Email == email).FirstOrDefaultAsync();
         }
 
         // Tilføj her flere metoder hvis nødvendigt.

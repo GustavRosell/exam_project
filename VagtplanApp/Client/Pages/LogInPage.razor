@@ -8,21 +8,19 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 @inject NavigationManager NavigationManager
 
-
-
 <h3>Log ind</h3>
 
-<EditForm Model="@logInPerson" OnValidSubmit="@HåndterLogin">
+<EditForm Model="@loginModel" OnValidSubmit="@HåndterLogin">
     <DataAnnotationsValidator /> <!--vores form kan læse annotations som [Required] og [EmailAddress] fra vores klasser-->
     <ValidationSummary /> <!--Skriver fejlen fra annotations-->
     <div class="form-group">
-        <label for="email">Email:</label>
-        <InputText id="email" class="form-control" @bind-Value="@logInPerson.Email" />
+        <label for="emaillogin">Email:</label>
+        <InputText id="emaillogin" class="form-control" @bind-Value="@loginModel.Email" />
     </div>
 
     <div class="form-group">
         <label for="password">Adgangskode:</label>
-        <InputText id="password" type="password" class="form-control" @bind-Value="@logInPerson.Password" />
+        <InputText id="password" type="password" class="form-control" @bind-Value="@loginModel.Password" />
     </div>
 
     <button type="submit" class="btn btn-primary">Log ind</button>
@@ -90,12 +88,9 @@
     </EditForm>
 </ModalDialog>
 
-
-
-
 @code {
     private Person nyPerson = new Person();
-    private Person logInPerson = new Person();
+    private Person loginModel = new Person();
     private ModalDialog modalRef { get; set; }
 
     [Inject]
@@ -114,6 +109,25 @@
 
     private async Task HåndterLogin()
     {
+        if (await mService.Login(loginModel.Email, loginModel.Password))
+        {
 
+            StateHasChanged(); // Opdatere UI for at få NavMenu og MainLayout == virker ikke:(
+
+
+            var isKoordinator = await localStore.GetItemAsync<bool>("isKoordinator");
+            if (isKoordinator)
+            {
+                NavigationManager.NavigateTo("/koordinatorProfil"); 
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/frivilligProfil");
+            }
+        }
+        else
+        {
+            // Login mislykkedes - vis fejlbesked            
+        }
     }
 }
