@@ -40,7 +40,5 @@ namespace VagtplanApp.Server.Repositories
             return await PersonCollection.Find(p => p.Email == email).FirstOrDefaultAsync();
         }
 
-        // Tilføj her flere metoder hvis nødvendigt.
-
     }
 }
