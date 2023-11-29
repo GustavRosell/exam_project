@@ -21,25 +21,28 @@ namespace VagtplanApp.Client.Services
             this.localStore = localStore;
         }
 
+        // Tilføjer en ny person til systemet og returnerer en bool for at indikere om handlingen lykkedes
         public async Task<bool> AddPerson(Person person)
         {
             var response = await httpClient.PostAsJsonAsync("/api/persons/add", person);
             return response.IsSuccessStatusCode;
         }
 
+        // Sætter den nuværende bruger og logger i konsollen for bekræftelse
         // CurrentUser bruges i NavMenu til at fremvise pages for brugerrolle som er logget ind 
         public void SetCurrentUser(Person user)
         {
             CurrentUser = user;
-            Console.WriteLine($"Bruger logget ind: {user.Email}"); // tjekker i konsol om login virker + ift vise navMenu bruges CurrentUser 
+            Console.WriteLine($"Bruger logget ind: {user.Email}");
         }
 
+        // Tjekker om den nuværende bruger er koordinator --> hvis ikke så frivillig jo
         public bool IsKoordinator()
         {
             return CurrentUser != null && CurrentUser.isKoordinator;
         }
 
-
+        // Håndterer bruger login, gemmer brugerdata lokalt og returnerer en bool == true det virker == false nooope
         public async Task<bool> Login(string email, string password)
         {
             var loginPerson = new Person { Email = email, Password = password };
@@ -66,6 +69,9 @@ namespace VagtplanApp.Client.Services
             }
         }
 
+
+        // Tjekker om en bruger er logget ind og logger i konsollen for bekræftelse
+        // IsUserLoggedIn bruges i NavMenu til at fremvise pages for brugerrolle som er logget ind 
         public bool IsUserLoggedIn()
         {
             var loggedIn = CurrentUser != null;
@@ -73,6 +79,8 @@ namespace VagtplanApp.Client.Services
             return loggedIn;
         }
 
+
+        // Logger ud ved at rydde den nuværende bruger og relateret lokal data
         public async Task Logout()
         {
             CurrentUser = null;
