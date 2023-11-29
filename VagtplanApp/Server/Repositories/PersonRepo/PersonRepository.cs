@@ -33,7 +33,13 @@ namespace VagtplanApp.Server.Repositories
             await PersonCollection.InsertOneAsync(person);
         }
 
-        // Tilføj her flere metoder hvis nødvendigt.
+
+        public async Task<Person> GetPersonByEmail(string email)
+        {
+            // Antag at _collection er din IMongoCollection<Person> som er sat op tidligere
+            return await PersonCollection.Find(person => person.Email == email).FirstOrDefaultAsync();
+        }
+
 
     }
 }

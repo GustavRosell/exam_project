@@ -2,12 +2,14 @@
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using VagtplanApp.Shared.Model;
+using static System.Net.WebRequestMethods;
 
 namespace VagtplanApp.Client.Services
 {
     public class PersonService : IPersonService
     {
         private readonly HttpClient httpClient;
+        private Person _currentUser;
 
         public Person CurrentUser { get; private set; }
 
@@ -32,13 +34,21 @@ namespace VagtplanApp.Client.Services
             return CurrentUser != null && CurrentUser.isKoordinator;
         }
 
-
-        public Person getPerson(string email, string password)
+        public async Task<Person> Authenticate(string email, string password)
         {
-            return null;
+            var loginPerson = new Person { Email = email, Password = password };
+            var response = await httpClient.PostAsJsonAsync("api/persons/authenticate", loginPerson);
+
+            if (response.IsSuccessStatusCode)
+            {
+                _currentUser = await response.Content.ReadFromJsonAsync<Person>();
+                return _currentUser;
+            }
+            else
+            {
+                return null;
+            }
         }
 
-
-        // Andre nødvendige metoder
     }
 }

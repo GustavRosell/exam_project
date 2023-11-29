@@ -114,6 +114,17 @@
 
     private async Task HåndterLogin()
     {
-
+        //Kalder vores Authenticate metode
+        var user = await mService.Authenticate(logInPerson.Email, logInPerson.Password);
+        
+        if (user != null)
+        {
+            mService.SetCurrentUser(user);
+            NavigationManager.NavigateTo(user.isKoordinator ? "/koordinator-side" : "/frivillig-side");
+        }
+        else
+        {
+            // Håndter fejl ved login
+        }
     }
 }

@@ -34,5 +34,23 @@ namespace VagtplanApp.Server.Controllers
             await mRepo.AddPerson(person);
         }
 
+        [HttpPost]
+        [Route("authenticate")]
+        public async Task<ActionResult<Person>> Authenticate([FromBody] Person loginPerson)
+        {
+
+            var person = await mRepo.GetPersonByEmail(loginPerson.Email);
+            if (person != null && person.Password == loginPerson.Password)
+            {
+                return person;
+            }
+            else
+            {
+                return Unauthorized(); // Returnerer HTTP 401 hvis login er ugyldigt
+            }
+        }
+
     }
+
+
 }
