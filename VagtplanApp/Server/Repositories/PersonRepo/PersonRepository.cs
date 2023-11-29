@@ -33,10 +33,11 @@ namespace VagtplanApp.Server.Repositories
             await PersonCollection.InsertOneAsync(person);
         }
 
-
+        //Metode der bliver benyttet i controller, til at matche input Email med Email i MongoDB
         public async Task<Person> GetPersonByEmail(string email)
         {
-            // Antag at _collection er din IMongoCollection<Person> som er sat op tidligere
+            // .FirstOrDefaultAsync skal benyttes her, da Find returnere et IFindFluent interface, men ikke udfører forespørgslen
+            // .FirstOrDefaultAsync vælger det første element som matcher i collectionen, ellers Null. 
             return await PersonCollection.Find(person => person.Email == email).FirstOrDefaultAsync();
         }
 
