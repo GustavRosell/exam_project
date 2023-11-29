@@ -9,7 +9,7 @@ namespace VagtplanApp.Client.Services
     public class PersonService : IPersonService
     {
         private readonly HttpClient httpClient;
-        private Person _currentUser;
+       // private Person _currentUser;
 
         public Person CurrentUser { get; private set; }
 
@@ -41,8 +41,8 @@ namespace VagtplanApp.Client.Services
 
             if (response.IsSuccessStatusCode)
             {
-                _currentUser = await response.Content.ReadFromJsonAsync<Person>();
-                return _currentUser;
+                CurrentUser = await response.Content.ReadFromJsonAsync<Person>();
+                return CurrentUser;
             }
             else
             {
