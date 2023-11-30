@@ -1,21 +1,15 @@
-﻿using System.Net.Http;
-using System.Net.Http.Json;
-using System.Reflection.Metadata;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Json;
 using Blazored.LocalStorage;
 using VagtplanApp.Shared.Model;
-using static System.Net.WebRequestMethods;
 
 namespace VagtplanApp.Client.Services
 {
     public class PersonService : IPersonService
     {
-        private readonly HttpClient httpClient;
-       // private Person _currentUser;
+        private readonly HttpClient httpClient; // HTTP klient bruges til at lave web requests
+        private readonly ILocalStorageService localStore; // Til at gemme og hente brugerdata fra lokal storage
 
-        public Person CurrentUser { get; private set; }
-        private readonly ILocalStorageService localStore; // Tilføjer localStore for at gemme currentUser lokalt i browseren
-
+        public Person CurrentUser { get; private set; } // Holder styr på den nuværende bruger
 
         public PersonService(HttpClient httpClient, ILocalStorageService localStore)
         {
@@ -34,11 +28,13 @@ namespace VagtplanApp.Client.Services
             CurrentUser = user;
         }
 
+        // 
         public bool IsKoordinator()
         {
             return CurrentUser != null && CurrentUser.isKoordinator;
         }
 
+        // Metode for log in
         public async Task<Person> Authenticate(string email, string password)
         {
             var loginPerson = new Person { Email = email, Password = password };
@@ -61,7 +57,7 @@ namespace VagtplanApp.Client.Services
 
         public async Task<bool> IsUserLoggedInAsync()
         {
-            // Forsøger at gendanne bruger fra local storage hvis CurrentUser er null
+            // Tjekker om brugeren er logget ind ved først at se på CurrentUser og derefter i localStorage
             if (CurrentUser == null)
             {
                 CurrentUser = await localStore.GetItemAsync<Person>("currentUser");

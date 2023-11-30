@@ -1,37 +1,45 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
-
+@inject IPersonService PersonService
+@using VagtplanApp.Client.Services
 @using VagtplanApp.Client.Pages;
 
 <div class="page">
-    @if (!IsLoginPage()) // Hvis vi ikke er på login siden, så viser vi sidebar
+    @if (!IsLoginPage()) // Viser sidebar == hvis brugeren ikke er på login-siden
     {
         <div class="sidebar">
-            <NavMenu />
+            <NavMenu /> 
         </div>
     }
 
-    <!-- Den øverste "bar" med "log out" == fører bare til login page !.PT.! (skal man logge ud..?)-->
     <main>
         <div class="top-row px-4">
-            <a href="login">Log Out</a> <!-- FIX LIGE METODE KALD TIL LOG UD FRA LogInPage -->
+            <a href="login">Log Out</a> <!-- Log ud link, fører til login-siden -->
         </div>
 
-
-        <!-- Aner ikk hvad det her gør, er her når man laver blazor-projektet og det fjerner absolut alting -->
+        <!-- Indhold af den aktuelle side, vises her -->
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
 
-
-<!-- isLoginPage == /login path -->
 @code {
+    private bool isUserLoggedIn;
+
+    // Kører, når komponenten initialiseres
+    protected override async Task OnInitializedAsync()
+    {
+        isUserLoggedIn = await PersonService.IsUserLoggedInAsync(); // Tjekker om brugeren er logget ind
+        if (!isUserLoggedIn && !IsLoginPage()) // Hvis brugeren ikke er logget ind og ikke på login-siden, omdirigeres til login
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+
+    // Hjælper med at identificere, om den aktuelle side er login-siden
     private bool IsLoginPage()
     {
-        string currentUrl = NavigationManager.Uri;
-        return currentUrl.Contains("/login");
+        return NavigationManager.Uri.Contains("/login");
     }
 }
-

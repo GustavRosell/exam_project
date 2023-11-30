@@ -2,7 +2,9 @@
 @inject IPersonService PersonService
 @inject NavigationManager NavigationManager
 
+
 <div class="top-row ps-3 navbar navbar-dark">
+    <!-- Topbar med applikationens navn og en knap til navigationsmenuen -->
     <div class="container-fluid">
         <a class="navbar-brand" href="/">VagtplanApp</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -11,11 +13,12 @@
     </div>
 </div>
 
-@if (isUserLoggedIn)
+
+@if (isUserLoggedIn) // Viser navigationselementer kun hvis brugeren er logget ind
 {
     <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
         <nav class="flex-column">
-            @if (isKoordinator)
+            @if (isKoordinator) // Viser forskellige links baseret på om brugeren er koordinator
             {
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="koordinator-side">
@@ -51,10 +54,9 @@
     private bool isUserLoggedIn;
     private bool isKoordinator;
 
-
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    // Skifter visningen af navigationsmenuen
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
@@ -62,8 +64,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        isUserLoggedIn = await PersonService.IsUserLoggedInAsync();
-        isKoordinator = PersonService.IsKoordinator(); // Antager at dette er synkront, ellers skal det håndteres asynkront
-
+        isUserLoggedIn = await PersonService.IsUserLoggedInAsync(); // Tjekker om brugeren er logget ind
+        isKoordinator = PersonService.IsKoordinator(); // Tjekker om brugeren er koordinator
     }
 }
