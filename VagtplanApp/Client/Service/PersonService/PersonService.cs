@@ -1,6 +1,8 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using VagtplanApp.Shared.Model;
 using static System.Net.WebRequestMethods;
 
@@ -12,10 +14,13 @@ namespace VagtplanApp.Client.Services
        // private Person _currentUser;
 
         public Person CurrentUser { get; private set; }
+        private readonly ILocalStorageService localStore; // Tilføjer localStore for at gemme currentUser lokalt i browseren
 
-        public PersonService(HttpClient httpClient)
+
+        public PersonService(HttpClient httpClient, ILocalStorageService localStore)
         {
             this.httpClient = httpClient;
+            this.localStore = localStore;
         }
 
         public async Task<bool> AddPerson(Person person)
@@ -42,6 +47,10 @@ namespace VagtplanApp.Client.Services
             if (response.IsSuccessStatusCode)
             {
                 CurrentUser = await response.Content.ReadFromJsonAsync<Person>();
+
+                // Gemmer den nuværende bruger i local storage for at opretholde tilstanden
+                await localStore.SetItemAsync("currentUser", CurrentUser);
+
                 return CurrentUser;
             }
             else
@@ -49,12 +58,15 @@ namespace VagtplanApp.Client.Services
                 return null;
             }
         }
-        public bool IsUserLoggedIn()
-        {
-            var loggedIn = CurrentUser != null;
-            Console.WriteLine($"Er bruger logget ind: {loggedIn}"); // tjekker i konsol om bruger er logget ind
-            return loggedIn;
-        }
 
+        public async Task<bool> IsUserLoggedInAsync()
+        {
+            // Forsøger at gendanne bruger fra local storage hvis CurrentUser er null
+            if (CurrentUser == null)
+            {
+                CurrentUser = await localStore.GetItemAsync<Person>("currentUser");
+            }
+            return CurrentUser != null;
+        }
     }
 }

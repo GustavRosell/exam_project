@@ -13,7 +13,7 @@ namespace VagtplanApp.Client.Services
         
         // Metode til at autentificere en bruger og returnere brugerobjektet hvis gyldigt, ellers null
         Task<Person> Authenticate(string email, string password);
-        bool IsUserLoggedIn();
+        Task<bool> IsUserLoggedInAsync();
 
     }
 }
