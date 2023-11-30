@@ -119,6 +119,7 @@
         
         if (user != null)
         {
+            await localStore.SetItemAsync("currentUser", user); // Gemmer brugerdata i local storage
             mService.SetCurrentUser(user);
             NavigationManager.NavigateTo(user.isKoordinator ? "/koordinator-side" : "/frivillig-side");
         }
