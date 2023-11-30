@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components;
 using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Client.Services
@@ -8,6 +9,8 @@ namespace VagtplanApp.Client.Services
     {
         private readonly HttpClient httpClient; // HTTP klient bruges til at lave web requests
         private readonly ILocalStorageService localStore; // Til at gemme og hente brugerdata fra lokal storage
+        //private readonly NavigationManager navigationManager; // Til Log-ud så vi kan navigere tilbage til forside
+
 
         public Person CurrentUser { get; private set; } // Holder styr på den nuværende bruger
 
@@ -15,6 +18,7 @@ namespace VagtplanApp.Client.Services
         {
             this.httpClient = httpClient;
             this.localStore = localStore;
+            //this.navigationManager = navigationManager;
         }
 
         public async Task<bool> AddPerson(Person person)
@@ -63,6 +67,17 @@ namespace VagtplanApp.Client.Services
                 CurrentUser = await localStore.GetItemAsync<Person>("currentUser");
             }
             return CurrentUser != null;
+        }
+        public async Task LogOut()
+        {
+            // Sætter nuværende bruger til null
+            CurrentUser = null;
+
+            // Rydder brugerdata fra local storage
+            await localStore.RemoveItemAsync("currentUser");
+
+            // Navigerer til forsiden
+            //navigationManager.NavigateTo("/");
         }
     }
 }

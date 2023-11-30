@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 @inject IPersonService PersonService
-@using VagtplanApp.Client.Services
+@using VagtplanApp.Client.Services;
 @using VagtplanApp.Client.Pages;
 
 <div class="page">
@@ -14,7 +14,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="login">Log Out</a> <!-- Log ud link, fører til login-siden -->
+            <a href="login" @onclick="LogOut">Log Out</a> <!-- Log ud link, fører til login-siden -->
         </div>
 
         <!-- Indhold af den aktuelle side, vises her -->
@@ -41,5 +41,11 @@
     private bool IsLoginPage()
     {
         return NavigationManager.Uri.Contains("/login");
+    }
+
+    private async Task LogOut()
+    {
+        await PersonService.LogOut();
+        NavigationManager.NavigateTo("/login"); // Omdirigerer til login-siden
     }
 }
