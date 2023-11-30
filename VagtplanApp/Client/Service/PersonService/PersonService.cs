@@ -49,6 +49,12 @@ namespace VagtplanApp.Client.Services
                 return null;
             }
         }
+        public bool IsUserLoggedIn()
+        {
+            var loggedIn = CurrentUser != null;
+            Console.WriteLine($"Er bruger logget ind: {loggedIn}"); // tjekker i konsol om bruger er logget ind
+            return loggedIn;
+        }
 
     }
 }

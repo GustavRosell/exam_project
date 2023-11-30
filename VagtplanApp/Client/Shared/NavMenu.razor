@@ -1,32 +1,40 @@
-﻿@using VagtplanApp.Client.Services
-@inject IPersonService mService  <!-- Inject her eller i kode blok????-->
+﻿﻿@using VagtplanApp.Client.Services
+@inject IPersonService PersonService
+@inject NavigationManager NavigationManager
 
-@if (PersonService.IsLoggedIn())
-{
-    <div class="top-row ps-3 navbar navbar-dark"> 
-        <!-- Din eksisterende navbar kode -->
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">VagtplanApp</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
+</div>
 
-    @if (PersonService.IsKoordinator())
-    {
-        <div class="nav-item">
-            <NavLink class="nav-link" href="/koordinator-side">
-                Koordinator sider
-            </NavLink>
-        </div>
-    }
-    else
-    {
-        <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-            <nav class="flex-column">
-                <!-- Din eksisterende frivillig navigation -->
-            </nav>
-        </div>
-    }
+@if (PersonService.IsUserLoggedIn())
+{
+    <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <!-- Vis link baseret på brugerens rolle -->
+            @if (PersonService.IsKoordinator())
+            {
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="koordinatorProfil">Koordinatorprofil</NavLink>
+                </div>
+            }
+            else
+            {
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="frivilligProfil">Frivilligprofil</NavLink>
+                </div>
+            }
+        </nav>
+    </div>
 }
 
 @code {
     private bool collapseNavMenu = true;
+
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
