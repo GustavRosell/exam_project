@@ -8,7 +8,7 @@ namespace VagtplanApp.Server.Repositories
     public class VagterRepository : IVagterRepository
     {
 
-        private readonly IMongoCollection<Vagter> PersonCollection;
+        private readonly IMongoCollection<Vagter> VagterCollection;
 
         public VagterRepository()
         {
@@ -28,17 +28,9 @@ namespace VagtplanApp.Server.Repositories
         }
 
         // Opretter person
-        public async Task AddVagter(Person person)
+        public async Task AddVagter(Vagter vagter)
         {
-            await VagterCollection.InsertOneAsync(person);
-        }
-
-        //Metode der bliver benyttet i controller, til at matche input Email med Email i MongoDB
-        public async Task<Person> GetPersonByEmail(string email)
-        {
-            // .FirstOrDefaultAsync skal benyttes her, da Find returnere et IFindFluent interface, men ikke udfører forespørgslen
-            // .FirstOrDefaultAsync vælger det første element som matcher i collectionen, ellers Null. 
-            return await PersonCollection.Find(person => person.Email == email).FirstOrDefaultAsync();
+            await VagterCollection.InsertOneAsync(vagter);
         }
 
 
