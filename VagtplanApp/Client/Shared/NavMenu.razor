@@ -1,4 +1,4 @@
-﻿﻿@using VagtplanApp.Client.Services
+﻿@using VagtplanApp.Client.Services
 @inject IPersonService PersonService
 @inject NavigationManager NavigationManager
 
@@ -15,7 +15,6 @@
 {
     <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
         <nav class="flex-column">
-            <!-- Vis link baseret på brugerens rolle -->
             @if (PersonService.IsKoordinator())
             {
                 <div class="nav-item">
@@ -34,6 +33,7 @@
         </nav>
     </div>
 }
+
 
 @code {
     private bool collapseNavMenu = true;
