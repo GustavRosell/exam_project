@@ -11,6 +11,8 @@ builder.Services.AddRazorPages();
 
 //????????????????????
 builder.Services.AddSingleton<IPersonRepository, PersonRepository>();
+builder.Services.AddSingleton<IVagterRepository, VagterRepository>();
+
 
 var app = builder.Build();
 
