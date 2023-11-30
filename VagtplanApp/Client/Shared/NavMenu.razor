@@ -19,13 +19,16 @@
             @if (PersonService.IsKoordinator())
             {
                 <div class="nav-item">
-                    <NavLink class="nav-link" href="koordinatorProfil">Koordinatorprofil</NavLink>
+                    <NavLink class="nav-link" href="/koordinator-side">Koordinatorprofil</NavLink>
                 </div>
             }
-            else
+            else if (!PersonService.IsKoordinator())
             {
                 <div class="nav-item">
-                    <NavLink class="nav-link" href="frivilligProfil">Frivilligprofil</NavLink>
+                    <NavLink class="nav-link" href="/frivillig-Profil">Frivillig profil</NavLink>
+                </div>
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="/frivillig-Profil">Frivillig side</NavLink>
                 </div>
             }
         </nav>
