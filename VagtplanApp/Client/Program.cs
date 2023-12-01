@@ -21,6 +21,11 @@ builder.Services.AddHttpClient<IPersonService, PersonService>(client =>
     client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
 });
 
+builder.Services.AddHttpClient<IVagterService, VagterService>(client =>
+{
+    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+});
+
 // Local Storage
 builder.Services.AddBlazoredLocalStorage();
 

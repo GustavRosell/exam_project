@@ -29,7 +29,6 @@
     <None Remove="Service\PersonService\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Service\" />
     <Folder Include="Service\PersonService\" />
   </ItemGroup>
 </Project>

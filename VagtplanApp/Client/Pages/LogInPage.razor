@@ -105,6 +105,7 @@
     private async Task CreatePerson()
     {
         await mService.AddPerson(newPerson);
+        newPerson = new Person();
         modalRef.Close();
     }
 

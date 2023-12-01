@@ -1,9 +1,59 @@
 ﻿@page "/koordinator-side"
+@using VagtplanApp.Client.Services
+@using VagtplanApp.Shared.Model
 
 
 <h3>Koordinator Side</h3>
 <NavLink class="btn btn-secondary" href="/koordinator-profil">Gå til profil</NavLink>
 
+<h1 class="mb-3 mt-3">Opret vagt</h1>
+<EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@AddShift">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="col-md-6 mb-3">
+        <label for="start-dato">Start dato</label>
+        <InputDate id="start-dato" @bind-Value="Vagter.StartTid" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="slut-dato">Slut dato</label>
+        <InputDate id="slut-dato" @bind-Value="Vagter.SlutTid" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="Email">Email</label>
+        <InputNumber id="Email" @bind-Value="Vagter.MinAlder" class="form-control" required />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Telefonnummer">Telefonnummer</label>
+        <InputText id="PhoneNumber" @bind-Value="Vagter.AntalPersoner" class="form-control" required />
+    </div>
+
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Tilføj</button>
+    </div>
+</EditForm>
+
 
 @code {
+
+    private Vagter Vagter = new Vagter();
+
+
+    private EditContext aEditContext;
+
+    [Inject]
+    private IVagterService mService { get; set; }
+
+    private async Task AddShift()
+    {
+
+        await mService.CreateShift(Vagter);
+
+    }
+
+    protected override void OnInitialized()
+    {
+        aEditContext = new EditContext(Vagter);
+    }
 }

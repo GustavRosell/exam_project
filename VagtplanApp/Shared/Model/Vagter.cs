@@ -10,21 +10,12 @@ namespace VagtplanApp.Shared.Model
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; private set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24);
 
-        public DateTime StartTid { get; private set; }
-        public DateTime SlutTid { get; private set; }
-        public int MinAlder { get; private set; }
-        public string AntalPersoner { get; private set; }  // antager dette er et antal, kunne også være en liste af person-ID'er?
+        public DateTime StartTid { get; set; }
+        public DateTime SlutTid { get; set; }
+        public int MinAlder { get; set; }
+        public string AntalPersoner { get; set; }  // antager dette er et antal, kunne også være en liste af person-ID'er?
 
-        // Konstruktør
-
-        public Vagter(DateTime startTid, DateTime slutTid, int minAlder, string antalPersoner)
-        {
-            StartTid = startTid;
-            SlutTid = slutTid;
-            MinAlder = minAlder;
-            AntalPersoner = antalPersoner;
-        }
     }
 }
