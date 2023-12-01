@@ -68,6 +68,7 @@ namespace VagtplanApp.Client.Services
             }
             return CurrentUser != null;
         }
+
         public async Task LogOut()
         {
             // Sætter nuværende bruger til null
