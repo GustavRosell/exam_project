@@ -16,6 +16,5 @@ namespace VagtplanApp.Shared.Model
         public DateTime SlutTid { get; set; }
         public int MinAlder { get; set; }
         public string AntalPersoner { get; set; }  // antager dette er et antal, kunne også være en liste af person-ID'er?
-
     }
 }

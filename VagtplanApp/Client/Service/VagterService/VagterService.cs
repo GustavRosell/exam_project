@@ -2,7 +2,6 @@
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using VagtplanApp.Shared.Model;
-using static System.Net.WebRequestMethods;
 
 namespace VagtplanApp.Client.Services
 {
@@ -21,9 +20,10 @@ namespace VagtplanApp.Client.Services
             return vagter;
         }
 
-        public async Task CreateShift(Vagter vagter)
+        public async Task CreateShift(Vagter vagt)
         {
-            await httpClient.PostAsJsonAsync<Vagter>("api/vagter/add", vagter);
+            // Send vagt til serveren for at blive gemt
+            await httpClient.PostAsJsonAsync("api/vagter/add", vagt);
         }
     }
 }

@@ -12,20 +12,19 @@
 
     <div class="col-md-6 mb-3">
         <label for="start-dato">Start dato</label>
-        <InputDate id="start-dato" @bind-Value="Vagter.StartTid" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        <InputDate id="start-dato" @bind-Value="vagter.StartTid" class="form-control" />
     </div>
     <div class="col-md-6 mb-3">
         <label for="slut-dato">Slut dato</label>
-        <InputDate id="slut-dato" @bind-Value="Vagter.SlutTid" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        <InputDate id="slut-dato" @bind-Value="vagter.SlutTid" class="form-control" />
     </div>
-
     <div class="col-md-6 mb-3">
         <label for="Email">Email</label>
-        <InputNumber id="Email" @bind-Value="Vagter.MinAlder" class="form-control" required />
+        <InputNumber id="Email" @bind-Value="vagter.MinAlder" class="form-control" required />
     </div>
     <div class="col-md-6 mb-3">
         <label for="Telefonnummer">Telefonnummer</label>
-        <InputText id="PhoneNumber" @bind-Value="Vagter.AntalPersoner" class="form-control" required />
+        <InputText id="PhoneNumber" @bind-Value="vagter.AntalPersoner" class="form-control" required />
     </div>
 
     <div class="col-12 mb-3">
@@ -35,7 +34,7 @@
 
 
 @code {
-    private Vagter Vagter = new Vagter();
+    private Vagter vagter = new Vagter();
     private EditContext aEditContext;
 
     [Inject]
@@ -43,12 +42,12 @@
 
     private async Task AddShift()
     {
-        await mService.CreateShift(Vagter);
-        Vagter = new Vagter();  //Dette peger på nyt id, så man kan oprette flere vagter
+        await mService.CreateShift(vagter);
+        vagter = new Vagter();  //Dette peger på nyt id, så man kan oprette flere vagter
     }
 
     protected override void OnInitialized()
     {
-        aEditContext = new EditContext(Vagter);
+        aEditContext = new EditContext(vagter);
     }
 }
