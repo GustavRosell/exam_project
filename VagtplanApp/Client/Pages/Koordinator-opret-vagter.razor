@@ -35,10 +35,7 @@
 
 
 @code {
-
     private Vagter Vagter = new Vagter();
-
-
     private EditContext aEditContext;
 
     [Inject]
@@ -46,9 +43,8 @@
 
     private async Task AddShift()
     {
-
         await mService.CreateShift(Vagter);
-
+        Vagter = new Vagter();  //Dette peger på nyt id, så man kan oprette flere vagter
     }
 
     protected override void OnInitialized()
