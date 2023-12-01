@@ -8,67 +8,70 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 @inject NavigationManager NavigationManager
 
+
+
 <h3>Log ind</h3>
 
-<EditForm Model="@loginModel" OnValidSubmit="@HåndterLogin">
+<EditForm Model="@logInPerson" OnValidSubmit="@AuthenticateLogin">
     <DataAnnotationsValidator /> <!--vores form kan læse annotations som [Required] og [EmailAddress] fra vores klasser-->
     <ValidationSummary /> <!--Skriver fejlen fra annotations-->
+
     <div class="form-group">
-        <label for="emaillogin">Email:</label>
-        <InputText id="emaillogin" class="form-control" @bind-Value="@loginModel.Email" />
+        <label for="email">Email:</label>
+        <InputText id="email" class="form-control" @bind-Value="@logInPerson.Email" />
     </div>
 
     <div class="form-group">
         <label for="password">Adgangskode:</label>
-        <InputText id="password" type="password" class="form-control" @bind-Value="@loginModel.Password" />
+        <InputText id="password" type="password" class="form-control" @bind-Value="@logInPerson.Password" />
     </div>
 
     <button type="submit" class="btn btn-primary">Log ind</button>
 
 </EditForm>
 
-<button class="btn btn-secondary" @onclick="VisModal"> Opret bruger</button>
+<button class="btn btn-secondary" @onclick="ShowModal">Opret bruger</button>
 
 <ModalDialog @ref="modalRef" Title="Opret ny person">
-    <EditForm Model="@nyPerson" OnValidSubmit="@OpretPerson">
+    <EditForm Model="@newPerson" OnValidSubmit="@CreatePerson">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
 
         <div class="form-group">
-            <label for="email">E-mail:</label>
-            <InputText id="email" class="form-control" @bind-Value="@nyPerson.Email" />
+            <label for="newEmail">E-mail:</label>
+            <InputText id="newEmail" class="form-control" @bind-Value="@newPerson.Email" />
         </div>
 
         <div class="form-group">
-            <label for="adgangskode">Adgangskode:</label>
-            <InputText id="adgangskode" type="password" class="form-control" @bind-Value="@nyPerson.Password" />
+            <label for="newAdgangskode">Adgangskode:</label>
+            <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@newPerson.Password" />
         </div>
 
         <div class="form-group">
             <label for="tlfnr">Telefonnummer:</label>
-            <InputNumber id="tlfnr" class="form-control" @bind-Value="@nyPerson.Telefonnummer" />
+            <InputNumber id="tlfnr" class="form-control" @bind-Value="@newPerson.Telefonnummer" />
 
         </div>
 
         <div class="form-group">
             <label for="forNavn">Fornavn:</label>
-            <InputText id="forNavn" class="form-control" @bind-Value="@nyPerson.ForNavn" />
+            <InputText id="forNavn" class="form-control" @bind-Value="@newPerson.ForNavn" />
         </div>
 
         <div class="form-group">
             <label for="efterNavn">Efternavn:</label>
-            <InputText id="efterNavn" class="form-control" @bind-Value="@nyPerson.EfterNavn" />
+            <InputText id="efterNavn" class="form-control" @bind-Value="@newPerson.EfterNavn" />
         </div>
 
         <div class="form-group">
             <label for="fødselsDato">Fødselsdato:</label>
-            <InputDate id="fødselsDato" class="form-control" @bind-Value="@nyPerson.FødselsDato" />
+            <InputDate id="fødselsDato" class="form-control" @bind-Value="@newPerson.FødselsDato" />
         </div>
 
         <div class="form-group">
             <label for="køn">Køn:</label>
-            <InputSelect id="køn" class="form-control" @bind-Value="@nyPerson.Køn">
+            <InputSelect id="køn" class="form-control" @bind-Value="@newPerson.Køn">
                 <option value="">Vælg køn...</option>
                 <option value="Mand">Mand</option>
                 <option value="Kvinde">Kvinde</option>
@@ -78,7 +81,7 @@
 
         <div class="form-group">
             <label for="rolle">Rolle:</label>
-            <InputRadioGroup id="rolle" class="form-control" @bind-Value="@nyPerson.isKoordinator">
+            <InputRadioGroup id="rolle" class="form-control" @bind-Value="@newPerson.isKoordinator">
                 <InputRadio id="isFrivillig" Value="false" /> Frivillig
                 <InputRadio is="isKoordinator" Value="true" /> Koordinator
             </InputRadioGroup>
@@ -88,46 +91,42 @@
     </EditForm>
 </ModalDialog>
 
+
+
+
 @code {
-    private Person nyPerson = new Person();
-    private Person loginModel = new Person();
+    private Person newPerson = new Person();
+    private Person logInPerson = new Person();
     private ModalDialog modalRef { get; set; }
 
     [Inject]
     private IPersonService mService { get; set; }
 
-    private async Task OpretPerson()
+    private async Task CreatePerson()
     {
-        await mService.AddPerson(nyPerson);
+        await mService.AddPerson(newPerson);
         modalRef.Close();
     }
 
-    private void VisModal()
+    private void ShowModal()
     {
         modalRef.Open();
     }
 
-    private async Task HåndterLogin()
+    private async Task AuthenticateLogin()
     {
-        if (await mService.Login(loginModel.Email, loginModel.Password))
+        //Kalder vores Authenticate metode
+        var user = await mService.Authenticate(logInPerson.Email, logInPerson.Password);
+        
+        if (user != null)
         {
-
-            StateHasChanged(); // Opdatere UI for at få NavMenu og MainLayout == virker ikke:(
-
-
-            var isKoordinator = await localStore.GetItemAsync<bool>("isKoordinator");
-            if (isKoordinator)
-            {
-                NavigationManager.NavigateTo("/koordinatorProfil"); 
-            }
-            else
-            {
-                NavigationManager.NavigateTo("/frivilligProfil");
-            }
+            await localStore.SetItemAsync("currentUser", user); // Gemmer brugerdata i local storage
+            mService.SetCurrentUser(user);
+            NavigationManager.NavigateTo(user.isKoordinator ? "/koordinator-side" : "/frivillig-side");
         }
         else
         {
-            // Login mislykkedes - vis fejlbesked            
+            // Håndter fejl ved login
         }
     }
 }

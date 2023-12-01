@@ -2,7 +2,9 @@
 @inject IPersonService PersonService
 @inject NavigationManager NavigationManager
 
+
 <div class="top-row ps-3 navbar navbar-dark">
+    <!-- Topbar med applikationens navn og en knap til navigationsmenuen -->
     <div class="container-fluid">
         <a class="navbar-brand" href="/">VagtplanApp</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -11,34 +13,58 @@
     </div>
 </div>
 
-@if (PersonService.IsUserLoggedIn())
+
+@if (isUserLoggedIn) // Viser navigationselementer kun hvis brugeren er logget ind
 {
     <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
         <nav class="flex-column">
-            <!-- Vis link baseret på brugerens rolle -->
-            @if (PersonService.IsKoordinator())
+            @if (isKoordinator) // Viser forskellige links baseret på om brugeren er koordinator
             {
-                <div class="nav-item">
-                    <NavLink class="nav-link" href="koordinatorProfil">Koordinatorprofil</NavLink>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="koordinator-side">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Koordinatorside
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="koordinator-profil">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Koordinatorprofil
+                    </NavLink>
                 </div>
             }
-            else
+            else if (!isKoordinator)
             {
                 <div class="nav-item">
-                    <NavLink class="nav-link" href="frivilligProfil">Frivilligprofil</NavLink>
+                    <NavLink class="nav-link" href="/frivillig-side">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Frivillig side
+                    </NavLink>
+                </div>
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="/frivillig-profil">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Frivillig profil
+                    </NavLink>
                 </div>
             }
         </nav>
     </div>
 }
 
+
 @code {
     private bool collapseNavMenu = true;
+    private bool isUserLoggedIn;
+    private bool isKoordinator;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    // Skifter visningen af navigationsmenuen
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isUserLoggedIn = await PersonService.IsUserLoggedInAsync(); // Tjekker om brugeren er logget ind
+        isKoordinator = PersonService.IsKoordinator(); // Tjekker om brugeren er koordinator
     }
 }

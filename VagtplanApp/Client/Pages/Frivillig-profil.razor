@@ -1,0 +1,32 @@
+﻿@page "/frivillig-profil"
+@inject Blazored.LocalStorage.ILocalStorageService localStore
+
+<h3>Frivillig Profil</h3>
+<NavLink class="btn btn-secondary" href="/frivillig-side">Gå til frivillig-side</NavLink>
+
+
+@if (currentUser == null)
+{
+    <p>Brugeren er ikke logget ind.</p>
+}
+else
+{
+    <div>
+        <p><strong>Fornavn:</strong> @currentUser.ForNavn</p>
+        <p><strong>Efternavn:</strong> @currentUser.EfterNavn</p>
+        <p><strong>Telefonnummer:</strong> @currentUser.Telefonnummer</p>
+        <p><strong>Email:</strong> @currentUser.Email</p>
+        <p><strong>Fødselsdato:</strong> @currentUser.FødselsDato</p>
+        <p><strong>Køn:</strong> @currentUser.Køn</p>
+        <p><strong>Rolle:</strong> @(currentUser.isKoordinator ? "Koordinator" : "Frivillig")</p>
+    </div>
+}
+
+@code {
+    private Person currentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await localStore.GetItemAsync<Person>("currentUser");
+    }
+}

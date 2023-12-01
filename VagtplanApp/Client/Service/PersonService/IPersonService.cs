@@ -10,8 +10,11 @@ namespace VagtplanApp.Client.Services
         Task<bool> AddPerson(Person person);
         void SetCurrentUser(Person user);
         bool IsKoordinator();
-        Task<bool> Login(string email, string password);
-        bool IsUserLoggedIn(); 
-        Task Logout(); 
+        
+        // Metode til at autentificere en bruger og returnere brugerobjektet hvis gyldigt, ellers null
+        Task<Person> Authenticate(string email, string password);
+        Task<bool> IsUserLoggedInAsync();
+        Task LogOut();
+
     }
 }

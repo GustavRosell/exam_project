@@ -34,22 +34,25 @@ namespace VagtplanApp.Server.Controllers
             await mRepo.AddPerson(person);
         }
 
-        // Get Email --> til login
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Person loginPerson)
+        //Authenticate routen
+        [HttpPost]
+        [Route("authenticate")]
+        public async Task<ActionResult<Person>> Authenticate([FromBody] Person loginPerson)
         {
+            //Først tjekker vi om input-email passer med Email i MongoDB
             var person = await mRepo.GetPersonByEmail(loginPerson.Email);
+            // Hvis Email passer, tjekker vi nu om personens password matcher med input-password. 
             if (person != null && person.Password == loginPerson.Password)
             {
-                // Succesfuld login
-                return Ok(new { Email = person.Email, IsKoordinator = person.isKoordinator });
+                return person;
             }
             else
             {
-                // Login mislykkedes
-                return Unauthorized();
+                return Unauthorized(); // Returnerer HTTP 401 hvis login er ugyldigt
             }
         }
 
     }
+
+
 }

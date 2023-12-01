@@ -1,7 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Concurrent;
-using System.Net.Http;
 using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Server.Repositories
@@ -34,11 +33,14 @@ namespace VagtplanApp.Server.Repositories
             await PersonCollection.InsertOneAsync(person);
         }
 
-        // get person ved email
+        //Metode der bliver benyttet i controller, til at matche input Email med Email i MongoDB
         public async Task<Person> GetPersonByEmail(string email)
         {
-            return await PersonCollection.Find(p => p.Email == email).FirstOrDefaultAsync();
+            // .FirstOrDefaultAsync skal benyttes her, da Find returnere et IFindFluent interface, men ikke udfører forespørgslen
+            // .FirstOrDefaultAsync vælger det første element som matcher i collectionen, ellers Null. 
+            return await PersonCollection.Find(person => person.Email == email).FirstOrDefaultAsync();
         }
+
 
     }
 }
