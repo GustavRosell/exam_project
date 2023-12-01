@@ -1,12 +1,10 @@
-﻿@page "/koordinator-side"
+﻿@page "/koordinator-opret-vagter"
 @using VagtplanApp.Client.Services
 @using VagtplanApp.Shared.Model
 
 
-<h3>Koordinator Side</h3>
-<NavLink class="btn btn-secondary" href="/koordinator-profil">Gå til profil</NavLink>
-
 <h1 class="mb-3 mt-3">Opret vagt</h1>
+
 <EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@AddShift">
     <DataAnnotationsValidator />
     <ValidationSummary />

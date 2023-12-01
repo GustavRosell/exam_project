@@ -21,26 +21,36 @@
             @if (isKoordinator) // Viser forskellige links baseret på om brugeren er koordinator
             {
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="koordinator-side">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Koordinatorside
+                    <NavLink class="nav-link" href="koordinator-oversigt">
+                        <span class="oi oi-list" aria-hidden="true"></span> Oversigt
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="koordinator-opret-vagter">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Opret Vagter
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="koordinator-profil">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Koordinatorprofil
+                        <span class="oi oi-person" aria-hidden="true"></span> Profil
                     </NavLink>
                 </div>
             }
             else if (!isKoordinator)
             {
                 <div class="nav-item">
-                    <NavLink class="nav-link" href="/frivillig-side">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Frivillig side
+                    <NavLink class="nav-link" href="/frivillig-mine-vagter">
+                        <span class="oi oi-list" aria-hidden="true"></span> Mine Vagter
+                    </NavLink>
+                </div>
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="/frivillig-tag-vagter">
+                        <span class="oi oi-list" aria-hidden="true"></span> Tag Vagter
                     </NavLink>
                 </div>
                 <div class="nav-item">
                     <NavLink class="nav-link" href="/frivillig-profil">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Frivillig profil
+                        <span class="oi oi-person" aria-hidden="true"></span> Profil
                     </NavLink>
                 </div>
             }
