@@ -34,6 +34,8 @@ namespace VagtplanApp.Server.Controllers
             await mRepo.AddVagter(vagter);
         }
 
+        
+
     }
 
 
