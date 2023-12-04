@@ -33,11 +33,32 @@ namespace VagtplanApp.Server.Repositories
             await VagterCollection.InsertOneAsync(vagter);
         }
 
+        // Opdaterer vagt med en ny person
         public async Task UpdateShift(string vagtId, string personId)
         {
-            var filter = Builders<Vagter>.Filter.Eq(v => v.id, vagtId);
-            var update = Builders<Vagter>.Update.AddToSet(v => v.assignedPersons, personId);
-            await VagterCollection.UpdateOneAsync(filter, update);
+            // Hent alle Vagter fra databasen
+            var alleVagter = await VagterCollection.Find(new BsonDocument()).ToListAsync();
+
+            // Find den specifikke Vagter-instans
+            Vagter fundetVagt = null;
+            foreach (var vagt in alleVagter)
+            {
+                if (vagt.id == vagtId)
+                {
+                    fundetVagt = vagt;
+                    break;
+                }
+            }
+
+            if (fundetVagt != null && !fundetVagt.assignedPersons.Contains(personId))
+            {
+                // Tilføj personId til assignedPersons-listen
+                fundetVagt.assignedPersons.Add(personId);
+
+                // Opdater Vagter-instansen i databasen
+                var filter = new BsonDocument("_id", new ObjectId(vagtId));
+                await VagterCollection.ReplaceOneAsync(filter, fundetVagt);
+            }
         }
     }
 }
