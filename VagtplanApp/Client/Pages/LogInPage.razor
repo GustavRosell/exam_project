@@ -18,12 +18,12 @@
 
     <div class="form-group">
         <label for="email">Email:</label>
-        <InputText id="email" class="form-control" @bind-Value="@logInPerson.Email" />
+        <InputText id="email" class="form-control" @bind-Value="@logInPerson.email" />
     </div>
 
     <div class="form-group">
         <label for="password">Adgangskode:</label>
-        <InputText id="password" type="password" class="form-control" @bind-Value="@logInPerson.Password" />
+        <InputText id="password" type="password" class="form-control" @bind-Value="@logInPerson.password" />
     </div>
 
     <button type="submit" class="btn btn-primary">Log ind</button>
@@ -40,38 +40,38 @@
 
         <div class="form-group">
             <label for="newEmail">E-mail:</label>
-            <InputText id="newEmail" class="form-control" @bind-Value="@newPerson.Email" />
+            <InputText id="newEmail" class="form-control" @bind-Value="@newPerson.email" />
         </div>
 
         <div class="form-group">
             <label for="newAdgangskode">Adgangskode:</label>
-            <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@newPerson.Password" />
+            <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@newPerson.password" />
         </div>
 
         <div class="form-group">
             <label for="tlfnr">Telefonnummer:</label>
-            <InputNumber id="tlfnr" class="form-control" @bind-Value="@newPerson.Telefonnummer" />
+            <InputNumber id="tlfnr" class="form-control" @bind-Value="@newPerson.phonenumber" />
 
         </div>
 
         <div class="form-group">
             <label for="forNavn">Fornavn:</label>
-            <InputText id="forNavn" class="form-control" @bind-Value="@newPerson.ForNavn" />
+            <InputText id="forNavn" class="form-control" @bind-Value="@newPerson.firstName" />
         </div>
 
         <div class="form-group">
             <label for="efterNavn">Efternavn:</label>
-            <InputText id="efterNavn" class="form-control" @bind-Value="@newPerson.EfterNavn" />
+            <InputText id="efterNavn" class="form-control" @bind-Value="@newPerson.lastName" />
         </div>
 
         <div class="form-group">
             <label for="fødselsDato">Fødselsdato:</label>
-            <InputDate id="fødselsDato" class="form-control" @bind-Value="@newPerson.FødselsDato" />
+            <InputDate id="fødselsDato" class="form-control" @bind-Value="@newPerson.birthdate" />
         </div>
 
         <div class="form-group">
             <label for="køn">Køn:</label>
-            <InputSelect id="køn" class="form-control" @bind-Value="@newPerson.Køn">
+            <InputSelect id="køn" class="form-control" @bind-Value="@newPerson.gender">
                 <option value="">Vælg køn...</option>
                 <option value="Mand">Mand</option>
                 <option value="Kvinde">Kvinde</option>
@@ -117,7 +117,7 @@
     private async Task AuthenticateLogin()
     {
         //Kalder vores Authenticate metode
-        var user = await mService.Authenticate(logInPerson.Email, logInPerson.Password);
+        var user = await mService.Authenticate(logInPerson.email, logInPerson.password);
         
         if (user != null)
         {

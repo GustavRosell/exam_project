@@ -12,19 +12,19 @@
 
     <div class="col-md-6 mb-3">
         <label for="start-dato">Start dato</label>
-        <InputDate id="start-dato" @bind-Value="vagter.StartTid" class="form-control" />
+        <InputDate id="start-dato" @bind-Value="vagter.startTime" class="form-control" />
     </div>
     <div class="col-md-6 mb-3">
         <label for="slut-dato">Slut dato</label>
-        <InputDate id="slut-dato" @bind-Value="vagter.SlutTid" class="form-control" />
+        <InputDate id="slut-dato" @bind-Value="vagter.endTime" class="form-control" />
     </div>
     <div class="col-md-6 mb-3">
         <label for="minAlder">Aldersgrænse</label>
-        <InputNumber id="minAlder" @bind-Value="vagter.MinAlder" class="form-control" required />
+        <InputNumber id="minAlder" @bind-Value="vagter.minAge" class="form-control" required />
     </div>
     <div class="col-md-6 mb-3">
         <label for="antalPersoner">Antal Personer</label>
-        <InputText id="AntalPersoner" @bind-Value="vagter.AntalPersoner" class="form-control" required />
+        <InputText id="AntalPersoner" @bind-Value="vagter.numberOfPersons" class="form-control" required />
     </div>
 
     <div class="col-12 mb-3">

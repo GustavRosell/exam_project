@@ -11,12 +11,12 @@
 else
 {
     <div>
-        <p><strong>Fornavn:</strong> @currentUser.ForNavn</p>
-        <p><strong>Efternavn:</strong> @currentUser.EfterNavn</p>
-        <p><strong>Telefonnummer:</strong> @currentUser.Telefonnummer</p>
-        <p><strong>Email:</strong> @currentUser.Email</p>
-        <p><strong>Fødselsdato:</strong> @currentUser.FødselsDato</p>
-        <p><strong>Køn:</strong> @currentUser.Køn</p>
+        <p><strong>Fornavn:</strong> @currentUser.firstName</p>
+        <p><strong>Efternavn:</strong> @currentUser.lastName</p>
+        <p><strong>Telefonnummer:</strong> @currentUser.phonenumber</p>
+        <p><strong>Email:</strong> @currentUser.email</p>
+        <p><strong>Fødselsdato:</strong> @currentUser.birthdate</p>
+        <p><strong>Køn:</strong> @currentUser.gender</p>
         <p><strong>Rolle:</strong> @(currentUser.isKoordinator ? "Koordinator" : "Frivillig")</p>
     </div>
 }

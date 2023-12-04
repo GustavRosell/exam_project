@@ -33,18 +33,18 @@ namespace VagtplanApp.Server.Repositories
             await PersonCollection.InsertOneAsync(person);
         }
 
-        //Metode der bliver benyttet i controller, til at matche input Email med Email i MongoDB
+        //Metode der bliver benyttet i controller, til at matche input email med email i MongoDB
         public async Task<Person> GetPersonByEmail(string email)
         {
             // .FirstOrDefaultAsync skal benyttes her, da Find returnere et IFindFluent interface, men ikke udfører forespørgslen
             // .FirstOrDefaultAsync vælger det første element som matcher i collectionen, ellers Null. 
-            return await PersonCollection.Find(person => person.Email == email).FirstOrDefaultAsync();
+            return await PersonCollection.Find(person => person.email == email).FirstOrDefaultAsync();
         }
 
         public async Task<Person> GetLatestPerson()
         {
             return await PersonCollection.Find(new BsonDocument())
-                                        .Sort("{PersonalId: -1}")
+                                        .Sort("{personalId: -1}")
                                         .Limit(1)
                                         .FirstOrDefaultAsync();
         }

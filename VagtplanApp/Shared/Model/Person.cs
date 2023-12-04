@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-// Required virker ikke for Telefonnummer og Fødselsdato
+// Required virker ikke for phonenumber og Fødselsdato
 namespace VagtplanApp.Shared.Model
 {
     public class Person
@@ -10,30 +10,30 @@ namespace VagtplanApp.Shared.Model
         // Felter
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24);
-        public int PersonalId { get; set; }
+        public string id { get; set; } = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24);
+        public int personalId { get; set; }
 
-        [Required(ErrorMessage = "Email er påkrævet.")]
+        [Required(ErrorMessage = "email er påkrævet.")]
         [EmailAddress(ErrorMessage = "Ugyldig email adresse.")]
-        public string Email { get; set; }
+        public string email { get; set; }
 
         [Required(ErrorMessage = "Adgangskode er påkrævet.")]
-        public string Password { get; set; } // Bemærk: Dette burde være hashet i en rigtig applikation
+        public string password { get; set; } // Bemærk: Dette burde være hashet i en rigtig applikation
 
-        [Required(ErrorMessage = "Telefonnummer er påkrævet.")]
-        public int Telefonnummer { get; set; }
+        [Required(ErrorMessage = "phonenumber er påkrævet.")]
+        public int phonenumber { get; set; }
 
         [Required(ErrorMessage = "Fornavn er påkrævet.")]
-        public string ForNavn { get; set; }
+        public string firstName { get; set; }
 
         [Required(ErrorMessage = "Efternavn er påkrævet.")]
-        public string EfterNavn { get; set; }
+        public string lastName { get; set; }
 
         [Required(ErrorMessage = "Fødselsdato er påkrævet.")]
-        public DateOnly FødselsDato { get; set; }
+        public DateOnly birthdate { get; set; }
 
         [Required(ErrorMessage = "Vælg venligst et køn.")]
-        public string Køn { get; set; }
+        public string gender { get; set; }
         public bool isKoordinator { get; set; } = false;
 
     }

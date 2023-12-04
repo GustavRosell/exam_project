@@ -39,10 +39,10 @@ namespace VagtplanApp.Server.Controllers
         [Route("authenticate")]
         public async Task<ActionResult<Person>> Authenticate([FromBody] Person loginPerson)
         {
-            //Først tjekker vi om input-email passer med Email i MongoDB
-            var person = await mRepo.GetPersonByEmail(loginPerson.Email);
-            // Hvis Email passer, tjekker vi nu om personens password matcher med input-password. 
-            if (person != null && person.Password == loginPerson.Password)
+            //Først tjekker vi om input-email passer med email i MongoDB
+            var person = await mRepo.GetPersonByEmail(loginPerson.email);
+            // Hvis email passer, tjekker vi nu om personens password matcher med input-password. 
+            if (person != null && person.password == loginPerson.password)
             {
                 return person;
             }

@@ -24,8 +24,8 @@ namespace VagtplanApp.Client.Services
         {
             var latestPersonResponse = await httpClient.GetAsync("/api/persons/getlatest");
             var latestPerson = await latestPersonResponse.Content.ReadFromJsonAsync<Person>();
-            int maxPersonalId = latestPerson?.PersonalId ?? 0;
-            person.PersonalId = maxPersonalId + 1;
+            int maxPersonalId = latestPerson?.personalId ?? 0;
+            person.personalId = maxPersonalId + 1;
 
             var response = await httpClient.PostAsJsonAsync("/api/persons/add", person);
             return response.IsSuccessStatusCode;
@@ -45,7 +45,7 @@ namespace VagtplanApp.Client.Services
         // Metode for log in
         public async Task<Person> Authenticate(string email, string password)
         {
-            var loginPerson = new Person { Email = email, Password = password };
+            var loginPerson = new Person { email = email, password = password };
             var response = await httpClient.PostAsJsonAsync("api/persons/authenticate", loginPerson);
 
             if (response.IsSuccessStatusCode)
