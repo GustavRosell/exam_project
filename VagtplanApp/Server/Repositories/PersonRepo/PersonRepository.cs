@@ -41,13 +41,13 @@ namespace VagtplanApp.Server.Repositories
             return await PersonCollection.Find(person => person.email == email).FirstOrDefaultAsync();
         }
 
-        public async Task<Person> GetLatestPerson()
-        {
-            return await PersonCollection.Find(new BsonDocument())
-                                        .Sort("{personalId: -1}")
-                                        .Limit(1)
-                                        .FirstOrDefaultAsync();
-        }
+        //public async Task<Person> GetLatestPerson()
+        //{
+        //    return await PersonCollection.Find(new BsonDocument())
+        //                                .Sort("{personalId: -1}")
+        //                                .Limit(1)
+        //                                .FirstOrDefaultAsync();
+        //}
 
     }
 }

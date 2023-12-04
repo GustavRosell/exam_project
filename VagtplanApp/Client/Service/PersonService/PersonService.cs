@@ -22,10 +22,10 @@ namespace VagtplanApp.Client.Services
 
         public async Task<bool> AddPerson(Person person) // Task<bool>??
         {
-            var latestPersonResponse = await httpClient.GetAsync("/api/persons/getlatest");
-            var latestPerson = await latestPersonResponse.Content.ReadFromJsonAsync<Person>();
-            int maxPersonalId = latestPerson?.personalId ?? 0;
-            person.personalId = maxPersonalId + 1;
+            //var latestPersonResponse = await httpClient.GetAsync("/api/persons/getlatest");
+            //var latestPerson = await latestPersonResponse.Content.ReadFromJsonAsync<Person>();
+            //int maxPersonalId = latestPerson?.personalId ?? 0;
+            //person.personalId = maxPersonalId + 1;
 
             var response = await httpClient.PostAsJsonAsync("/api/persons/add", person);
             return response.IsSuccessStatusCode;
