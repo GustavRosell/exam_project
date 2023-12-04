@@ -32,13 +32,12 @@ namespace VagtplanApp.Server.Repositories
         {
             await VagterCollection.InsertOneAsync(vagter);
         }
-        public async Task UpdateShift(string vagtId, List<string> assignedPersonIds)
+
+        public async Task UpdateShift(string vagtId, string personId)
         {
             var filter = Builders<Vagter>.Filter.Eq(v => v.id, vagtId);
-            var update = Builders<Vagter>.Update.Set(v => v.assignedPersons, assignedPersonIds);
+            var update = Builders<Vagter>.Update.AddToSet(v => v.assignedPersons, personId);
             await VagterCollection.UpdateOneAsync(filter, update);
         }
-
-
     }
 }

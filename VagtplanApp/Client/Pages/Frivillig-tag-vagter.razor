@@ -46,7 +46,7 @@
 
     private async Task TakeShift(string vagtId)
     {
-        // Da logikken for at tilføje den nuværende bruger er i VagterService, behøver vi kun at sende vagtId
-        await mService.UpdateVagt(vagtId, new List<string>());
+        await mService.UpdateVagt(vagtId);
     }
+
 }

@@ -36,12 +36,11 @@ namespace VagtplanApp.Server.Controllers
 
         [HttpPut]
         [Route("updateshift/{vagtId}")]
-        public async Task<IActionResult> UpdateVagt(string vagtId, [FromBody] List<string> assignedPersonIds)
+        public async Task<IActionResult> UpdateVagt(string vagtId, [FromBody] string personId)
         {
-            await mRepo.UpdateShift(vagtId, assignedPersonIds);
+            await mRepo.UpdateShift(vagtId, personId);
             return Ok();
         }
-
     }
 
 

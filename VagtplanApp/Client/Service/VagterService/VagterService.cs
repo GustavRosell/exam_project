@@ -29,22 +29,16 @@ namespace VagtplanApp.Client.Services
             // Send vagt til serveren for at blive gemt
             await httpClient.PostAsJsonAsync("api/vagter/add", vagt);
         }
-        public async Task<bool> UpdateVagt(string vagtId, List<string> assignedPersonIds)
+        public async Task<bool> UpdateVagt(string vagtId)
         {
-            // Hent CurrentUser fra local storage
             var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
-
             if (currentUser != null)
             {
-                // Tilføj CurrentUser's ID til assignedPersonIds, hvis det ikke allerede er der
-                if (!assignedPersonIds.Contains(currentUser.id))
-                {
-                    assignedPersonIds.Add(currentUser.id);
-                }
+                var response = await httpClient.PutAsJsonAsync($"/api/vagter/updateshift/{vagtId}", currentUser.id);
+                return response.IsSuccessStatusCode;
             }
-
-            var response = await httpClient.PutAsJsonAsync($"/api/vagter/updateshift/{vagtId}", assignedPersonIds);
-            return response.IsSuccessStatusCode;
+            return false;
         }
+
     }
 }

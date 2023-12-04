@@ -8,6 +8,6 @@ namespace VagtplanApp.Client.Services
         Task<List<Vagter>> GetAllVagter();
         Task CreateShift(Vagter vagter);
 
-        Task<bool> UpdateVagt(string vagtId, List<string> assignedPersonIds);
+        Task<bool> UpdateVagt(string vagtId);
     }
 }
