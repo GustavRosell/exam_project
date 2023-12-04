@@ -40,14 +40,5 @@ namespace VagtplanApp.Server.Repositories
             // .FirstOrDefaultAsync vælger det første element som matcher i collectionen, ellers Null. 
             return await PersonCollection.Find(person => person.email == email).FirstOrDefaultAsync();
         }
-
-        //public async Task<Person> GetLatestPerson()
-        //{
-        //    return await PersonCollection.Find(new BsonDocument())
-        //                                .Sort("{personalId: -1}")
-        //                                .Limit(1)
-        //                                .FirstOrDefaultAsync();
-        //}
-
     }
 }
