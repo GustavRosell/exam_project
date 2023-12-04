@@ -11,7 +11,6 @@ namespace VagtplanApp.Client.Services
         private readonly ILocalStorageService localStore; // Til at gemme og hente brugerdata fra lokal storage
         //private readonly NavigationManager navigationManager; // Til Log-ud så vi kan navigere tilbage til forside
 
-
         public Person CurrentUser { get; private set; } // Holder styr på den nuværende bruger
 
         public PersonService(HttpClient httpClient, ILocalStorageService localStore)
@@ -21,8 +20,13 @@ namespace VagtplanApp.Client.Services
             //this.navigationManager = navigationManager;
         }
 
-        public async Task<bool> AddPerson(Person person)
+        public async Task<bool> AddPerson(Person person) // Task<bool>??
         {
+            var latestPersonResponse = await httpClient.GetAsync("/api/persons/getlatest");
+            var latestPerson = await latestPersonResponse.Content.ReadFromJsonAsync<Person>();
+            int maxPersonalId = latestPerson?.PersonalId ?? 0;
+            person.PersonalId = maxPersonalId + 1;
+
             var response = await httpClient.PostAsJsonAsync("/api/persons/add", person);
             return response.IsSuccessStatusCode;
         }

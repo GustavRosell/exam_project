@@ -51,6 +51,15 @@ namespace VagtplanApp.Server.Controllers
                 return Unauthorized(); // Returnerer HTTP 401 hvis login er ugyldigt
             }
         }
+        [HttpGet]
+        [Route("getlatest")]
+        public async Task<ActionResult<Person>> GetLatestPerson()
+        {
+
+                var lastPerson = await mRepo.GetLatestPerson();
+                return Ok(lastPerson);
+
+        }
 
     }
 
