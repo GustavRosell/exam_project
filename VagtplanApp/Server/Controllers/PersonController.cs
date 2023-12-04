@@ -56,8 +56,8 @@ namespace VagtplanApp.Server.Controllers
         //public async Task<ActionResult<Person>> GetLatestPerson()
         //{
 
-        //        var lastPerson = await mRepo.GetLatestPerson();
-        //        return Ok(lastPerson);
+        //    var lastPerson = await mRepo.GetLatestPerson();
+        //    return Ok(lastPerson);
 
         //}
 
