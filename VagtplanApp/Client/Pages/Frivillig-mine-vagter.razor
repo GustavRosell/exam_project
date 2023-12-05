@@ -1,19 +1,49 @@
 ﻿@page "/frivillig-mine-vagter"
 @using VagtplanApp.Client.Services
 
-
 <h3>Mine vagter</h3>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>StartTid</th>
-            <th>SlutTid</th>
-            <th>MinAlder</th>
-            <th>AntalPersoner</th>
-        </tr>
-    </thead>
-</table>
+@if (vagter == null)
+{
+    <p><em>Henter vagter...</em></p>
+}
+else if (!vagter.Any())
+{
+    <p>Der er ingen vagter tildelt dig.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Start Tid</th>
+                <th>Slut Tid</th>
+                <th>Minimums Alder</th>
+                <th>Antal Personer</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vagt in vagter)
+            {
+                <tr>
+                    <td>@vagt.startTime</td>
+                    <td>@vagt.endTime</td>
+                    <td>@vagt.minAge</td>
+                    <td>@vagt.numberOfPersons</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
+    private List<Vagter> vagter;
+
+    [Inject]
+    private IVagterService mService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        vagter = await mService.GetShiftsForVolunteer();
+    }
 }

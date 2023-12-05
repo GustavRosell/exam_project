@@ -6,6 +6,7 @@ namespace VagtplanApp.Server.Repositories
     {
         List<Vagter> GetAll();
         Task AddVagter(Vagter vagter);
-        Task UpdateShift(string vagtId, string personId);
+        Task TakeShift(string vagtId, string personId);
+        Task<List<Vagter>> GetShiftsByPersonId(string personId);
     }
 }

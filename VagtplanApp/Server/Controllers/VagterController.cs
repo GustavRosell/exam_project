@@ -18,7 +18,7 @@ namespace VagtplanApp.Server.Controllers
             mRepo = repo;
         }
 
-        // GetAll
+        // GetAll vagter
         [HttpGet]
         [Route("getall")]
         public List<Vagter> GetAll()
@@ -26,22 +26,38 @@ namespace VagtplanApp.Server.Controllers
             return mRepo.GetAll();
         }
 
-        // Add Person
+        // Opretter en person
         [HttpPost]
         [Route("add")]
-        public async Task CreateVagter([FromBody] Vagter vagter) // FromBody indikerer at data for booking forventes at blive sendt som en JSON
+        public async Task CreateVagter([FromBody] Vagter vagter) 
         {
             await mRepo.AddVagter(vagter);
         }
 
+        // Frivillige kan tage vagter (SKAL VI TILFØJE IACTIONRESULT?)
         [HttpPut]
-        [Route("updateshift/{vagtId}")]
-        public async Task<IActionResult> UpdateVagt(string vagtId, [FromBody] string personId)
+        [Route("takeshift/{vagtId}")]
+        public async Task TakeShift(string vagtId, [FromBody] string personId)
         {
-            await mRepo.UpdateShift(vagtId, personId);
-            return Ok();
+            await mRepo.TakeShift(vagtId, personId);
+        }
+
+        // Viser frivilliges vagter
+        [HttpGet]
+        [Route("person/{personId}")]
+        public async Task<ActionResult<List<Vagter>>> GetShiftsByPersonId(string personId)
+        {
+                var vagter = await mRepo.GetShiftsByPersonId(personId);
+                if (vagter == null || vagter.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return vagter;
         }
     }
-
-
 }
+    
+
+
+

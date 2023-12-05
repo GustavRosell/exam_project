@@ -7,6 +7,7 @@ namespace VagtplanApp.Client.Services
     {
         Task<List<Vagter>> GetAllVagter();
         Task CreateShift(Vagter vagter);
-        Task<bool> UpdateVagt(string vagtId);
+        Task<bool> TakeShift(string vagtId);
+        Task<List<Vagter>> GetShiftsForVolunteer();
     }
 }

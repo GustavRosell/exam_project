@@ -33,11 +33,24 @@ namespace VagtplanApp.Server.Repositories
             await VagterCollection.InsertOneAsync(vagter);
         }
 
-        public async Task UpdateShift(string vagtId, string personId)
+        // Frivillige kan tage vagter
+        public async Task TakeShift(string vagtId, string personId)
         {
-            var filter = Builders<Vagter>.Filter.Eq(v => v.id, vagtId);
-            var update = Builders<Vagter>.Update.AddToSet(v => v.assignedPersons, personId);
+            // Filter der matcher documenter i mongoDB ("_id") med vores parameter vagtId, som skal konverters til et ObjectId pga MongoDB
+            var filter = new BsonDocument("_id", new ObjectId(vagtId));
+
+            // Tilføjer personId, til assignedPersons i DB
+            var update = new BsonDocument("$addToSet", new BsonDocument("assignedPersons", personId));
             await VagterCollection.UpdateOneAsync(filter, update);
+        }
+
+
+        // Henter en liste af alle de vagter som en frivillig er tilknyttet
+        public async Task<List<Vagter>> GetShiftsByPersonId(string personId)
+        {
+            var filter = new BsonDocument("assignedPersons", new BsonDocument("$eq", personId));
+            var vagterList = await VagterCollection.Find(filter).ToListAsync();
+            return vagterList;
         }
     }
 }
