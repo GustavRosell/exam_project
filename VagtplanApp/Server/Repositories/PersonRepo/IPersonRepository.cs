@@ -8,5 +8,6 @@ namespace VagtplanApp.Server.Repositories
         Task AddPerson(Person person);
         Task<Person> GetPersonByEmail(string email);
         //Task<Person> GetLatestPerson();
+        Task UpdatePerson(Person updatePerson);
     }
 }

@@ -61,6 +61,39 @@ namespace VagtplanApp.Server.Controllers
 
         //}
 
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> UpdatePerson([FromBody] Person updatePerson)
+        {
+            try
+            {
+                // Retrieve the existing person from the database
+                var existingPerson = await mRepo.GetPersonByEmail(updatePerson.email);
+
+                if (existingPerson == null)
+                {
+                    return NotFound();
+                }
+
+                // Update the properties of the existing person
+                existingPerson.firstName = updatePerson.firstName;
+                existingPerson.lastName = updatePerson.lastName;
+                existingPerson.email = updatePerson.email;
+                existingPerson.password = updatePerson.password;
+                // Update other properties as needed
+
+                // Save the changes to the database
+                await mRepo.UpdatePerson(existingPerson);
+
+                return Ok(existingPerson);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return an appropriate response
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
+
     }
 
 

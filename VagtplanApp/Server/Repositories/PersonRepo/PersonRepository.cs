@@ -49,5 +49,22 @@ namespace VagtplanApp.Server.Repositories
         //                                .FirstOrDefaultAsync();
         //}
 
+
+        //  FUCK BUILDERS
+        public async Task UpdatePerson(Person updatePerson)
+        {
+            var filter = Builders<Person>.Filter.Eq(p => p.id, updatePerson.id); // Bruger email for filter, men det betyder at vi ikke kan ændre emailen
+            var update = Builders<Person>.Update
+               .Set(p => p.firstName, updatePerson.firstName)
+               .Set(p => p.lastName, updatePerson.lastName)
+               //.Set(p => p.email, updatePerson.email) 
+               .Set(p => p.password, updatePerson.password);
+            // Add other properties as needed
+
+            await PersonCollection.UpdateOneAsync(filter, update);
+        }
+
+
+
     }
 }
