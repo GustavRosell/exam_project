@@ -48,9 +48,9 @@ namespace VagtplanApp.Server.Controllers
         public async Task<ActionResult<List<Vagter>>> GetShiftsByPersonId(string personId)
         {
                 var vagter = await mRepo.GetShiftsByPersonId(personId);
-                if (vagter == null || vagter.Count == 0)
+                if (vagter == null)
                 {
-                    return NotFound();
+                     return new List<Vagter>();
                 }
 
                 return vagter;

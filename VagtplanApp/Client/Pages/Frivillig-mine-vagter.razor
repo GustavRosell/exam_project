@@ -9,7 +9,7 @@
 }
 else if (!vagter.Any())
 {
-    <p>Der er ingen vagter tildelt dig.</p>
+    <p>Du har ikke ingen vagter.</p>
 }
 else
 {
@@ -20,6 +20,7 @@ else
                 <th>Slut Tid</th>
                 <th>Minimums Alder</th>
                 <th>Antal Personer</th>
+                <th>Fjern vagt</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +31,7 @@ else
                     <td>@vagt.endTime</td>
                     <td>@vagt.minAge</td>
                     <td>@vagt.numberOfPersons</td>
+                    <td></td>
                 </tr>
             }
         </tbody>
