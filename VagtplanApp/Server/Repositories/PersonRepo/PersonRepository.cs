@@ -40,5 +40,18 @@ namespace VagtplanApp.Server.Repositories
             // .FirstOrDefaultAsync vælger det første element som matcher i collectionen, ellers Null. 
             return await PersonCollection.Find(person => person.email == email).FirstOrDefaultAsync();
         }
+
+        public async Task UpdatePerson(Person updatePerson)
+        {
+            var filter = Builders<Person>.Filter.Eq(p => p.id, updatePerson.id); // Bruger email for filter, men det betyder at vi ikke kan ændre emailen
+            var update = Builders<Person>.Update
+               .Set(p => p.firstName, updatePerson.firstName)
+               .Set(p => p.lastName, updatePerson.lastName)
+               //.Set(p => p.email, updatePerson.email) 
+               .Set(p => p.password, updatePerson.password);
+            // Add other properties as needed
+
+            await PersonCollection.UpdateOneAsync(filter, update);
+        }
     }
 }

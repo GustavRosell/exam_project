@@ -1,4 +1,5 @@
 ﻿@page "/frivillig-profil"
+@using VagtplanApp.Client.Services;
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 
@@ -19,13 +20,93 @@ else
         <p><strong>Køn:</strong> @currentUser.gender</p>
         <p><strong>Rolle:</strong> @(currentUser.isKoordinator ? "Koordinator" : "Frivillig")</p>
     </div>
+
+    <button class="btn btn-secondary" @onclick="ShowModal">Rediger oplysninger</button>
+
+    <ModalDialog @ref="modalRef" Title="Rediger oplysninger">
+        <EditForm Model="@updatePerson" OnValidSubmit="@UpdatedPerson">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+
+            <div class="form-group">
+                <label for="updatedEmail">E-mail:</label>
+                <InputText id="updatedEmail" class="form-control" @bind-Value="@updatePerson.email" />
+            </div>
+            <div class="form-group">
+                <label for="newAdgangskode">Adgangskode:</label>
+                <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@updatePerson.password" />
+            </div>
+
+            @* <div class="form-group">
+                <label for="tlfnr">Telefonnummer:</label>
+                <InputNumber id="tlfnr" class="form-control" @bind-Value="@newPerson.phonenumber" />
+
+            </div> *@
+
+            <div class="form-group">
+                <label for="forNavn">Fornavn:</label>
+                <InputText id="forNavn" class="form-control" @bind-Value="@updatePerson.firstName" />
+            </div>
+
+            <div class="form-group">
+                <label for="efterNavn">Efternavn:</label>
+                <InputText id="efterNavn" class="form-control" @bind-Value="@updatePerson.lastName" />
+            </div>
+
+            @* @* @* <div class="form-group">
+                <label for="fødselsDato">Fødselsdato:</label>
+                <InputDate id="fødselsDato" class="form-control" @bind-Value="@newPerson.birthdate" />
+            </div>
+
+            <div class="form-group">
+                <label for="køn">Køn:</label>
+                <InputSelect id="køn" class="form-control" @bind-Value="@newPerson.gender">
+                    <option value="">Vælg køn...</option>
+                    <option value="Mand">Mand</option>
+                    <option value="Kvinde">Kvinde</option>
+                    <option value="Andet">Andet</option>
+                </InputSelect>
+            </div> 
+
+            <div class="form-group">
+                <label for="rolle">Rolle:</label>
+                <InputRadioGroup id="rolle" class="form-control" @bind-Value="@newPerson.isKoordinator">
+                    <InputRadio id="isFrivillig" Value="false" /> Frivillig
+                    <InputRadio is="isKoordinator" Value="true" /> Koordinator
+                </InputRadioGroup>
+            </div> *@
+
+            <button type="submit" class="btn btn-success">Opdater</button>
+        </EditForm>
+    </ModalDialog>
+
 }
 
 @code {
+    private Person updatePerson = new Person();
+    private ModalDialog modalRef { get; set; }
+
+    [Inject]
+    private IPersonService mService { get; set; }
+
+    
     private Person currentUser;
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await localStore.GetItemAsync<Person>("currentUser");
+    }
+
+    private async Task UpdatedPerson()
+    {
+        await mService.UpdateCurrentUser(updatePerson);
+        updatePerson = new Person();
+        modalRef.Close();
+    }
+
+    private void ShowModal()
+    {
+        modalRef.Open();
     }
 }
