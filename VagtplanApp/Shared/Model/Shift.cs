@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace VagtplanApp.Shared.Model
 {
-    public class Vagter
+    public class Shift
     {
         // Felter
 

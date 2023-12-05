@@ -5,45 +5,45 @@ using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Client.Services
 {
-    public class VagterService : IVagterService
+    public class ShiftService : IShiftService
     {
         private readonly HttpClient httpClient; // HTTP klient bruges til at lave web requests
         private readonly ILocalStorageService localStorage;
 
 
-        public VagterService(HttpClient httpClient, ILocalStorageService localStorage)
+        public ShiftService(HttpClient httpClient, ILocalStorageService localStorage)
         {
             this.httpClient = httpClient;
             this.localStorage = localStorage;
 
         }
-        public async Task<List<Vagter>> GetAllVagter()
+        public async Task<List<Shift>> GetAllShifts()
         {
-            var vagter = await httpClient.GetFromJsonAsync<List<Vagter>>("api/vagter/getall");
+            var shifts = await httpClient.GetFromJsonAsync<List<Shift>>("api/shift/getall");
 
-            return vagter;
+            return shifts;
         }
 
-        public async Task CreateShift(Vagter vagt)
+        public async Task CreateShift(Shift shift)
         {
             // Send vagt til serveren for at blive gemt
-            await httpClient.PostAsJsonAsync("api/vagter/add", vagt);
+            await httpClient.PostAsJsonAsync("api/shift/add", shift);
         }
 
         // Frivillige kan tage vagter
-        public async Task<bool> TakeShift(string vagtId)
+        public async Task<bool> TakeShift(string shiftId)
         {
             var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
             if (currentUser != null)
             {
-                var response = await httpClient.PutAsJsonAsync($"/api/vagter/takeshift/{vagtId}", currentUser.id);
+                var response = await httpClient.PutAsJsonAsync($"/api/shift/takeshift/{shiftId}", currentUser.id);
                 return response.IsSuccessStatusCode;
             }
             return false;
         }
 
         // Metode for at hente vagter for en bestemt frivillig
-        public async Task<List<Vagter>> GetShiftsForVolunteer()
+        public async Task<List<Shift>> GetShiftsForVolunteer()
         {
             // Henter den nuværende bruger fra LocalStorage
             var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
@@ -52,19 +52,19 @@ namespace VagtplanApp.Client.Services
             if (currentUser != null)
             {
                 // Sender en GET-anmodning til serveren for at hente vagter for den nuværende bruger
-                var vagter = await httpClient.GetFromJsonAsync<List<Vagter>>($"api/vagter/person/{currentUser.id}");
+                var shitfs = await httpClient.GetFromJsonAsync<List<Shift>>($"api/shift/person/{currentUser.id}");
 
                 // Hvis der ikke er nogen vagter for brugeren, returnerer en tom liste
-                if (vagter == null || vagter.Count == 0)
+                if (shitfs == null || shitfs.Count == 0)
                 {
-                    return new List<Vagter>();
+                    return new List<Shift>();
                 }
 
-                return vagter;
+                return shitfs;
             }
 
             // Hvis der ikke er nogen nuværende bruger, returneres en tom liste
-            return new List<Vagter>();
+            return new List<Shift>();
         }
     }
 }

@@ -36,16 +36,16 @@
 
 
 @code {
-    private Vagter vagter = new Vagter();
+    private Shift vagter = new Shift();
     private EditContext aEditContext;
 
     [Inject]
-    private IVagterService mService { get; set; }
+    private IShiftService mService { get; set; }
 
     private async Task AddShift()
     {
         await mService.CreateShift(vagter);
-        vagter = new Vagter();  //Dette peger på nyt id, så man kan oprette flere vagter
+        vagter = new Shift();  //Dette peger på nyt id, så man kan oprette flere vagter
     }
 
     protected override void OnInitialized()

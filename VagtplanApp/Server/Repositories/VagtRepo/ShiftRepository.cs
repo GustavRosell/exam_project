@@ -5,52 +5,52 @@ using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Server.Repositories
 {
-    public class VagterRepository : IVagterRepository
+    public class ShiftRepository : IShiftRepository
     {
 
-        private readonly IMongoCollection<Vagter> VagterCollection;
+        private readonly IMongoCollection<Shift> shiftCollection;
 
-        public VagterRepository()
+        public ShiftRepository()
         {
             MongoClient client = new MongoClient(@"mongodb+srv://Adgang:ViSkalHaveAdgang123@cluster0.2szl4mg.mongodb.net/");
             IMongoDatabase database = client.GetDatabase("festival");
-            VagterCollection = database.GetCollection<Vagter>("vagter");
+            shiftCollection = database.GetCollection<Shift>("vagter");
         }
 
         // Henter alle personer
-        public List<Vagter> GetAll()
+        public List<Shift> GetAllShifts()
         {
             // Finder alle personer i MongoDB-samlingen og gemmer dem i en liste
-            var VagterList = VagterCollection.Find(new BsonDocument()).ToList();
+            var shiftList = shiftCollection.Find(new BsonDocument()).ToList();
 
             // Returnere listen af personer.
-            return VagterList;
+            return shiftList;
         }
 
-        // Opretter person
-        public async Task AddVagter(Vagter vagter)
+        // Opretter vagt
+        public async Task CreateShift(Shift shift)
         {
-            await VagterCollection.InsertOneAsync(vagter);
+            await shiftCollection.InsertOneAsync(shift);
         }
 
         // Frivillige kan tage vagter
-        public async Task TakeShift(string vagtId, string personId)
+        public async Task TakeShift(string shiftId, string personId)
         {
             // Filter der matcher documenter i mongoDB ("_id") med vores parameter vagtId, som skal konverters til et ObjectId pga MongoDB
-            var filter = new BsonDocument("_id", new ObjectId(vagtId));
+            var filter = new BsonDocument("_id", new ObjectId(shiftId));
 
             // Tilføjer personId, til assignedPersons i DB
             var update = new BsonDocument("$addToSet", new BsonDocument("assignedPersons", personId));
-            await VagterCollection.UpdateOneAsync(filter, update);
+            await shiftCollection.UpdateOneAsync(filter, update);
         }
 
 
         // Henter en liste af alle de vagter som en frivillig er tilknyttet
-        public async Task<List<Vagter>> GetShiftsByPersonId(string personId)
+        public async Task<List<Shift>> GetShiftsByPersonId(string personId)
         {
             var filter = new BsonDocument("assignedPersons", new BsonDocument("$eq", personId));
-            var vagterList = await VagterCollection.Find(filter).ToListAsync();
-            return vagterList;
+            var shiftList = await shiftCollection.Find(filter).ToListAsync();
+            return shiftList;
         }
     }
 }

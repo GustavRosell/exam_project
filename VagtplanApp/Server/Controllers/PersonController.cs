@@ -23,7 +23,7 @@ namespace VagtplanApp.Server.Controllers
         [Route("getall")]
         public List<Person> GetAll()
         {
-            return mRepo.GetAll();
+            return mRepo.GetAllPersons();
         }
 
         // Add Person
@@ -31,7 +31,7 @@ namespace VagtplanApp.Server.Controllers
         [Route("add")]
         public async Task CreatePerson([FromBody] Person person) // FromBody indikerer at data for booking forventes at blive sendt som en JSON
         {
-            await mRepo.AddPerson(person);
+            await mRepo.CreatePerson(person);
         }
 
         //Authenticate routen

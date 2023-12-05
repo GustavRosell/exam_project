@@ -33,15 +33,15 @@
 </table>
 
 @code {
-    private List<Vagter> vagterList = new List<Vagter>(); // Tom liste til at gemme bookings
+    private List<Shift> vagterList = new List<Shift>(); // Tom liste til at gemme bookings
 
     [Inject]
-    private IVagterService mService { get; set; }
+    private IShiftService mService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
 
-        vagterList = (await mService.GetAllVagter());
+        vagterList = (await mService.GetAllShifts());
 
     }
 }

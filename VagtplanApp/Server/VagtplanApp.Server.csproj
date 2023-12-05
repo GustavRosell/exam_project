@@ -26,8 +26,6 @@
     <None Remove="Repositories\VagtRepo\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Repositories\" />
     <Folder Include="Repositories\PersonRepo\" />
-    <Folder Include="Repositories\VagtRepo\" />
   </ItemGroup>
 </Project>
