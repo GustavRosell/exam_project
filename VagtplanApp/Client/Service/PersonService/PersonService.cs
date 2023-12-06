@@ -77,35 +77,9 @@ namespace VagtplanApp.Client.Services
 
         }
 
-        public async Task<bool> UpdateCurrentUser(Person updatePerson)
+        public async Task UpdatePerson(Person updatedperson)
         {
-            if (CurrentUser == null)
-            {
-                // CurrentUser is not set, fetch it from local storage
-                CurrentUser = await localStore.GetItemAsync<Person>("currentUser");
-            }
-
-            if (CurrentUser != null)
-            {
-                // Update the properties of the current user with the new data
-                CurrentUser.firstName = updatePerson.firstName;
-                CurrentUser.lastName = updatePerson.lastName;
-                CurrentUser.email = updatePerson.email;
-                CurrentUser.password = updatePerson.password;
-                // Add other properties as needed
-
-                // Send a PUT request to update the user data on the server
-                var response = await httpClient.PutAsJsonAsync("api/persons/update", CurrentUser);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // Update local storage with the modified user data
-                    await localStore.SetItemAsync("currentUser", CurrentUser);
-                    return true;
-                }
-            }
-
-            return false;
+            var response = await httpClient.PutAsJsonAsync("api/persons/updateperson", updatedperson);
         }
     }
 }

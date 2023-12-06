@@ -41,16 +41,21 @@ namespace VagtplanApp.Server.Repositories
             return await personCollection.Find(person => person.email == email).FirstOrDefaultAsync();
         }
 
-        public async Task UpdatePerson(Person updatePerson)
+        public async Task UpdatePerson(Person updatedPerson)
         {
-            var filter = Builders<Person>.Filter.Eq(p => p.id, updatePerson.id); // Bruger email for filter, men det betyder at vi ikke kan ændre emailen
-            var update = Builders<Person>.Update
-               .Set(p => p.firstName, updatePerson.firstName)
-               .Set(p => p.lastName, updatePerson.lastName)
-               //.Set(p => p.email, updatePerson.email) 
-               .Set(p => p.password, updatePerson.password);
-            // Add other properties as needed
+            // Opretter et filter, der matcher dokumentet baseret på ObjectId
+            var filter = new BsonDocument("_id", new ObjectId(updatedPerson.id));
 
+            // Opretter et opdateringsdokument baseret på updatedPerson objektet
+            // Bruger '$set' for at opdatere de specifikke felter i dokumentet
+            var update = new BsonDocument("$set", new BsonDocument
+            {
+                { "email", updatedPerson.email },
+                { "password", updatedPerson.password },
+                { "phonenumber", updatedPerson.phonenumber }
+            });
+            
+            // Udfører opdateringsoperationen
             await personCollection.UpdateOneAsync(filter, update);
         }
     }

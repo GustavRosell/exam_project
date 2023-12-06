@@ -24,84 +24,50 @@ else
     <button class="btn btn-secondary" @onclick="ShowModal">Rediger oplysninger</button>
 
     <ModalDialog @ref="modalRef" Title="Rediger oplysninger">
-        <EditForm Model="@updatePerson" OnValidSubmit="@UpdatedPerson">
+        <EditForm Model="@UpdateUserDetails" OnValidSubmit="@UpdateUserDetails">
             <DataAnnotationsValidator />
             <ValidationSummary />
 
 
             <div class="form-group">
                 <label for="updatedEmail">E-mail:</label>
-                <InputText id="updatedEmail" class="form-control" @bind-Value="@updatePerson.email" />
+                <InputText id="updatedEmail" class="form-control" @bind-Value="@updatedPerson.email" />
             </div>
             <div class="form-group">
                 <label for="newAdgangskode">Adgangskode:</label>
-                <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@updatePerson.password" />
+                <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@updatedPerson.password" />
             </div>
 
-            @* <div class="form-group">
+            <div class="form-group">
                 <label for="tlfnr">Telefonnummer:</label>
-                <InputNumber id="tlfnr" class="form-control" @bind-Value="@newPerson.phonenumber" />
-
-            </div> *@
-
-            <div class="form-group">
-                <label for="forNavn">Fornavn:</label>
-                <InputText id="forNavn" class="form-control" @bind-Value="@updatePerson.firstName" />
+                <InputNumber id="tlfnr" class="form-control" @bind-Value="@updatedPerson.phonenumber" />
             </div>
 
-            <div class="form-group">
-                <label for="efterNavn">Efternavn:</label>
-                <InputText id="efterNavn" class="form-control" @bind-Value="@updatePerson.lastName" />
-            </div>
-
-            @* @* @* <div class="form-group">
-                <label for="fødselsDato">Fødselsdato:</label>
-                <InputDate id="fødselsDato" class="form-control" @bind-Value="@newPerson.birthdate" />
-            </div>
-
-            <div class="form-group">
-                <label for="køn">Køn:</label>
-                <InputSelect id="køn" class="form-control" @bind-Value="@newPerson.gender">
-                    <option value="">Vælg køn...</option>
-                    <option value="Mand">Mand</option>
-                    <option value="Kvinde">Kvinde</option>
-                    <option value="Andet">Andet</option>
-                </InputSelect>
-            </div> 
-
-            <div class="form-group">
-                <label for="rolle">Rolle:</label>
-                <InputRadioGroup id="rolle" class="form-control" @bind-Value="@newPerson.isKoordinator">
-                    <InputRadio id="isFrivillig" Value="false" /> Frivillig
-                    <InputRadio is="isKoordinator" Value="true" /> Koordinator
-                </InputRadioGroup>
-            </div> *@
 
             <button type="submit" class="btn btn-success">Opdater</button>
         </EditForm>
     </ModalDialog>
-
 }
 
 @code {
-    private Person updatePerson = new Person();
+    private Person updatedPerson = new Person();
     private ModalDialog modalRef { get; set; }
 
     [Inject]
     private IPersonService mService { get; set; }
 
-    
     private Person currentUser;
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await localStore.GetItemAsync<Person>("currentUser");
+        updatedPerson = new Person { id = currentUser.id }; // Kopier relevant data fra currentUser
     }
 
-    private async Task UpdatedPerson()
+    private async Task UpdateUserDetails()
     {
-        await mService.UpdateCurrentUser(updatePerson);
-        updatePerson = new Person();
+        // Antag at updatedPerson nu indeholder de opdaterede oplysninger
+        await mService.UpdatePerson(updatedPerson);
         modalRef.Close();
     }
 
