@@ -11,7 +11,6 @@ namespace VagtplanApp.Shared.Model
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string id { get; set; } = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24);
-        public int personalId { get; set; }
 
         [Required(ErrorMessage = "email er påkrævet.")]
         [EmailAddress(ErrorMessage = "Ugyldig email adresse.")]

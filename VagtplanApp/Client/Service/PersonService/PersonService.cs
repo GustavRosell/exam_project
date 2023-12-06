@@ -22,11 +22,6 @@ namespace VagtplanApp.Client.Services
 
         public async Task<bool> AddPerson(Person person) // Task<bool>??
         {
-            //var latestPersonResponse = await httpClient.GetAsync("/api/persons/getlatest");
-            //var latestPerson = await latestPersonResponse.Content.ReadFromJsonAsync<Person>();
-            //int maxPersonalId = latestPerson?.personalId ?? 0;
-            //person.personalId = maxPersonalId + 1;
-
             var response = await httpClient.PostAsJsonAsync("/api/persons/add", person);
             return response.IsSuccessStatusCode;
         }
@@ -36,7 +31,6 @@ namespace VagtplanApp.Client.Services
             CurrentUser = user;
         }
 
-        // 
         public bool IsKoordinator()
         {
             return CurrentUser != null && CurrentUser.isKoordinator;
@@ -81,8 +75,11 @@ namespace VagtplanApp.Client.Services
             // Rydder brugerdata fra local storage
             await localStore.RemoveItemAsync("currentUser");
 
-            // Navigerer til forsiden
-            //navigationManager.NavigateTo("/");
+        }
+
+        public async Task UpdatePerson(Person updatedperson)
+        {
+            var response = await httpClient.PutAsJsonAsync("api/persons/updateperson", updatedperson);
         }
     }
 }

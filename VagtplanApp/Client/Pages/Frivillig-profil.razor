@@ -1,4 +1,5 @@
 ﻿@page "/frivillig-profil"
+@using VagtplanApp.Client.Services;
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 
@@ -19,13 +20,59 @@ else
         <p><strong>Køn:</strong> @currentUser.gender</p>
         <p><strong>Rolle:</strong> @(currentUser.isKoordinator ? "Koordinator" : "Frivillig")</p>
     </div>
+
+    <button class="btn btn-secondary" @onclick="ShowModal">Rediger oplysninger</button>
+
+    <ModalDialog @ref="modalRef" Title="Rediger oplysninger">
+        <EditForm Model="@UpdateUserDetails" OnValidSubmit="@UpdateUserDetails">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+
+            <div class="form-group">
+                <label for="updatedEmail">E-mail:</label>
+                <InputText id="updatedEmail" class="form-control" @bind-Value="@updatedPerson.email" />
+            </div>
+            <div class="form-group">
+                <label for="newAdgangskode">Adgangskode:</label>
+                <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@updatedPerson.password" />
+            </div>
+
+            <div class="form-group">
+                <label for="tlfnr">Telefonnummer:</label>
+                <InputNumber id="tlfnr" class="form-control" @bind-Value="@updatedPerson.phonenumber" />
+            </div>
+
+
+            <button type="submit" class="btn btn-success">Opdater</button>
+        </EditForm>
+    </ModalDialog>
 }
 
 @code {
+    private Person updatedPerson = new Person();
+    private ModalDialog modalRef { get; set; }
+
+    [Inject]
+    private IPersonService mService { get; set; }
+
     private Person currentUser;
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await localStore.GetItemAsync<Person>("currentUser");
+        updatedPerson = new Person { id = currentUser.id }; // Kopier relevant data fra currentUser
+    }
+
+    private async Task UpdateUserDetails()
+    {
+        // Antag at updatedPerson nu indeholder de opdaterede oplysninger
+        await mService.UpdatePerson(updatedPerson);
+        modalRef.Close();
+    }
+
+    private void ShowModal()
+    {
+        modalRef.Open();
     }
 }
