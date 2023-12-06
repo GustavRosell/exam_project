@@ -44,7 +44,7 @@ namespace VagtplanApp.Server.Controllers
 
         // Viser frivilliges vagter
         [HttpGet]
-        [Route("person/{personId}")]
+        [Route("person/{personId}")] // SKAL ÆNDRES TIL AT VÆRE shift/shitfs
         public async Task<ActionResult<List<Shift>>> GetShiftsByPersonId(string personId)
         {
             var shifts = await mRepo.GetShiftsByPersonId(personId);
@@ -55,6 +55,15 @@ namespace VagtplanApp.Server.Controllers
 
             return shifts;
         }
+
+        [HttpPut]
+        [Route("removeperson/{shiftId}/{personId}")]
+        public async Task<IActionResult> RemovePersonFromShift(string shiftId, string personId)
+        {
+            await mRepo.RemovePersonFromShift(shiftId, personId);
+            return Ok();
+        }
+
     }
 }
 

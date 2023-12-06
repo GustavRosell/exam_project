@@ -9,5 +9,6 @@ namespace VagtplanApp.Client.Services
         Task CreateShift(Shift shift);
         Task<bool> TakeShift(string shiftId);
         Task<List<Shift>> GetShiftsForVolunteer();
+        Task RemovePersonFromShift(string shiftId);
     }
 }

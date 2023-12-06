@@ -17,7 +17,7 @@ namespace VagtplanApp.Server.Repositories
             shiftCollection = database.GetCollection<Shift>("vagter");
         }
 
-        // Henter alle personer
+        // Henter alle vagter
         public List<Shift> GetAllShifts()
         {
             // Finder alle personer i MongoDB-samlingen og gemmer dem i en liste
@@ -51,6 +51,19 @@ namespace VagtplanApp.Server.Repositories
             var filter = new BsonDocument("assignedPersons", new BsonDocument("$eq", personId));
             var shiftList = await shiftCollection.Find(filter).ToListAsync();
             return shiftList;
+        }
+
+        // Så frivillige kan fjerne vagter som de har taget
+        public async Task RemovePersonFromShift(string shiftId, string personId)
+        {
+            // Filter der matcher dokumenter i MongoDB ("_id") med vores parameter shiftId
+            var filter = new BsonDocument("_id", new ObjectId(shiftId));
+
+            // Opdateringskommandoen fjerner personId fra listen 'assignedPersons'
+            var update = new BsonDocument("$pull", new BsonDocument("assignedPersons", personId));
+
+            // Udfører opdateringsoperationen
+            await shiftCollection.UpdateOneAsync(filter, update);
         }
     }
 }

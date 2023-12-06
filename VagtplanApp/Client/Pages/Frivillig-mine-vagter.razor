@@ -24,14 +24,14 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var vagt in vagter)
+            @foreach (var shift in vagter)
             {
                 <tr>
-                    <td>@vagt.startTime</td>
-                    <td>@vagt.endTime</td>
-                    <td>@vagt.minAge</td>
-                    <td>@vagt.numberOfPersons</td>
-                    <td></td>
+                    <td>@shift.startTime</td>
+                    <td>@shift.endTime</td>
+                    <td>@shift.minAge</td>
+                    <td>@shift.numberOfPersons</td>
+                    <td> <svg xmlns="http://www.w3.org/2000/svg" @onclick="() => RemovePersonFromShift(shift.id)" width="24" height="24" viewBox="0 0 8 8"><path fill="#900" d="M4 0C1.79 0 0 1.79 0 4s1.79 4 4 4s4-1.79 4-4s-1.79-4-4-4zM2.5 1.78L4 3.28l1.5-1.5l.72.72L4.72 4l1.5 1.5l-.72.72L4 4.72l-1.5 1.5l-.72-.72L3.28 4l-1.5-1.5l.72-.72z" /></svg></td>
                 </tr>
             }
         </tbody>
@@ -48,4 +48,11 @@ else
     {
         vagter = await mService.GetShiftsForVolunteer();
     }
+
+    private async Task RemovePersonFromShift(string shiftId)
+    {
+        await mService.RemovePersonFromShift(shiftId);
+        vagter = await mService.GetShiftsForVolunteer(); // Opdater listen af vagter
+    }
+
 }
