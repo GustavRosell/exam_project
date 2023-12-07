@@ -11,5 +11,7 @@ namespace VagtplanApp.Client.Services
         Task<List<Shift>> GetShiftsForVolunteer();
         Task RemovePersonFromShift(string shiftId);
         Task UpdateShift(Shift updatedShift);
+        List<Shift> GetSortedShifts(List<Shift> shifts, bool sortByPriority);
+
     }
 }

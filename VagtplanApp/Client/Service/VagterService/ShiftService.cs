@@ -26,6 +26,14 @@ namespace VagtplanApp.Client.Services
             return shifts;
         }
 
+        // Sortere alle shifts på prioritet
+        public List<Shift> GetSortedShifts(List<Shift> shifts, bool sortByPriority)
+        {
+            return sortByPriority
+                ? shifts.OrderBy(shift => shift.priority).ToList()
+                : shifts.ToList();
+        }
+
         // Opretter en ny vagt ved at sende data til serveren
         public async Task CreateShift(Shift shift)
         {

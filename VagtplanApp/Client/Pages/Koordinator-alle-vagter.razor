@@ -12,6 +12,7 @@
             <th>Start Tid</th>
             <th>Slut Tid</th>
             <th>Antal Personer</th>
+            <th>Prioritet<a class="oi oi-sort-ascending" @onclick="SortPriority"></a></th>
             <th>Rediger Vagt</th>
         </tr>
     </thead>
@@ -25,6 +26,7 @@
                 <td>@shift.startTime.ToString("HH:mm")</td>
                 <td>@shift.endTime.ToString("HH:mm")</td>
                 <td>@shift.numberOfPersons</td>
+                <td>@shift.priority</td>
                 <button class="btn btn-secondary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button>
             </tr>
         }
@@ -68,6 +70,7 @@
 
     [Inject]
     private IShiftService mService { get; set; }
+    private bool sortByPriority = false;
 
 
 
@@ -90,4 +93,16 @@
         // Opdater shiftList for at vise de nye ændringer
         shiftList = await mService.GetAllShifts();
     }
+
+    private List<Shift> GetSortedVagterList()
+    {
+        return mService.GetSortedShifts(shiftList, sortByPriority);
+    }
+
+    private void SortPriority()
+    {
+        sortByPriority = !sortByPriority;
+        shiftList = mService.GetSortedShifts(shiftList, sortByPriority);
+    }
+
 }
