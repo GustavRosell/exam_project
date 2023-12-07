@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.14" />
     <PackageReference Include="MongoDB.Bson" Version="2.22.0" />
+    <PackageReference Include="Blazored.Toast" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
