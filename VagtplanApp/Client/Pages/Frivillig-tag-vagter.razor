@@ -26,7 +26,7 @@
                 <td>@shift.numberOfPersons</td>
                 <td> <svg xmlns="http://www.w3.org/2000/svg" @onclick="() => TakeShift(shift.id)" width="25" height="25" viewBox="0 0 8 8"><path fill="currentColor" d="M4 0C1.79 0 0 1.79 0 4s1.79 4 4 4s4-1.79 4-4s-1.79-4-4-4zm2 1.78l.72.72L3.5 5.72L1.78 4l.72-.72l1 1L6 1.78z" /></svg> </td>
 
-            </tr>   
+            </tr>
         }
     </tbody>
 </table>
@@ -46,7 +46,60 @@
 
     private async Task TakeShift(string shiftId)
     {
-        await mService.TakeShift(shiftId);
+        if (takenUserShifts.Count==0)
+        {
+            await GetTakenUserShifts();
+            Console.WriteLine(takenUserShifts);
+        }
+
+        var currentShift = shiftList.FirstOrDefault(x => x.id == shiftId);
+
+        var unableToTakeShift = false;
+
+        foreach (var shift in takenUserShifts)
+        {
+            if (currentShift != null && CheckTimeOverlap(currentShift.startTime, currentShift.endTime, shift.startTime, shift.endTime))
+            {
+                //Her skal der laves noget popup eller toast til at fortælle brugeren at de ikke kan tage den her vagt, fordi den overlapper med en eksisterende
+                Console.WriteLine("Overlap in shift");
+                unableToTakeShift = true;
+            }
+        }
+
+        if (!unableToTakeShift)
+        {
+            await mService.TakeShift(shiftId);
+        }
     }
+
+    private List<Shift> takenUserShifts = new List<Shift>();
+
+    private async Task GetTakenUserShifts()
+    {
+        takenUserShifts = await mService.GetShiftsForVolunteer();
+    }
+
+    private bool CheckTimeOverlap(DateTime startCurrentShift, DateTime endCurrentShift, DateTime startAnyShift, DateTime endAnyShift)
+    {
+        //Simplifiseres (mindre variabler)
+        var startTick = startAnyShift.Ticks;
+        var endTick = endAnyShift.Ticks;
+
+        var currentStartTick = startCurrentShift.Ticks;
+        var currentEndTick = endCurrentShift.Ticks;
+
+        if (currentStartTick >=startTick && currentStartTick<=endTick)
+        {
+            return true;
+        }
+
+        if (currentEndTick >= startTick && currentEndTick<=endTick)
+        {
+            return true;
+        }
+
+         return false;
+    }
+
 
 }
