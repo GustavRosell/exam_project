@@ -403,3 +403,5 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+/VagtplanApp/Server/.config/dotnet-tools.json
+/VagtplanApp/Server/Properties/ServiceDependencies/VagtplanApp - Web Deploy/profile.arm.json

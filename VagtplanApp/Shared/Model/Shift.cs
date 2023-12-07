@@ -22,7 +22,7 @@ namespace VagtplanApp.Shared.Model
 
         public string priority { get; set; }
     }
-    public enum Priority 
+    public enum Priority // Denne enumerable bruges til at rangere shifts efter "Lav", "Normal", "Høj"
     {
         Lav,
         Normal,
