@@ -21,13 +21,11 @@
         @foreach (var shift in shiftList)
         {
             <tr>
-                <td>@shift.date</td>
+                <td>@shift.date.ToString("dd:MM")</td>
                 <td>@shift.startTime.ToString("HH:mm")</td>
                 <td>@shift.endTime.ToString("HH:mm")</td>
                 <td>@shift.numberOfPersons</td>
                 <button class="btn btn-secondary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button>
-
-
             </tr>
         }
     </tbody>

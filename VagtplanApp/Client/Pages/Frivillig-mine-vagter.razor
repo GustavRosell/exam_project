@@ -27,7 +27,7 @@ else
             @foreach (var shift in vagter)
             {
                 <tr>
-                    <td>@shift.date</td>
+                    <td>@shift.date.ToString("dd:MM")</td>
                     <td>@shift.startTime.ToString("HH:mm")</td>
                     <td>@shift.endTime.ToString("HH:mm")</td>
                     <td>@shift.numberOfPersons</td>
