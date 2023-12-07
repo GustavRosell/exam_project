@@ -18,22 +18,53 @@
     <tbody>
 
         <!--Viser bookings udfra det som vælges i dropdown-menu-->
-        @foreach (var vagter in vagterList)
+        @foreach (var shift in shiftList)
         {
             <tr>
-                <td>@vagter.date</td>
-                <td>@vagter.startTime.ToString("HH:mm")</td> 
-                <td>@vagter.endTime.ToString("HH:mm")</td>
-                <td>@vagter.numberOfPersons</td>
-                @*<td> <svg xmlns="http://www.w3.org/2000/svg" @onclick="() => DeleteBooking(booking.Id)" width="24" height="24" viewBox="0 0 8 8"><path fill="#900" d="M4 0C1.79 0 0 1.79 0 4s1.79 4 4 4s4-1.79 4-4s-1.79-4-4-4zM2.5 1.78L4 3.28l1.5-1.5l.72.72L4.72 4l1.5 1.5l-.72.72L4 4.72l-1.5 1.5l-.72-.72L3.28 4l-1.5-1.5l.72-.72z" /></svg></td> *@
+                <td>@shift.date</td>
+                <td>@shift.startTime.ToString("HH:mm")</td> 
+                <td>@shift.endTime.ToString("HH:mm")</td>
+                <td>@shift.numberOfPersons</td>
+                <button class="btn btn-secondary" @onclick="ShowModal">Rediger oplysninger</button>
 
+                <ModalDialog @ref="modalRef" Title="Rediger oplysninger">
+                    <EditForm Model="@UpdateShiftDetails" OnValidSubmit="@UpdateShiftDetails">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="col-md-6 mb-3">
+                            <label for="dato">Dato</label>
+                            <input type="date" id="dato" @bind="shift.date" class="form-control" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="start-dato">Start tid</label>
+                            <input type="time" id="start-dato" @bind="shift.startTime" class="form-control" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="slut-dato">Slut tid</label>
+                            <input type="time" id="slut-dato" @bind="shift.endTime" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="antalPersoner">Antal Personer</label>
+                            <InputNumber id="AntalPersoner" @bind-Value="shift.numberOfPersons" class="form-control" required />
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <button type="submit" class="btn btn-primary">Opdater</button>
+                        </div>
+
+                    </EditForm>
+                </ModalDialog>
             </tr>
         }
     </tbody>
-</table>
+   </table>
+
 
 @code {
-    private List<Shift> vagterList = new List<Shift>(); 
+    private List<Shift> shiftList = new List<Shift>(); 
+    private Shift updatedShift = new Shift();
+    private ModalDialog modalRef { get; set; }
 
     [Inject]
     private IShiftService mService { get; set; }
@@ -42,8 +73,17 @@
 
     protected override async Task OnInitializedAsync()
     {
+        shiftList = (await mService.GetAllShifts());
+    }
 
-        vagterList = (await mService.GetAllShifts());
+    private void ShowModal()
+    {
+        modalRef.Open();
+    }
 
+    private async Task UpdateShiftDetails()
+    {
+        await mService.UpdateShift(updatedShift);
+        modalRef.Close();
     }
 }

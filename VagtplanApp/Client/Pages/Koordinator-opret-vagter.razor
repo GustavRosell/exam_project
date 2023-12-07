@@ -11,32 +11,29 @@
 
     <div class="col-md-6 mb-3">
         <label for="dato">Dato</label>
-        @*<InputDate id="start-dato" @bind-Value="vagter.StartTid" class="form-control" />*@
-        <input type="date" id="dato" @bind="vagter.date" class="form-control" required />
+        <input type="date" id="dato" @bind="shift.date" class="form-control" required />
     </div>
     <div class="col-md-6 mb-3">
         <label for="start-dato">Start tid</label>
-        @*<InputDate id="start-dato" @bind-Value="vagter.StartTid" class="form-control" />*@
-        <input type="time" id="start-dato" @bind="vagter.startTime" class="form-control" required />
+        <input type="time" id="start-dato" @bind="shift.startTime" class="form-control" required />
     </div>
     <div class="col-md-6 mb-3">
         <label for="slut-dato">Slut tid</label>
-        @*<InputDate id="slut-dato" @bind-Value="vagter.SlutTid" class="form-control" /> der er forskel på InputDate of type="datetime-local"*@
-        <input type="time" id="slut-dato" @bind="vagter.endTime" class="form-control" />
+        <input type="time" id="slut-dato" @bind="shift.endTime" class="form-control" />
     </div>
     <div class="col-md-6 mb-3">
         <label for="antalPersoner">Antal Personer</label>
-        <InputNumber id="AntalPersoner" @bind-Value="vagter.numberOfPersons" class="form-control" required />
+        <InputNumber id="AntalPersoner" @bind-Value="shift.numberOfPersons" class="form-control" required />
     </div>
 
     <div class="col-12 mb-3">
         <button type="submit" class="btn btn-primary">Tilføj</button>
     </div>
 </EditForm>
-}
+
 
 @code {
-    private Shift vagter = new Shift();
+    private Shift shift = new Shift();
     private EditContext aEditContext;
     private ModalDialog modalRef { get; set; }
 
@@ -45,12 +42,12 @@
 
     private async Task AddShift()
     {
-        await mService.CreateShift(vagter);
-        vagter = new Shift();  //Dette peger på nyt id, så man kan oprette flere vagter
+        await mService.CreateShift(shift);
+        shift = new Shift();  //Dette peger på nyt id, så man kan oprette flere vagter
     }
 
     protected override void OnInitialized()
     {
-        aEditContext = new EditContext(vagter);
+        aEditContext = new EditContext(shift);
     }
 }
