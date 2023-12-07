@@ -9,20 +9,20 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-
     <div class="col-md-6 mb-3">
-        <label for="start-dato">Start dato</label>
+        <label for="dato">Dato</label>
         @*<InputDate id="start-dato" @bind-Value="vagter.StartTid" class="form-control" />*@
-        <input type="datetime-local" id="start-dato" @bind="vagter.startTime" class="form-control" required />
+        <input type="date" id="dato" @bind="vagter.date" class="form-control" required />
     </div>
     <div class="col-md-6 mb-3">
-        <label for="slut-dato">Slut dato</label>
+        <label for="start-dato">Start tid</label>
+        @*<InputDate id="start-dato" @bind-Value="vagter.StartTid" class="form-control" />*@
+        <input type="time" id="start-dato" @bind="vagter.startTime" class="form-control" required />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="slut-dato">Slut tid</label>
         @*<InputDate id="slut-dato" @bind-Value="vagter.SlutTid" class="form-control" /> der er forskel på InputDate of type="datetime-local"*@
-        <input type="datetime-local" id="slut-dato" @bind="vagter.endTime" class="form-control" />
-    </div>
-    <div class="col-md-6 mb-3">
-        <label for="minAlder">Aldersgrænse</label>
-        <InputNumber id="minAlder" @bind-Value="vagter.minAge" class="form-control" required />
+        <input type="time" id="slut-dato" @bind="vagter.endTime" class="form-control" />
     </div>
     <div class="col-md-6 mb-3">
         <label for="antalPersoner">Antal Personer</label>

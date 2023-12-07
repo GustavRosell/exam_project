@@ -31,16 +31,16 @@ else
 
             <div class="form-group">
                 <label for="updatedEmail">E-mail:</label>
-                <InputText id="updatedEmail" class="form-control" @bind-Value="@updatedPerson.email" />
+                <InputText id="updatedEmail" class="form-control" @bind-Value="@updatedPerson.email" required />
             </div>
             <div class="form-group">
                 <label for="newAdgangskode">Adgangskode:</label>
-                <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@updatedPerson.password" />
+                <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@updatedPerson.password" required />
             </div>
 
             <div class="form-group">
                 <label for="tlfnr">Telefonnummer:</label>
-                <InputNumber id="tlfnr" class="form-control" @bind-Value="@updatedPerson.phonenumber" />
+                <InputNumber id="tlfnr" class="form-control" @bind-Value="@updatedPerson.phonenumber" required />
             </div>
 
 
@@ -79,6 +79,13 @@ else
 
     private void ShowModal()
     {
+        // Kopierer den nuværende brugers data til updatedPerson objektet == udfylder modalDialog med information
+        updatedPerson = new Person
+        {
+            email = currentUser.email,
+            password = currentUser.password,
+            phonenumber = currentUser.phonenumber,
+        };
         modalRef.Open();
     }
 }
