@@ -72,5 +72,10 @@ namespace VagtplanApp.Client.Services
             await httpClient.PutAsync($"api/shift/removeperson/{shiftId}/{currentUser.id}", null);
             
         }
+
+        public async Task UpdateShift(Shift updatedShift)
+        {
+            var response = await httpClient.PutAsJsonAsync("api/shift/updateshift", updatedShift);
+        }
     }
 }

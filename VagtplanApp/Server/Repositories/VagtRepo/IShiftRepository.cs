@@ -9,5 +9,6 @@ namespace VagtplanApp.Server.Repositories
         Task TakeShift(string vagtId, string personId);
         Task<List<Shift>> GetShiftsByPersonId(string personId);
         Task RemovePersonFromShift(string shiftId, string personId);
+        Task UpdateShift(Shift updatedShift);
     }
 }

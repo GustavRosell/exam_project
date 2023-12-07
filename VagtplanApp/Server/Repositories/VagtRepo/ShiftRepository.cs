@@ -65,5 +65,22 @@ namespace VagtplanApp.Server.Repositories
             // Udfører opdateringsoperationen
             await shiftCollection.UpdateOneAsync(filter, update);
         }
+
+
+        public async Task UpdateShift(Shift updatedShift)
+        {
+            var filter = new BsonDocument("_id", new ObjectId(updatedShift.id));
+
+
+            var update = new BsonDocument("$set", new BsonDocument
+            {
+                { "date", updatedShift.date.ToDateTime(TimeOnly.MinValue)}, // Konverterer DateOnly til DateTime
+                { "startTime", updatedShift.startTime },
+                { "endTime", updatedShift.endTime },
+                { "numberOfPersons", updatedShift.numberOfPersons }
+            });
+
+            await shiftCollection.UpdateOneAsync(filter, update);
+        }
     }
 }

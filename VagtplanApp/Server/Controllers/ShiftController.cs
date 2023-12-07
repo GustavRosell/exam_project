@@ -64,6 +64,13 @@ namespace VagtplanApp.Server.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        [Route("updateshift")]
+        public async Task<IActionResult> UpdatePerson([FromBody] Shift shift)
+        {
+            await mRepo.UpdateShift(shift);
+            return Ok();
+        }
     }
 }
 
