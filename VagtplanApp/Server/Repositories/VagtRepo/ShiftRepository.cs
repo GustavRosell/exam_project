@@ -74,7 +74,7 @@ namespace VagtplanApp.Server.Repositories
 
             var update = new BsonDocument("$set", new BsonDocument
             {
-                { "date", updatedShift.date.ToDateTime(TimeOnly.MinValue)}, // Konverterer DateOnly til DateTime
+                { "date", updatedShift.date },
                 { "startTime", updatedShift.startTime },
                 { "endTime", updatedShift.endTime },
                 { "numberOfPersons", updatedShift.numberOfPersons }

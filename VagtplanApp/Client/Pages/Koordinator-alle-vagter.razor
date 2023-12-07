@@ -22,47 +22,49 @@
         {
             <tr>
                 <td>@shift.date</td>
-                <td>@shift.startTime.ToString("HH:mm")</td> 
+                <td>@shift.startTime.ToString("HH:mm")</td>
                 <td>@shift.endTime.ToString("HH:mm")</td>
                 <td>@shift.numberOfPersons</td>
-                <button class="btn btn-secondary" @onclick="ShowModal">Rediger oplysninger</button>
+                <button class="btn btn-secondary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button>
 
-                <ModalDialog @ref="modalRef" Title="Rediger oplysninger">
-                    <EditForm Model="@UpdateShiftDetails" OnValidSubmit="@UpdateShiftDetails">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
 
-                        <div class="col-md-6 mb-3">
-                            <label for="dato">Dato</label>
-                            <input type="date" id="dato" @bind="shift.date" class="form-control" required />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="start-dato">Start tid</label>
-                            <input type="time" id="start-dato" @bind="shift.startTime" class="form-control" required />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="slut-dato">Slut tid</label>
-                            <input type="time" id="slut-dato" @bind="shift.endTime" class="form-control" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="antalPersoner">Antal Personer</label>
-                            <InputNumber id="AntalPersoner" @bind-Value="shift.numberOfPersons" class="form-control" required />
-                        </div>
-
-                        <div class="col-12 mb-3">
-                            <button type="submit" class="btn btn-primary">Opdater</button>
-                        </div>
-
-                    </EditForm>
-                </ModalDialog>
             </tr>
         }
     </tbody>
-   </table>
+</table>
 
+
+<ModalDialog @ref="modalRef" Title="Rediger oplysninger">
+    <EditForm Model="@updatedShift" OnValidSubmit="@UpdateShiftDetails">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="col-md-6 mb-3">
+            <label for="dato">Dato</label>
+            <input type="date" id="dato" @bind="updatedShift.date" class="form-control" required />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="start-dato">Start tid</label>
+            <input type="time" id="start-dato" @bind="updatedShift.startTime" class="form-control" required />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="slut-dato">Slut tid</label>
+            <input type="time" id="slut-dato" @bind="updatedShift.endTime" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="antalPersoner">Antal Personer</label>
+            <InputNumber id="AntalPersoner" @bind-Value="updatedShift.numberOfPersons" class="form-control" required />
+        </div>
+
+        <div class="col-12 mb-3">
+            <button type="submit" class="btn btn-primary">Opdater</button>
+        </div>
+
+    </EditForm>
+</ModalDialog>
 
 @code {
-    private List<Shift> shiftList = new List<Shift>(); 
+    private List<Shift> shiftList = new List<Shift>();
     private Shift updatedShift = new Shift();
     private ModalDialog modalRef { get; set; }
 
@@ -76,14 +78,18 @@
         shiftList = (await mService.GetAllShifts());
     }
 
-    private void ShowModal()
+    private void ShowModal(Shift shift)
     {
+        updatedShift = shift; // Her forudfyldes formularen med den valgte vagt
         modalRef.Open();
     }
 
     private async Task UpdateShiftDetails()
     {
-        await mService.UpdateShift(updatedShift);
+        await mService.UpdateShift(updatedShift); // Antager at denne metode eksisterer og opdaterer en vagt
         modalRef.Close();
+
+        // Opdater shiftList for at vise de nye ændringer
+        shiftList = await mService.GetAllShifts();
     }
 }
