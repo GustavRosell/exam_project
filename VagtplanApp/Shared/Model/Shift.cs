@@ -20,5 +20,12 @@ namespace VagtplanApp.Shared.Model
         public int numberOfPersons { get; set; }  // antager dette er et antal, kunne også være en liste af person-ID'er?
         public List<string> assignedPersons { get; set; } = new List<string>(); // String eller int? kommer an på id
 
+        public string priority { get; set; }
     }
+    public enum Priority 
+    {
+        Lav,
+        Normal,
+        Høj
+    } 
 }

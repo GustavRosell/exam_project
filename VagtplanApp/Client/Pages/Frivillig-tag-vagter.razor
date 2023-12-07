@@ -11,6 +11,7 @@
             <th>Start tid</th>
             <th>Slut tid</th>
             <th>Antal personer</th>
+            <th>Prioritet</th>
             <th>Tag vagt</th>
         </tr>
     </thead>
@@ -24,6 +25,7 @@
                 <td>@shift.startTime</td>
                 <td>@shift.endTime</td>
                 <td>@shift.numberOfPersons</td>
+                <td>@shift.priority</td>
                 <td> <svg xmlns="http://www.w3.org/2000/svg" @onclick="() => TakeShift(shift.id)" width="25" height="25" viewBox="0 0 8 8"><path fill="currentColor" d="M4 0C1.79 0 0 1.79 0 4s1.79 4 4 4s4-1.79 4-4s-1.79-4-4-4zm2 1.78l.72.72L3.5 5.72L1.78 4l.72-.72l1 1L6 1.78z" /></svg> </td>
             </tr>
         }
