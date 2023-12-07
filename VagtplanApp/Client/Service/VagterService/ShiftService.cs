@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Linq;
+using System.Net.Http.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using VagtplanApp.Shared.Model;
@@ -30,9 +31,10 @@ namespace VagtplanApp.Client.Services
         public List<Shift> GetSortedShifts(List<Shift> shifts, bool sortByPriority)
         {
             return sortByPriority
-                ? shifts.OrderBy(shift => shift.priority).ToList()
+                ? shifts.OrderByDescending(shift => shift.priority).ToList()
                 : shifts.ToList();
         }
+
 
         // Opretter en ny vagt ved at sende data til serveren
         public async Task CreateShift(Shift shift)
@@ -79,6 +81,11 @@ namespace VagtplanApp.Client.Services
             // Sender en anmodning til serveren for at fjerne den nuværende bruger fra en vagt
             await httpClient.PutAsync($"api/shift/removeperson/{shiftId}/{currentUser.id}", null);
             
+        }
+
+        public async Task UpdateShift(Shift updatedShift)
+        {
+            var response = await httpClient.PutAsJsonAsync("api/shift/updateshift", updatedShift);
         }
     }
 }

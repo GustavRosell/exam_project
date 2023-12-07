@@ -19,22 +19,54 @@
     <tbody>
 
         <!--Viser bookings udfra det som vælges i dropdown-menu-->
-        @foreach (var vagter in GetSortedVagterList())
+        @foreach (var shift in shiftList)
         {
             <tr>
-                <td>@vagter.date</td>
-                <td>@vagter.startTime</td> 
-                <td>@vagter.endTime</td>
-                <td>@vagter.numberOfPersons</td>
-                <td>@vagter.priority</td>
-                @*<td> <svg xmlns="http://www.w3.org/2000/svg" @onclick="() => DeleteBooking(booking.Id)" width="24" height="24" viewBox="0 0 8 8"><path fill="#900" d="M4 0C1.79 0 0 1.79 0 4s1.79 4 4 4s4-1.79 4-4s-1.79-4-4-4zM2.5 1.78L4 3.28l1.5-1.5l.72.72L4.72 4l1.5 1.5l-.72.72L4 4.72l-1.5 1.5l-.72-.72L3.28 4l-1.5-1.5l.72-.72z" /></svg></td> *@
+                <td>@shift.date.ToString("dd:MM")</td>
+                <td>@shift.startTime.ToString("HH:mm")</td>
+                <td>@shift.endTime.ToString("HH:mm")</td>
+                <td>@shift.numberOfPersons</td>
+                <td>@shift.priority</td>
+                <button class="btn btn-secondary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button>
             </tr>
         }
     </tbody>
 </table>
 
+
+<ModalDialog @ref="modalRef" Title="Rediger oplysninger">
+    <EditForm Model="@updatedShift" OnValidSubmit="@UpdateShiftDetails">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="col-md-6 mb-3">
+            <label for="dato">Dato</label>
+            <input type="date" id="dato" @bind="updatedShift.date" class="form-control" required />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="start-dato">Start tid</label>
+            <input type="time" id="start-dato" @bind="updatedShift.startTime" class="form-control" required />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="slut-dato">Slut tid</label>
+            <input type="time" id="slut-dato" @bind="updatedShift.endTime" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="antalPersoner">Antal Personer</label>
+            <InputNumber id="AntalPersoner" @bind-Value="updatedShift.numberOfPersons" class="form-control" required />
+        </div>
+
+        <div class="col-12 mb-3">
+            <button type="submit" class="btn btn-primary">Opdater</button>
+        </div>
+
+    </EditForm>
+</ModalDialog>
+
 @code {
-    private List<Shift> vagterList = new List<Shift>(); 
+    private List<Shift> shiftList = new List<Shift>();
+    private Shift updatedShift = new Shift();
+    private ModalDialog modalRef { get; set; }
 
     [Inject]
     private IShiftService mService { get; set; }
@@ -44,18 +76,34 @@
 
     protected override async Task OnInitializedAsync()
     {
+        shiftList = (await mService.GetAllShifts());
+    }
 
-        vagterList = (await mService.GetAllShifts());
+    private void ShowModal(Shift shift)
+    {
+        updatedShift = shift; // Her forudfyldes formularen med den valgte vagt
+        modalRef.Open();
+    }
 
+    private async Task UpdateShiftDetails()
+    {
+        await mService.UpdateShift(updatedShift); // Antager at denne metode eksisterer og opdaterer en vagt
+        modalRef.Close();
+
+        // Opdater shiftList for at vise de nye ændringer
+        shiftList = await mService.GetAllShifts();
     }
 
     private List<Shift> GetSortedVagterList()
     {
-        return mService.GetSortedShifts(vagterList, sortByPriority);
-    }  
+        return mService.GetSortedShifts(shiftList, sortByPriority);
+    }
 
     private void SortPriority()
     {
         sortByPriority = !sortByPriority;
+        shiftList = mService.GetSortedShifts(shiftList, sortByPriority);
     }
+
+
 }

@@ -65,5 +65,22 @@ namespace VagtplanApp.Server.Repositories
             // Udfører opdateringsoperationen
             await shiftCollection.UpdateOneAsync(filter, update);
         }
+
+
+        public async Task UpdateShift(Shift updatedShift)
+        {
+            var filter = new BsonDocument("_id", new ObjectId(updatedShift.id));
+
+            var update = new BsonDocument("$set", new BsonDocument
+            {
+                { "date", updatedShift.date }, // MongoDB forstår DateTime, men ikke DateOnly
+                { "startTime", updatedShift.startTime }, // Antager at dette allerede er et DateTime objekt
+                { "endTime", updatedShift.endTime }, // Antager at dette allerede er et DateTime objekt
+                { "numberOfPersons", updatedShift.numberOfPersons }
+                // Tilføj yderligere opdateringer efter behov
+            });
+
+            await shiftCollection.UpdateOneAsync(filter, update);
+        }
     }
 }
