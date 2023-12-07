@@ -64,10 +64,16 @@ else
         updatedPerson = new Person { id = currentUser.id }; // Kopier relevant data fra currentUser
     }
 
+
     private async Task UpdateUserDetails()
     {
-        // Antag at updatedPerson nu indeholder de opdaterede oplysninger
         await mService.UpdatePerson(updatedPerson);
+        // Opdaterer CurrentUser med de nye oplysninger
+        currentUser.email = updatedPerson.email;
+        currentUser.password = updatedPerson.password; // Bør kun opdateres, hvis det er nødvendigt
+        currentUser.phonenumber = updatedPerson.phonenumber;
+        // Gemmer den opdaterede bruger i local storage
+        await localStore.SetItemAsync("currentUser", currentUser);
         modalRef.Close();
     }
 
