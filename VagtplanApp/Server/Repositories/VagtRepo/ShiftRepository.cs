@@ -82,5 +82,16 @@ namespace VagtplanApp.Server.Repositories
 
             await shiftCollection.UpdateOneAsync(filter, update);
         }
+
+
+        public async Task DeleteShift(string shiftId)
+        {
+            // Filter to match the document with the given shiftId
+            var filter = new BsonDocument("_id", new ObjectId(shiftId));
+
+            // Delete the document that matches the filter
+            await shiftCollection.DeleteOneAsync(filter);
+        }
+
     }
 }

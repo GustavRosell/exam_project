@@ -10,4 +10,5 @@ public interface IShiftService
     Task UpdateShift(Shift updatedShift);
     List<Shift> GetSortedShifts(List<Shift> shifts, bool sortByPriority);
     Task<bool> TryTakeShift(string shiftId);
+    Task DeleteShift(string shiftId);
 }

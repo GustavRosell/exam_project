@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using MongoDB.Bson;
 using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Client.Services
@@ -121,6 +122,12 @@ namespace VagtplanApp.Client.Services
             // Tager vagten - kalder TakeShift()
             return await TakeShift(shiftId);
         }
+
+         public async Task DeleteShift(string shiftId)
+        {
+            await httpClient.DeleteAsync("api/shift/DeleteShift/{shiftId}");
+        }
+
 
     }
 }

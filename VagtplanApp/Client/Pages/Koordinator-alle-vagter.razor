@@ -16,6 +16,7 @@
             <th>Antal Personer</th>
             <th>Prioritet<a class="oi oi-sort-ascending" @onclick="SortPriority"></a></th>
             <th>Rediger Vagt</th>
+            <th>Slet Vagt</th>
         </tr>
     </thead>
     <tbody>
@@ -29,7 +30,8 @@
                 <td>@shift.endTime.ToString("HH:mm")</td>
                 <td>@shift.numberOfPersons</td>
                 <td>@shift.priority</td>
-                <button class="btn btn-secondary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button>
+                <td> <button class="btn btn-outline-primary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button> </td>
+                <td> <button class="btn btn-outline-danger" @onclick="() => DeleteShift(shift.id)">Slet denne vagt</button> </td>
             </tr>
         }
 
@@ -108,5 +110,12 @@
         shiftList = mService.GetSortedShifts(shiftList, sortByPriority);
     }
 
+    private async Task DeleteShift(string shiftId)
+    {
+        await mService.DeleteShift(shiftId); 
+     
 
+        // Opdater shiftList for at vise de nye ændringer
+        shiftList = await mService.GetAllShifts();
+    }
 }
