@@ -10,5 +10,6 @@ namespace VagtplanApp.Server.Repositories
         Task<List<Shift>> GetShiftsByPersonId(string personId);
         Task RemovePersonFromShift(string shiftId, string personId);
         Task UpdateShift(Shift updatedShift);
+        Task DeleteShift(string shiftId);
     }
 }

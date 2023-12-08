@@ -77,11 +77,23 @@ namespace VagtplanApp.Server.Repositories
                 { "startTime", updatedShift.startTime }, // Antager at dette allerede er et DateTime objekt
                 { "endTime", updatedShift.endTime }, // Antager at dette allerede er et DateTime objekt
                 { "numberOfPersons", updatedShift.numberOfPersons },
-                { "IsLocked", updatedShift.IsLocked },
+                { "priority", updatedShift.priority },
+                { "IsLocked", updatedShift.IsLocked }
                 // Tilføj yderligere opdateringer efter behov
             });
 
             await shiftCollection.UpdateOneAsync(filter, update);
         }
+
+
+        public async Task DeleteShift(string shiftId)
+        {
+            // Filter to match the document with the given shiftId
+            var filter = new BsonDocument("_id", new ObjectId(shiftId));
+
+            // Delete the document that matches the filter
+            await shiftCollection.DeleteOneAsync(filter);
+        }
+
     }
 }

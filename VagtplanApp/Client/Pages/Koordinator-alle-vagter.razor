@@ -16,6 +16,7 @@
             <th>Antal Personer (tildelt/total)</th>
             <th>Prioritet<a class="oi oi-sort-ascending" @onclick="SortPriority"></a></th>
             <th>Rediger Vagt</th>
+            <th>Slet Vagt</th>
         </tr>
     </thead>
     <tbody>
@@ -40,6 +41,7 @@
                         <span>Lås</span>
                     }
                 </button>
+                <td> <button class="btn btn-outline-danger" @onclick="() => DeleteShift(shift.id)">Slet denne vagt</button> </td>
             </tr>
         }
 
@@ -67,6 +69,14 @@
         <div class="col-md-6 mb-3">
             <label for="antalPersoner">Antal Personer</label>
             <InputNumber id="AntalPersoner" @bind-Value="updatedShift.numberOfPersons" class="form-control" required />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="prioriity">Prioritet</label>
+            <select id="priority" @bind="updatedShift.priority" class="form-control">
+                <option value="Lav">Lav</option>
+                <option value="Normal">Normal</option>
+                <option value="Høj">Høj</option>
+            </select>
         </div>
 
         <div class="col-12 mb-3">
@@ -118,6 +128,14 @@
         shiftList = mService.GetSortedShifts(shiftList, sortByPriority);
     }
 
+    private async Task DeleteShift(string shiftId)
+    {
+        await mService.DeleteShift(shiftId); 
+     
+
+        // Opdater shiftList for at vise de nye ændringer
+        shiftList = await mService.GetAllShifts();
+    }
     // låse funktion
     private async Task ToggleLock(Shift shift)
     {
