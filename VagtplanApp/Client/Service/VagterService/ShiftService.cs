@@ -82,22 +82,28 @@ namespace VagtplanApp.Client.Services
 
         }
 
+        // 
         public async Task UpdateShift(Shift updatedShift)
         {
             var response = await httpClient.PutAsJsonAsync("api/shift/updateshift", updatedShift);
         }
 
-        private bool CheckTimeOverlap(DateTime startCurrentShift, DateTime endCurrentShift, DateTime startAnyShift, DateTime endAnyShift)
-        {
-            return startCurrentShift < endAnyShift && endCurrentShift > startAnyShift;
-        }
 
+        //
         public async Task<Shift> GetShiftById(string shiftId)
         {
             // Antagelse: Henter en specifik vagt fra serveren ved at bruge shiftId
             return await httpClient.GetFromJsonAsync<Shift>($"api/shift/{shiftId}");
         }
 
+        //
+        private bool ShiftsOverlap(Shift attemptToTakeShift, Shift userShift)
+        {
+            // Kontroller om tidsrummet for den ønskede vagt overlapper med nogen af brugerens eksisterende vagter
+            return attemptToTakeShift.startTime < userShift.endTime && attemptToTakeShift.endTime > userShift.startTime;
+        }
+
+        //
         public async Task<bool> TryTakeShift(string shiftId)
         {
             try
@@ -105,15 +111,15 @@ namespace VagtplanApp.Client.Services
                 var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
                 if (currentUser == null) return false;
 
-                var currentShift = await GetShiftById(shiftId);
-                if (currentShift == null) return false;
+                var attemptToTakeShift = await GetShiftById(shiftId);
+                if (attemptToTakeShift == null) return false;
 
-                var takenUserShifts = await GetShiftsForVolunteer();
-                foreach (var shift in takenUserShifts)
+                var userShifts = await GetShiftsForVolunteer(currentUser.id);
+                foreach (var userShift in userShifts)
                 {
-                    if (CheckTimeOverlap(currentShift.startTime, currentShift.endTime, shift.startTime, shift.endTime))
+                    if (ShiftsOverlap(attemptToTakeShift, userShift))
                     {
-                        return false;
+                        return false; // Overlap fundet, kan ikke tage vagten
                     }
                 }
 
