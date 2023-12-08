@@ -88,48 +88,37 @@ namespace VagtplanApp.Client.Services
             var response = await httpClient.PutAsJsonAsync("api/shift/updateshift", updatedShift);
         }
 
-
-        //
-        public async Task<Shift> GetShiftById(string shiftId)
-        {
-            // Antagelse: Henter en specifik vagt fra serveren ved at bruge shiftId
-            return await httpClient.GetFromJsonAsync<Shift>($"api/shift/{shiftId}");
-        }
-
-        //
+        // Kontroller om tidsrummet for den ønskede vagt overlapper med nogen af brugerens eksisterende vagter
         private bool ShiftsOverlap(Shift attemptToTakeShift, Shift userShift)
         {
-            // Kontroller om tidsrummet for den ønskede vagt overlapper med nogen af brugerens eksisterende vagter
+
             return attemptToTakeShift.startTime < userShift.endTime && attemptToTakeShift.endTime > userShift.startTime;
         }
 
         //
         public async Task<bool> TryTakeShift(string shiftId)
+
         {
-            try
+            var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
+            if (currentUser == null) return false;
+
+            // Antager, at GetAllShifts returnerer alle tilgængelige vagter inklusiv detaljer.
+            var allShifts = await GetAllShifts();
+            var attemptToTakeShift = allShifts.FirstOrDefault(s => s.id == shiftId);
+            if (attemptToTakeShift == null) return false;
+
+            var userShifts = await GetShiftsForVolunteer(); // Antager at denne metode returnerer alle vagter for den nuværende bruger
+            foreach (var userShift in userShifts)
             {
-                var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
-                if (currentUser == null) return false;
-
-                var attemptToTakeShift = await GetShiftById(shiftId);
-                if (attemptToTakeShift == null) return false;
-
-                var userShifts = await GetShiftsForVolunteer(currentUser.id);
-                foreach (var userShift in userShifts)
+                if (ShiftsOverlap(attemptToTakeShift, userShift))
                 {
-                    if (ShiftsOverlap(attemptToTakeShift, userShift))
-                    {
-                        return false; // Overlap fundet, kan ikke tage vagten
-                    }
+                    return false; // Overlap fundet, kan ikke tage vagten
                 }
+            }
 
-                return await TakeShift(shiftId);
-            }
-            catch (Exception ex)
-            {
-                // Log fejl eller håndter den på anden måde
-                return false;
-            }
+            // Tager vagten - kalder TakeShift()
+            return await TakeShift(shiftId);
         }
+
     }
 }
