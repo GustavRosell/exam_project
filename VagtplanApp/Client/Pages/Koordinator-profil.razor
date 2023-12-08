@@ -28,15 +28,15 @@ else
 
             <div class="form-group">
                 <label for="updatedEmail">E-mail:</label>
-                <InputText id="updatedEmail" class="form-control" @bind-Value="@updatedPerson.email" />
+                <InputText id="updatedEmail" class="form-control" @bind-Value="@updatedPerson.email" required />
             </div>
             <div class="form-group">
                 <label for="newAdgangskode">Adgangskode:</label>
-                <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@updatedPerson.password" />
+                <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@updatedPerson.password" required />
             </div>
             <div class="form-group">
                 <label for="tlfnr">Telefonnummer:</label>
-                <InputNumber id="tlfnr" class="form-control" @bind-Value="@updatedPerson.phonenumber" />
+                <InputNumber id="tlfnr" class="form-control" @bind-Value="@updatedPerson.phonenumber" required />
             </div>
 
             <button type="submit" class="btn btn-success">Opdater</button>
@@ -54,28 +54,39 @@ else
     [Inject]
     private IPersonService mService { get; set; }
 
+
+    //
     protected override async Task OnInitializedAsync()
     {
         currentUser = await localStore.GetItemAsync<Person>("currentUser");
         updatedPerson = new Person { id = currentUser.id }; // Kopier relevant data fra currentUser
     }
 
-    private void ShowModal()
-    {
-        modalRef.Open();
-    }
-
+    //
     private async Task UpdateUserDetails()
     {
         await mService.UpdatePerson(updatedPerson);
 
         // Opdaterer CurrentUser med de nye oplysninger
         currentUser.email = updatedPerson.email;
-        currentUser.password = updatedPerson.password; 
+        currentUser.password = updatedPerson.password;
         currentUser.phonenumber = updatedPerson.phonenumber;
 
         // Gemmer den opdaterede bruger i local storage
         await localStore.SetItemAsync("currentUser", currentUser);
         modalRef.Close();
+    }
+
+    //
+    private void ShowModal()
+    {
+        updatedPerson = new Person
+        {
+            email = currentUser.email,
+            password = currentUser.password,
+            phonenumber = currentUser.phonenumber,
+        };
+
+        modalRef.Open();
     }
 }

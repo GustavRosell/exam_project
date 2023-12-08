@@ -1,0 +1,15 @@
+﻿.error-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e74c3c; /* A shade of red */
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    color: #fff; /* Text color */
+    font-size: 16px;
+    max-width: 600px; /* Adjust as needed */
+    text-align: center;
+}

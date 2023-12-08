@@ -6,6 +6,8 @@
 <h1 class="mb-3 mt-3">Oversigt over vagter</h1>
 
 <table class="table table-striped">
+
+    <!--Viser -->
     <thead>
         <tr>
             <th>Dato</th>
@@ -18,7 +20,7 @@
     </thead>
     <tbody>
 
-        <!--Viser bookings udfra det som vælges i dropdown-menu-->
+        <!--Viser -->
         @foreach (var shift in shiftList)
         {
             <tr>
@@ -30,10 +32,11 @@
                 <button class="btn btn-secondary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button>
             </tr>
         }
+
     </tbody>
 </table>
 
-
+<!--Viser -->
 <ModalDialog @ref="modalRef" Title="Rediger oplysninger">
     <EditForm Model="@updatedShift" OnValidSubmit="@UpdateShiftDetails">
         <DataAnnotationsValidator />
