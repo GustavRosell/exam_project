@@ -18,6 +18,7 @@ namespace VagtplanApp.Shared.Model
         public int numberOfPersons { get; set; } 
         public List<string> assignedPersons { get; set; } = new List<string>(); 
         public Priority priority { get; set; }
+        public bool IsLocked { get; set; } // koordinator låser vagt så frivillig ikke kan fjerne den fra 'mine vagter'
     }
 
     public enum Priority // Denne enumerable bruges til at rangere shifts efter "Lav", "Normal", "Høj"

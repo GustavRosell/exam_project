@@ -88,7 +88,7 @@ namespace VagtplanApp.Client.Services
         public async Task UpdateShift(Shift updatedShift)
         {
             var response = await httpClient.PutAsJsonAsync("api/shift/updateshift", updatedShift);
-        }
+        }   
 
         // Kontroller om tidsrummet for den ønskede vagt overlapper med nogen af brugerens eksisterende vagter
         private bool ShiftsOverlap(Shift attemptToTakeShift, Shift userShift)
