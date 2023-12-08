@@ -60,6 +60,14 @@
             <label for="antalPersoner">Antal Personer</label>
             <InputNumber id="AntalPersoner" @bind-Value="updatedShift.numberOfPersons" class="form-control" required />
         </div>
+        <div class="col-md-6 mb-3">
+            <label for="prioriity">Prioritet</label>
+            <select id="priority" @bind="updatedShift.priority" class="form-control">
+                <option value="Lav">Lav</option>
+                <option value="Normal">Normal</option>
+                <option value="Høj">Høj</option>
+            </select>
+        </div>
 
         <div class="col-12 mb-3">
             <button type="submit" class="btn btn-primary">Opdater</button>

@@ -76,7 +76,8 @@ namespace VagtplanApp.Server.Repositories
                 { "date", updatedShift.date }, // MongoDB forstår DateTime, men ikke DateOnly
                 { "startTime", updatedShift.startTime }, // Antager at dette allerede er et DateTime objekt
                 { "endTime", updatedShift.endTime }, // Antager at dette allerede er et DateTime objekt
-                { "numberOfPersons", updatedShift.numberOfPersons }
+                { "numberOfPersons", updatedShift.numberOfPersons },
+                { "priority", updatedShift.priority }
                 // Tilføj yderligere opdateringer efter behov
             });
 
