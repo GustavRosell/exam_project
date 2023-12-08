@@ -1,4 +1,5 @@
 ﻿using VagtplanApp.Shared.Model;
+using static VagtplanApp.Client.Services.ShiftService;
 
 public interface IShiftService
 {
@@ -9,5 +10,5 @@ public interface IShiftService
     Task RemovePersonFromShift(string shiftId);
     Task UpdateShift(Shift updatedShift);
     List<Shift> GetSortedShifts(List<Shift> shifts, bool sortByPriority);
-    Task<bool> TryTakeShift(string shiftId);
+    Task<string> TryTakeShift(string shiftId);
 }

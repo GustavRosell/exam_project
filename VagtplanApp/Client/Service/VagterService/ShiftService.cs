@@ -98,28 +98,24 @@ namespace VagtplanApp.Client.Services
         }
 
         //
-        public async Task<bool> TryTakeShift(string shiftId)
-
+        public async Task<string> TryTakeShift(string shiftId)
         {
             var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
-            if (currentUser == null) return false;
 
-            // Antager, at GetAllShifts returnerer alle tilgængelige vagter inklusiv detaljer.
             var allShifts = await GetAllShifts();
             var attemptToTakeShift = allShifts.FirstOrDefault(s => s.id == shiftId);
-            if (attemptToTakeShift == null) return false;
+            if (attemptToTakeShift.assignedPersons.Count >= attemptToTakeShift.numberOfPersons)
+                return "FullyBooked";
 
-            var userShifts = await GetShiftsForVolunteer(); // Antager at denne metode returnerer alle vagter for den nuværende bruger
+            var userShifts = await GetShiftsForVolunteer();
             foreach (var userShift in userShifts)
             {
                 if (ShiftsOverlap(attemptToTakeShift, userShift))
-                {
-                    return false; // Overlap fundet, kan ikke tage vagten
-                }
+                    return "TimeOverlap";
             }
 
-            // Tager vagten - kalder TakeShift()
-            return await TakeShift(shiftId);
+            var takeSuccess = await TakeShift(shiftId);
+            return takeSuccess ? "Success" : "Error";
         }
 
     }
