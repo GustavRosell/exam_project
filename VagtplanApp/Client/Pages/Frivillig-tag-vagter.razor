@@ -77,7 +77,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        shiftList = (await mService.GetAllShifts()).OrderByDescending(s => s.priority).ToList();
+        shiftList = (await mService.GetAllShifts()).OrderByDescending(s => s.priority).ToList(); // OrderByDescending her initialisere vi listen af shifts og sortere efter prioritet
     }
 
     private async Task TakeShift(string shiftId)
