@@ -59,7 +59,7 @@
             </tr>
 
         }
-    </tbody>
+        </tbody>
 </table>
 
 @code {
@@ -70,14 +70,14 @@
         showError = false;
     }
 
-    private List<Shift> shiftList = new List<Shift>(); // Tom liste til at gemme bookings
+    private List<Shift> shiftList = new List<Shift>(); // Tom liste til at gemme vagter
 
     [Inject]
     private IShiftService mService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        shiftList = (await mService.GetAllShifts());
+        shiftList = (await mService.GetAllShifts()).OrderByDescending(s => s.priority).ToList();
     }
 
     private async Task TakeShift(string shiftId)
@@ -140,6 +140,4 @@
 
         return false;
     }
-
-
 }
