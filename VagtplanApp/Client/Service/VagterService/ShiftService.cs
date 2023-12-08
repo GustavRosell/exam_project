@@ -125,7 +125,7 @@ namespace VagtplanApp.Client.Services
 
          public async Task DeleteShift(string shiftId)
         {
-            await httpClient.DeleteAsync("api/shift/DeleteShift/{shiftId}");
+            await httpClient.DeleteAsync($"api/shift/deleteshift/{shiftId}");
         }
 
 

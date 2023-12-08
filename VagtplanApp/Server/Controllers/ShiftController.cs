@@ -72,7 +72,7 @@ namespace VagtplanApp.Server.Controllers
             return Ok();
         }
         [HttpDelete]
-        [Route("DeleteShift/{shiftId}")]
+        [Route("deleteshift/{shiftId}")]
         public async Task DeleteShift(string shiftId)
         {
             await mRepo.DeleteShift(shiftId);
