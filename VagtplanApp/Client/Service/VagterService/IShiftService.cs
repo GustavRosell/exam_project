@@ -1,17 +1,13 @@
-﻿using System.Threading.Tasks;
-using VagtplanApp.Shared.Model;
+﻿using VagtplanApp.Shared.Model;
 
-namespace VagtplanApp.Client.Services
+public interface IShiftService
 {
-    public interface IShiftService
-    {
-        Task<List<Shift>> GetAllShifts();
-        Task CreateShift(Shift shift);
-        Task<bool> TakeShift(string shiftId);
-        Task<List<Shift>> GetShiftsForVolunteer();
-        Task RemovePersonFromShift(string shiftId);
-        Task UpdateShift(Shift updatedShift);
-        List<Shift> GetSortedShifts(List<Shift> shifts, bool sortByPriority);
-
-    }
+    Task<List<Shift>> GetAllShifts();
+    Task CreateShift(Shift shift);
+    Task<bool> TakeShift(string shiftId);
+    Task<List<Shift>> GetShiftsForVolunteer();
+    Task RemovePersonFromShift(string shiftId);
+    Task UpdateShift(Shift updatedShift);
+    List<Shift> GetSortedShifts(List<Shift> shifts, bool sortByPriority);
+    Task<bool> TryTakeShift(string shiftId);
 }

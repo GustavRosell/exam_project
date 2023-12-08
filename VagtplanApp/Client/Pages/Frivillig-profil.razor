@@ -37,7 +37,6 @@ else
                 <label for="newAdgangskode">Adgangskode:</label>
                 <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@updatedPerson.password" required />
             </div>
-
             <div class="form-group">
                 <label for="tlfnr">Telefonnummer:</label>
                 <InputNumber id="tlfnr" class="form-control" @bind-Value="@updatedPerson.phonenumber" required />
@@ -52,19 +51,21 @@ else
 @code {
     private Person updatedPerson = new Person();
     private ModalDialog modalRef { get; set; }
+    private Person currentUser;
+
 
     [Inject]
     private IPersonService mService { get; set; }
 
-    private Person currentUser;
 
+    // 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await localStore.GetItemAsync<Person>("currentUser");
         updatedPerson = new Person { id = currentUser.id }; // Kopier relevant data fra currentUser
     }
 
-
+    // 
     private async Task UpdateUserDetails()
     {
         await mService.UpdatePerson(updatedPerson);
@@ -77,6 +78,7 @@ else
         modalRef.Close();
     }
 
+    // 
     private void ShowModal()
     {
         // Kopierer den nuværende brugers data til updatedPerson objektet == udfylder modalDialog med information

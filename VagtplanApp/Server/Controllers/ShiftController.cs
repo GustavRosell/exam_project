@@ -73,7 +73,3 @@ namespace VagtplanApp.Server.Controllers
         }
     }
 }
-
-
-
-

@@ -9,9 +9,9 @@ namespace VagtplanApp.Client.Services
     public class ShiftService : IShiftService
     {
         // HTTP klient bruges til at lave web requests
-        private readonly HttpClient httpClient; 
+        private readonly HttpClient httpClient;
         // LocalStorage bruges til at gemme og hente data lokalt
-        private readonly ILocalStorageService localStorage; 
+        private readonly ILocalStorageService localStorage;
 
         public ShiftService(HttpClient httpClient, ILocalStorageService localStorage)
         {
@@ -59,18 +59,19 @@ namespace VagtplanApp.Client.Services
         // Henter vagter for den aktuelle bruger
         public async Task<List<Shift>> GetShiftsForVolunteer()
         {
-            var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
-
-            // Sender en GET-anmodning til serveren for at hente vagter for den nuværende bruger
-            var shifts = await httpClient.GetFromJsonAsync<List<Shift>>($"api/shift/person/{currentUser.id}");
-
-            // Hvis der ikke er nogen vagter for brugeren, returnerer en tom liste
-            if (shifts == null || shifts.Count == 0)
+            try
             {
+                var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
+                if (currentUser == null) return new List<Shift>();
+
+                var shifts = await httpClient.GetFromJsonAsync<List<Shift>>($"api/shift/person/{currentUser.id}");
+                return shifts ?? new List<Shift>();
+            }
+            catch (Exception ex)
+            {
+                // Log fejl eller håndter den på anden måde
                 return new List<Shift>();
             }
-
-            return shifts;
         }
 
         // Personer kan fjerne sig selv fra en vagt
@@ -80,12 +81,46 @@ namespace VagtplanApp.Client.Services
 
             // Sender en anmodning til serveren for at fjerne den nuværende bruger fra en vagt
             await httpClient.PutAsync($"api/shift/removeperson/{shiftId}/{currentUser.id}", null);
-            
+
         }
 
+        // 
         public async Task UpdateShift(Shift updatedShift)
         {
             var response = await httpClient.PutAsJsonAsync("api/shift/updateshift", updatedShift);
         }
+
+        // Kontroller om tidsrummet for den ønskede vagt overlapper med nogen af brugerens eksisterende vagter
+        private bool ShiftsOverlap(Shift attemptToTakeShift, Shift userShift)
+        {
+
+            return attemptToTakeShift.startTime < userShift.endTime && attemptToTakeShift.endTime > userShift.startTime;
+        }
+
+        //
+        public async Task<bool> TryTakeShift(string shiftId)
+
+        {
+            var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
+            if (currentUser == null) return false;
+
+            // Antager, at GetAllShifts returnerer alle tilgængelige vagter inklusiv detaljer.
+            var allShifts = await GetAllShifts();
+            var attemptToTakeShift = allShifts.FirstOrDefault(s => s.id == shiftId);
+            if (attemptToTakeShift == null) return false;
+
+            var userShifts = await GetShiftsForVolunteer(); // Antager at denne metode returnerer alle vagter for den nuværende bruger
+            foreach (var userShift in userShifts)
+            {
+                if (ShiftsOverlap(attemptToTakeShift, userShift))
+                {
+                    return false; // Overlap fundet, kan ikke tage vagten
+                }
+            }
+
+            // Tager vagten - kalder TakeShift()
+            return await TakeShift(shiftId);
+        }
+
     }
 }
