@@ -59,22 +59,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         currentUser = await localStore.GetItemAsync<Person>("currentUser");
+        Console.WriteLine($"Current user loaded: {currentUser?.email}");
         updatedPerson = new Person { id = currentUser.id }; // Kopier relevant data fra currentUser
-    }
-
-    //
-    private async Task UpdateUserDetails()
-    {
-        await mService.UpdatePerson(updatedPerson);
-
-        // Opdaterer CurrentUser med de nye oplysninger
-        currentUser.email = updatedPerson.email;
-        currentUser.password = updatedPerson.password;
-        currentUser.phonenumber = updatedPerson.phonenumber;
-
-        // Gemmer den opdaterede bruger i local storage
-        await localStore.SetItemAsync("currentUser", currentUser);
-        modalRef.Close();
     }
 
     //
@@ -88,5 +74,19 @@ else
         };
 
         modalRef.Open();
+    }
+
+    //
+    private async Task UpdateUserDetails()
+    {
+        // Opdaterer CurrentUser med de nye oplysninger
+        currentUser.email = updatedPerson.email;
+        currentUser.password = updatedPerson.password;
+        currentUser.phonenumber = updatedPerson.phonenumber;
+
+        // Gemmer den opdaterede bruger i local storage
+        await localStore.SetItemAsync("currentUser", currentUser);
+        await mService.UpdatePerson(currentUser);
+        modalRef.Close();
     }
 }

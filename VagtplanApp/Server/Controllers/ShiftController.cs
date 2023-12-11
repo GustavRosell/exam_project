@@ -37,9 +37,9 @@ namespace VagtplanApp.Server.Controllers
         // Frivillige kan tage vagter (SKAL VI TILFØJE IACTIONRESULT?)
         [HttpPut]
         [Route("takeshift/{shiftId}")]
-        public async Task TakeShift(string shiftId, [FromBody] string personId)
+        public async Task AddPersonToShift(string shiftId, [FromBody] string personId)
         {
-            await mRepo.TakeShift(shiftId, personId);
+            await mRepo.AddPersonToShift(shiftId, personId);
         }
 
         // Viser frivilliges vagter
@@ -71,6 +71,7 @@ namespace VagtplanApp.Server.Controllers
             await mRepo.UpdateShift(shift);
             return Ok();
         }
+
         [HttpDelete]
         [Route("deleteshift/{shiftId}")]
         public async Task DeleteShift(string shiftId)

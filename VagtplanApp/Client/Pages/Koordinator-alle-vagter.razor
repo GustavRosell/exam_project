@@ -16,6 +16,7 @@
             <th>Antal Personer (tildelt/total)</th>
             <th>Prioritet<a class="oi oi-sort-ascending" @onclick="SortPriority"></a></th>
             <th>Rediger Vagt</th>
+            <th>Lås Vagt</th>
             <th>Slet Vagt</th>
         </tr>
     </thead>
@@ -30,21 +31,22 @@
                 <td>@shift.endTime.ToString("HH:mm")</td>
                 <td>@shift.assignedPersons.Count/@shift.numberOfPersons</td>
                 <td>@shift.priority</td>
-                <button class="btn btn-outline-secondary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button>
-                <button class="btn btn-outline-secondary" @onclick="() => ToggleLock(shift)">
-                    @if (shift.IsLocked)
-                    {
-                        <span>Lås op</span>
-                    }
-                    else
-                    {
-                        <span>Lås</span>
-                    }
-                </button>
+                <td> <button class="btn btn-outline-secondary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button></td>
+                <td>
+                    <button class="btn btn-outline-secondary" @onclick="() => ToggleLock(shift)">
+                        @if (shift.IsLocked)
+                        {
+                            <span>Lås op</span>
+                        }
+                        else
+                        {
+                            <span>Lås</span>
+                        }
+                    </button>
+                </td>
                 <td> <button class="btn btn-outline-danger" @onclick="() => DeleteShift(shift.id)">Slet denne vagt</button> </td>
             </tr>
         }
-
     </tbody>
 </table>
 
@@ -130,8 +132,8 @@
 
     private async Task DeleteShift(string shiftId)
     {
-        await mService.DeleteShift(shiftId); 
-     
+        await mService.DeleteShift(shiftId);
+
 
         // Opdater shiftList for at vise de nye ændringer
         shiftList = await mService.GetAllShifts();

@@ -49,14 +49,18 @@
     [Inject]
     private IShiftService mService { get; set; }
 
-    private async Task AddShift()
-    {
-        await mService.CreateShift(shift);
-        shift = new Shift();  //Dette peger på nyt id, så man kan oprette flere vagter
-    }
-
     protected override void OnInitialized()
     {
         aEditContext = new EditContext(shift);
+        // shift.date = DateTime.Today; // Sætter shift.date til dagens dato
+        // shift.priority = Priority.Normal; // Sætter standardværdien for priority til "Normal"
+
+        StateHasChanged();
+    }
+
+    private async Task AddShift()
+    {
+        await mService.CreateShift(shift);
+        shift = new Shift(); // Resetter objektet for at kunne oprette en ny vagt
     }
 }

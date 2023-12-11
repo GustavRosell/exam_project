@@ -57,6 +57,7 @@ namespace VagtplanApp.Server.Controllers
         public async Task<IActionResult> UpdatePerson([FromBody] Person person)
         {
             await mRepo.UpdatePerson(person);
+            Console.WriteLine($"Received update for person: {person.email}");
             return Ok();
         }
     }

@@ -14,7 +14,7 @@ namespace VagtplanApp.Client.Services
         Task<Person> Authenticate(string email, string password);
         Task<bool> IsUserLoggedInAsync();
         Task LogOut();
-        Task UpdatePerson(Person updatedperson);
+        Task UpdatePerson(Person updatedPerson);
 
     }
 }

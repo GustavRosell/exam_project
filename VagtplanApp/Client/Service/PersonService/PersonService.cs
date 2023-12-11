@@ -77,9 +77,17 @@ namespace VagtplanApp.Client.Services
 
         }
 
-        public async Task UpdatePerson(Person updatedperson)
+        public async Task UpdatePerson(Person updatedPerson)
         {
-            var response = await httpClient.PutAsJsonAsync("api/persons/updateperson", updatedperson);
+            Console.WriteLine($"Sending update for person with ID: {updatedPerson.id}");
+            var response = await httpClient.PutAsJsonAsync("api/persons/updateperson", updatedPerson);
+
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Failed to update person: {response.StatusCode}");
+            }
         }
+
     }
 }
