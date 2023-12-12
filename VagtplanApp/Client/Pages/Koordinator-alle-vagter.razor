@@ -7,7 +7,7 @@
 
 <table class="table table-striped">
 
-    <!--Viser -->
+    <!-- Viser tabel over alle vagter, med CRUD muligheder -->
     <thead>
         <tr>
             <th>Dato</th>
@@ -21,8 +21,6 @@
         </tr>
     </thead>
     <tbody>
-
-        <!--Viser -->
         @foreach (var shift in shiftList)
         {
             <tr>
@@ -50,7 +48,7 @@
     </tbody>
 </table>
 
-<!--Viser -->
+<!-- Modal-komponent for redigér vagt -->
 <ModalDialog @ref="modalRef" Title="Rediger oplysninger">
     <EditForm Model="@updatedShift" OnValidSubmit="@UpdateShiftDetails">
         <DataAnnotationsValidator />
@@ -89,27 +87,29 @@
 </ModalDialog>
 
 @code {
+    // Fields:
     private List<Shift> shiftList = new List<Shift>();
     private Shift updatedShift = new Shift();
     private ModalDialog modalRef { get; set; }
 
-    [Inject]
+    [Inject] // Henter service-klassen
     private IShiftService mService { get; set; }
     private bool sortByPriority = false;
 
-
-
+    // Henter alle vagter ved indlæsning af side
     protected override async Task OnInitializedAsync()
     {
         shiftList = (await mService.GetAllShifts());
     }
 
+    // Åbner modal-komponent
     private void ShowModal(Shift shift)
     {
         updatedShift = shift; // Her forudfyldes formularen med den valgte vagt
         modalRef.Open();
     }
 
+    // Opdaterer vagtoplysninger efter redigering og lukker modalen.
     private async Task UpdateShiftDetails()
     {
         await mService.UpdateShift(updatedShift); // Antager at denne metode eksisterer og opdaterer en vagt
@@ -119,30 +119,34 @@
         shiftList = await mService.GetAllShifts();
     }
 
+    /*
+    // slet???????? hvad gør den?????
     private List<Shift> GetSortedVagterList()
     {
         return mService.GetSortedShifts(shiftList, sortByPriority);
     }
+    */
 
+    // Funktion for at sorterer efter prioritet
     private void SortPriority()
     {
         sortByPriority = !sortByPriority;
         shiftList = mService.GetSortedShifts(shiftList, sortByPriority);
     }
 
+    // Funktion for at slette vagt
     private async Task DeleteShift(string shiftId)
     {
         await mService.DeleteShift(shiftId);
 
-
         // Opdater shiftList for at vise de nye ændringer
         shiftList = await mService.GetAllShifts();
     }
-    // låse funktion
+
+    // Funktion for at låse en vagt
     private async Task ToggleLock(Shift shift)
     {
         shift.IsLocked = !shift.IsLocked;
         await mService.UpdateShift(shift); // Opdater vagten
-        shiftList = await mService.GetAllShifts(); // Genindlæs listen
     }
 }

@@ -1,24 +1,23 @@
-﻿using System.Linq;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components;
-using MongoDB.Bson;
 using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Client.Services
 {
+    // ShiftService: Håndterer operationer relateret til vagter
     public class ShiftService : IShiftService
-    {
-        // HTTP klient bruges til at lave web requests
-        private readonly HttpClient httpClient;
-        // LocalStorage bruges til at gemme og hente data lokalt
-        private readonly ILocalStorageService localStorage;
+    {        
+        private readonly HttpClient httpClient; // HTTP klient bruges til at lave web requests
+        private readonly ILocalStorageService localStorage; // LocalStorage bruges til at gemme og hente data lokalt
 
+        // Constructor: Initialiserer httpClient og localStorage
         public ShiftService(HttpClient httpClient, ILocalStorageService localStorage)
         {
             this.httpClient = httpClient;
             this.localStorage = localStorage;
         }
+
+        // ---------------------------------------------------------------------------------------------------------------------------------------
 
         // Henter alle vagter fra serveren
         public async Task<List<Shift>> GetAllShifts()
@@ -36,14 +35,13 @@ namespace VagtplanApp.Client.Services
                 : shifts.ToList();
         }
 
-
         // Opretter en ny vagt ved at sende data til serveren
         public async Task CreateShift(Shift shift)
         {
             await httpClient.PostAsJsonAsync("api/shift/add", shift);
         }
 
-        // Frivillige kan tage vagter
+        // Tillader frivillige at tage en specifik vagt
         public async Task<bool> TakeShift(string shiftId)
         {
             // Henter den nuværende bruger fra LocalStorage
@@ -56,8 +54,7 @@ namespace VagtplanApp.Client.Services
             return response.IsSuccessStatusCode;
         }
 
-
-        // Henter vagter for den aktuelle bruger
+        // Henter vagter tildelt til den nuværende bruger
         public async Task<List<Shift>> GetShiftsForVolunteer()
         {
             try
@@ -75,7 +72,7 @@ namespace VagtplanApp.Client.Services
             }
         }
 
-        // Personer kan fjerne sig selv fra en vagt
+        // Fjerner den nuværende bruger fra en vagt
         public async Task RemovePersonFromShift(string shiftId)
         {
             var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
@@ -85,11 +82,11 @@ namespace VagtplanApp.Client.Services
 
         }
 
-        // 
+        // Opdaterer detaljer om en vagt
         public async Task UpdateShift(Shift updatedShift)
         {
             var response = await httpClient.PutAsJsonAsync("api/shift/updateshift", updatedShift);
-        }   
+        }
 
         // Kontroller om tidsrummet for den ønskede vagt overlapper med nogen af brugerens eksisterende vagter
         private bool ShiftsOverlap(Shift attemptToTakeShift, Shift userShift)
@@ -98,7 +95,7 @@ namespace VagtplanApp.Client.Services
             return attemptToTakeShift.startTime < userShift.endTime && attemptToTakeShift.endTime > userShift.startTime;
         }
 
-        //
+        // "forsåger" at tage en vagt --> Håndterer forskellige scenarier som overlapning
         public async Task<string> TryTakeShift(string shiftId)
         {
             var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
@@ -119,11 +116,10 @@ namespace VagtplanApp.Client.Services
             return takeSuccess ? "Success" : "Error";
         }
 
-         public async Task DeleteShift(string shiftId)
+        // Sletter en vagt.
+        public async Task DeleteShift(string shiftId)
         {
             await httpClient.DeleteAsync($"api/shift/deleteshift/{shiftId}");
         }
-
-
     }
 }

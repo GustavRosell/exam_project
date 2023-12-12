@@ -1,23 +1,23 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Collections.Concurrent;
 using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Server.Repositories
 {
+    // PersonRepository: Håndterer interaktionen med MongoDB for person-relateret data
     public class PersonRepository : IPersonRepository
     {
-
         private readonly IMongoCollection<Person> personCollection;
 
         public PersonRepository()
         {
+            // Opretter forbindelse til MongoDB og initialiserer personCollection
             MongoClient client = new MongoClient(@"mongodb+srv://Adgang:ViSkalHaveAdgang123@cluster0.2szl4mg.mongodb.net/");
             IMongoDatabase database = client.GetDatabase("festival");
             personCollection = database.GetCollection<Person>("persons");
         }
 
-        // Henter alle personer
+        // Henter alle personer fra databasen
         public List<Person> GetAllPersons()
         {
             // Finder alle personer i MongoDB-samlingen og gemmer dem i en liste
@@ -27,13 +27,13 @@ namespace VagtplanApp.Server.Repositories
             return personList;
         }
 
-        // Opretter person
+        // Tilføjer en ny person til databaasen
         public async Task CreatePerson(Person person)
         {
             await personCollection.InsertOneAsync(person);
         }
 
-        //Metode der bliver benyttet i controller, til at matche input Email med Email i MongoDB
+        // Metode der bliver benyttet i controller, til at matche input Email med Email i MongoDB
         public async Task<Person> GetPersonByEmail(string email)
         {
             // .FirstOrDefaultAsync skal benyttes her, da Find returnere et IFindFluent interface, men ikke udfører forespørgslen
@@ -41,6 +41,7 @@ namespace VagtplanApp.Server.Repositories
             return await personCollection.Find(person => person.email == email).FirstOrDefaultAsync();
         }
 
+        // Opdaterer en persons oplysninger i databasen
         public async Task UpdatePerson(Person updatedPerson)
         {
             // Opretter et filter, der matcher dokumentet baseret på ObjectId

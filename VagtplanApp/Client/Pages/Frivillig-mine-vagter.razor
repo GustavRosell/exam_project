@@ -5,14 +5,17 @@
 
 @if (vagter == null)
 {
+    // Viser en ventemelding, mens vagter indlæses fra serveren.
     <p><em>Henter vagter...</em></p>
 }
 else if (!vagter.Any())
 {
+    // Viser en besked, hvis brugeren ikke har nogen tildelte vagter.
     <p>Du har ikke ingen vagter.</p>
 }
 else
 {
+    // Skaber en tabel, der viser brugerens vagter.
     <table class="table table-striped">
         <thead>
             <tr>
@@ -46,29 +49,34 @@ else
 }
 
 @code {
+    // Fields:
     private List<Shift>? vagter;
     private string errorMessage = "";
     private bool showError = false;
 
-    [Inject]
+    [Inject] // Henter service-klassen
     private IShiftService mService { get; set; }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------
+
+    // Henter alle vagter ved indlæsning af side
     protected override async Task OnInitializedAsync()
     {
         vagter = await mService.GetShiftsForVolunteer();
     }
 
+    // Fjerner en person fra en vagt og opdaterer listen.
     private async Task RemovePersonFromShift(string shiftId)
     {
         var shift = vagter.FirstOrDefault(s => s.id == shiftId);
         if (shift != null && !shift.IsLocked)
         {
             await mService.RemovePersonFromShift(shiftId);
-            vagter = await mService.GetShiftsForVolunteer(); // Opdater listen af vagter
+            vagter = await mService.GetShiftsForVolunteer(); // Opdatérer listen af vagter
         }
         else
         {
-            // Vis en fejlmeddelelse
+            // Viser fejlmeddelelse
             errorMessage = "Denne vagt er låst og kan ikke fjernes.";
             showError = true; // Denne bool bestemmer, om en fejlmeddelelse vises i UI
         }

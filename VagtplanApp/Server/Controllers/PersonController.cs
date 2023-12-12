@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using VagtplanApp.Server.Repositories;
 using VagtplanApp.Shared.Model;
 
@@ -8,17 +7,18 @@ namespace VagtplanApp.Server.Controllers
     [ApiController]
     [Route("api/persons")]
 
+    // PersonController: Håndterer HTTP-anmodninger relaterert til brugere
     public class PersonController : ControllerBase
     {
-        private IPersonRepository mRepo;
+        // Repository injiceret via konstruktør
+        private IPersonRepository mRepo; 
 
-        // Konstruktør til at injicere repository
         public PersonController(IPersonRepository repo)
         {
             mRepo = repo;
         }
 
-        // GetAll
+        // Henter alle personer
         [HttpGet]
         [Route("getall")]
         public List<Person> GetAll()
@@ -26,7 +26,7 @@ namespace VagtplanApp.Server.Controllers
             return mRepo.GetAllPersons();
         }
 
-        // Add Person
+        // Tilføjer en ny person 
         [HttpPost]
         [Route("add")]
         public async Task CreatePerson([FromBody] Person person) // FromBody indikerer at data for booking forventes at blive sendt som en JSON
@@ -34,7 +34,7 @@ namespace VagtplanApp.Server.Controllers
             await mRepo.CreatePerson(person);
         }
 
-        //Authenticate routen
+        // Autentificerer en bruger
         [HttpPost]
         [Route("authenticate")]
         public async Task<ActionResult<Person>> Authenticate([FromBody] Person loginPerson)
@@ -52,6 +52,7 @@ namespace VagtplanApp.Server.Controllers
             }
         }
 
+        // Opdaterer en persons oplysninger
         [HttpPut]
         [Route("updateperson")]
         public async Task<IActionResult> UpdatePerson([FromBody] Person person)

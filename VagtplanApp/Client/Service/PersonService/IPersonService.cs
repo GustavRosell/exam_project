@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using VagtplanApp.Shared.Model;
+﻿using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Client.Services
 {
@@ -9,12 +8,9 @@ namespace VagtplanApp.Client.Services
         Task<bool> AddPerson(Person person);
         void SetCurrentUser(Person user);
         bool IsKoordinator();
-
-        // Metode til at autentificere en bruger og returnere brugerobjektet hvis gyldigt, ellers null
         Task<Person> Authenticate(string email, string password);
         Task<bool> IsUserLoggedInAsync();
         Task LogOut();
         Task UpdatePerson(Person updatedPerson);
-
     }
 }

@@ -1,10 +1,10 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Collections.Concurrent;
 using VagtplanApp.Shared.Model;
 
 namespace VagtplanApp.Server.Repositories
 {
+    // ShiftRepository: Håndterer interaktionen med MongoDB for vagt-relateret data.
     public class ShiftRepository : IShiftRepository
     {
 
@@ -12,12 +12,13 @@ namespace VagtplanApp.Server.Repositories
 
         public ShiftRepository()
         {
+            // Opretter forbindelse til MongoDB og initialiserer shiftCollection
             MongoClient client = new MongoClient(@"mongodb+srv://Adgang:ViSkalHaveAdgang123@cluster0.2szl4mg.mongodb.net/");
             IMongoDatabase database = client.GetDatabase("festival");
             shiftCollection = database.GetCollection<Shift>("vagter");
         }
 
-        // Henter alle vagter
+        // Henter alle vagter fra databasen
         public List<Shift> GetAllShifts()
         {
             // Finder alle personer i MongoDB-samlingen og gemmer dem i en liste
@@ -27,13 +28,13 @@ namespace VagtplanApp.Server.Repositories
             return shiftList;
         }
 
-        // Opretter vagt
+        // Opretter en ny vagt i databasen
         public async Task CreateShift(Shift shift)
         {
             await shiftCollection.InsertOneAsync(shift);
         }
 
-        // Frivillige kan tage vagter
+        // Tilføjer en person  til en specifik vagt
         public async Task AddPersonToShift(string shiftId, string personId)
         {
             // Filter der matcher documenter i mongoDB ("_id") med vores parameter vagtId, som skal konverters til et ObjectId pga MongoDB
@@ -53,7 +54,7 @@ namespace VagtplanApp.Server.Repositories
             return shiftList;
         }
 
-        // Så frivillige kan fjerne vagter som de har taget
+        // Fjerner en person fra en vagt
         public async Task RemovePersonFromShift(string shiftId, string personId)
         {
             // Filter der matcher dokumenter i MongoDB ("_id") med vores parameter shiftId
@@ -66,7 +67,7 @@ namespace VagtplanApp.Server.Repositories
             await shiftCollection.UpdateOneAsync(filter, update);
         }
 
-
+        // Opdaterer en vagts oplysninger
         public async Task UpdateShift(Shift updatedShift)
         {
             var filter = new BsonDocument("_id", new ObjectId(updatedShift.id));
@@ -84,7 +85,7 @@ namespace VagtplanApp.Server.Repositories
             await shiftCollection.UpdateOneAsync(filter, update);
         }
 
-
+        // Sletter en vagt fra databasen
         public async Task DeleteShift(string shiftId)
         {
             // Filter to match the document with the given shiftId

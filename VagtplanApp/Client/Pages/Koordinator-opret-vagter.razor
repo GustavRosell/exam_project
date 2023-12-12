@@ -1,11 +1,9 @@
 ﻿@page "/koordinator-opret-vagter"
-@using VagtplanApp.Client.Services
 @using VagtplanApp.Shared.Model
-
-
 
 <h1 class="mb-3 mt-3">Opret vagt</h1>
 
+<!-- Formular til at indtaste og indsende oplysninger om en ny vagt -->
 <EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@AddShift">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -38,26 +36,26 @@
     <div class="col-12 mb-3">
         <button type="submit" class="btn btn-primary">Tilføj</button>
     </div>
+
 </EditForm>
 
-
 @code {
+    // Fields:
     private Shift shift = new Shift();
     private EditContext aEditContext;
     private ModalDialog modalRef { get; set; }
 
-    [Inject]
+    [Inject] // Henter service-klassen
     private IShiftService mService { get; set; }
 
+    // Initialiserer en ny vagt og dens tilhørende EditContext ved indlæsning af siden.
     protected override void OnInitialized()
     {
         aEditContext = new EditContext(shift);
-        // shift.date = DateTime.Today; // Sætter shift.date til dagens dato
-        // shift.priority = Priority.Normal; // Sætter standardværdien for priority til "Normal"
-
         StateHasChanged();
     }
 
+    // Funktion for opret vagt
     private async Task AddShift()
     {
         await mService.CreateShift(shift);

@@ -1,6 +1,4 @@
 ﻿@page "/frivillig-tag-vagter"
-@using VagtplanApp.Client.Services
-
 
 <h3>Vælg Vagter</h3>
 
@@ -46,27 +44,28 @@
 
 
 @code {
-    private bool showError = false;
+    // Fields:
+    private List<Shift> shiftList = new List<Shift>();
     private string errorMessage = "";
-
-
+    private bool showError = false;
     private void HideError()
     {
         showError = false;
         errorMessage = "";
     }
 
-    private List<Shift> shiftList = new List<Shift>();
-
-    [Inject]
+    [Inject] // Henter service-klassen
     private IShiftService mService { get; set; }
 
+    // Henter og sorterer listen af tilgængelige vagter ved indlæsning af siden.
     protected override async Task OnInitializedAsync()
     {
-        shiftList = (await mService.GetAllShifts()).OrderByDescending(s => s.priority).ToList(); // OrderByDescending her initialisere vi listen af shifts og sortere efter prioritet
-        StateHasChanged(); // For at opdatere UI
+        // Initialiserer listen af shifts og sortere efter prioritet
+        shiftList = (await mService.GetAllShifts()).OrderByDescending(s => s.priority).ToList();
+        StateHasChanged(); // Opdaterer UI
     }
 
+    // Håndterer logikken for at tage en vagt og opdatere UI baseret på resultatet.
     private async Task TakeShift(string shiftId)
     {
         var result = await mService.TryTakeShift(shiftId);
@@ -90,4 +89,3 @@
         }
     }
 }
-

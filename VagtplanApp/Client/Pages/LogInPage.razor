@@ -3,15 +3,12 @@
 @using VagtplanApp.Shared.Model;
 @using VagtplanApp.Client.Shared;
 @using VagtplanApp.Client.Services;
-@using Blazored.LocalStorage;
 @inject HttpClient Http;
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 @inject NavigationManager NavigationManager
 
-
-
 <h3>Log ind</h3>
-
+<!-- Formular til login. Brugerens indtastede oplysninger bindes til 'logInPerson' -->
 <EditForm Model="@logInPerson" OnValidSubmit="@AuthenticateLogin">
     <DataAnnotationsValidator /> <!--vores form kan læse annotations som [Required] og [EmailAddress] fra vores klasser-->
     <ValidationSummary /> <!--Skriver fejlen fra annotations-->
@@ -91,17 +88,16 @@
     </EditForm>
 </ModalDialog>
 
-
-
-
 @code {
+    // Fields:
     private Person newPerson = new Person();
     private Person logInPerson = new Person();
     private ModalDialog modalRef { get; set; }
 
-    [Inject]
+    [Inject] // Henter service-klassen
     private IPersonService mService { get; set; }
 
+    // Funktion for opret person
     private async Task CreatePerson()
     {
         await mService.AddPerson(newPerson);
@@ -109,19 +105,22 @@
         modalRef.Close();
     }
 
+    // Åbner modal-komponent
     private void ShowModal()
     {
         modalRef.Open();
     }
 
+    // Funktion for log-in
     private async Task AuthenticateLogin()
     {
-        //Kalder vores Authenticate metode
+        // Kalder vores Authenticate metode
         var user = await mService.Authenticate(logInPerson.email, logInPerson.password);
-        
+
         if (user != null)
         {
-            await localStore.SetItemAsync("currentUser", user); // Gemmer brugerdata i local storage
+            // Gemmer brugerdata i local storage og navigerer til relavant side efter brugerrolle
+            await localStore.SetItemAsync("currentUser", user);
             mService.SetCurrentUser(user);
             NavigationManager.NavigateTo(user.isKoordinator ? "/koordinator-oversigt" : "/frivillig-mine-vagter");
         }

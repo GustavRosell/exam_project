@@ -7,9 +7,10 @@
 
 @if (currentUser == null)
 {
+    // Besked vises, hvis ingen bruger er logget ind.
     <p>Brugeren er ikke logget ind.</p>
 }
-else
+else // Viser den nuværende brugers profiloplysninger.
 {
     <div>
         <p><strong>Fornavn:</strong> @currentUser.firstName</p>
@@ -49,24 +50,24 @@ else
 }
 
 @code {
+    // Fields:
     private Person updatedPerson = new Person();
     private ModalDialog modalRef { get; set; }
     private Person currentUser;
 
-
-    [Inject]
+    [Inject] // Henter service-klassen
     private IPersonService mService { get; set; }
 
 
-    // 
+    // Henter den nuværende brugers profiloplysninger ved indlæsning af side
     protected override async Task OnInitializedAsync()
     {
         currentUser = await localStore.GetItemAsync<Person>("currentUser");
-        Console.WriteLine($"Current user loaded: {currentUser?.email}");
+        Console.WriteLine($"Current user loaded: {currentUser?.email}"); // Tjekker i konsol om korrekt bruger er logget ind
         updatedPerson = new Person { id = currentUser.id }; // Kopier relevant data fra currentUser
     }
 
-    // 
+    // Åbner modal-komponenten, for at tillade brugeren at redigere sine oplysninger.
     private void ShowModal()
     {
         // Kopierer den nuværende brugers data til updatedPerson objektet == udfylder modalDialog med information
@@ -79,18 +80,19 @@ else
         modalRef.Open();
     }
 
-    // 
+    // Opdaterer CurrentUser med de nye oplysninger
     private async Task UpdateUserDetails()
     {
-        // Opdaterer CurrentUser med de nye oplysninger
         currentUser.email = updatedPerson.email;
         currentUser.password = updatedPerson.password;
         currentUser.phonenumber = updatedPerson.phonenumber;
 
-        Console.WriteLine($"Attempting to update user: {updatedPerson.id}"); // tester i konsol
         // Gemmer den opdaterede bruger i local storage
         await localStore.SetItemAsync("currentUser", currentUser);
         await mService.UpdatePerson(currentUser);
+
+        // Tjekker i konsol om opdatering er udført
+        Console.WriteLine($"Attempting to update user: {updatedPerson.id}");
         modalRef.Close();
     }
 }

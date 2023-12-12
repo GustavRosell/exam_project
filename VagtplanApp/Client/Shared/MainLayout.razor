@@ -2,7 +2,6 @@
 @inject NavigationManager NavigationManager
 @inject IPersonService PersonService
 @using VagtplanApp.Client.Services;
-@using VagtplanApp.Client.Pages;
 
 <div class="page">
     @if (!IsLoginPage()) // Viser sidebar == hvis brugeren ikke er på login-siden
@@ -14,7 +13,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="login" @onclick="LogOut">Log Out</a> <!-- Log ud link, fører til login-siden -->
+            <a href="login" @onclick="LogOut">Log Out</a> <!-- Log ud knap, fører til login-siden -->
         </div>
 
         <!-- Indhold af den aktuelle side, vises her -->
@@ -25,9 +24,12 @@
 </div>
 
 @code {
+    // Fields:
     private bool isUserLoggedIn;
 
-    // Kører, når komponenten initialiseres
+    // ---------------------------------------------------------------------------------------------------------------------------------------
+
+    // Initialiserer og tjekker brugerens login-status
     protected override async Task OnInitializedAsync()
     {
         isUserLoggedIn = await PersonService.IsUserLoggedInAsync(); // Tjekker om brugeren er logget ind
@@ -37,12 +39,13 @@
         }
     }
 
-    // Hjælper med at identificere, om den aktuelle side er login-siden
+    // Tjekker om den nuværende side er login-siden
     private bool IsLoginPage()
     {
         return NavigationManager.Uri.Contains("/login");
     }
 
+    // Logger brugeren ud og omdirigerer til login-siden
     private async Task LogOut()
     {
         await PersonService.LogOut();

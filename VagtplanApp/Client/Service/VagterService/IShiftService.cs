@@ -1,5 +1,4 @@
 ﻿using VagtplanApp.Shared.Model;
-using static VagtplanApp.Client.Services.ShiftService;
 
 public interface IShiftService
 {

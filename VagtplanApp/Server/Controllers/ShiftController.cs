@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using VagtplanApp.Server.Repositories;
 using VagtplanApp.Shared.Model;
 
@@ -34,7 +33,7 @@ namespace VagtplanApp.Server.Controllers
             await mRepo.CreateShift(shift);
         }
 
-        // Frivillige kan tage vagter (SKAL VI TILFØJE IACTIONRESULT?)
+        // Frivillige kan tage vagter
         [HttpPut]
         [Route("takeshift/{shiftId}")]
         public async Task AddPersonToShift(string shiftId, [FromBody] string personId)
@@ -44,7 +43,7 @@ namespace VagtplanApp.Server.Controllers
 
         // Viser frivilliges vagter
         [HttpGet]
-        [Route("person/{personId}")] // SKAL ÆNDRES TIL AT VÆRE shift/shitfs
+        [Route("person/{personId}")] // SKAL ÆNDRES TIL AT VÆRE shift/shifts
         public async Task<ActionResult<List<Shift>>> GetShiftsByPersonId(string personId)
         {
             var shifts = await mRepo.GetShiftsByPersonId(personId);
@@ -56,6 +55,7 @@ namespace VagtplanApp.Server.Controllers
             return shifts;
         }
 
+        // 
         [HttpPut]
         [Route("removeperson/{shiftId}/{personId}")]
         public async Task<IActionResult> RemovePersonFromShift(string shiftId, string personId)
@@ -64,6 +64,7 @@ namespace VagtplanApp.Server.Controllers
             return Ok();
         }
 
+        // 
         [HttpPut]
         [Route("updateshift")]
         public async Task<IActionResult> UpdatePerson([FromBody] Shift shift)
@@ -72,6 +73,7 @@ namespace VagtplanApp.Server.Controllers
             return Ok();
         }
 
+        // 
         [HttpDelete]
         [Route("deleteshift/{shiftId}")]
         public async Task DeleteShift(string shiftId)
@@ -79,6 +81,5 @@ namespace VagtplanApp.Server.Controllers
             await mRepo.DeleteShift(shiftId);
 
         }
-
     }
 }

@@ -2,7 +2,6 @@
 @inject IPersonService PersonService
 @inject NavigationManager NavigationManager
 
-
 <div class="top-row ps-3 navbar navbar-dark">
     <!-- Topbar med applikationens navn og en knap til navigationsmenuen -->
     <div class="container-fluid">
@@ -18,7 +17,7 @@
 {
     <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
         <nav class="flex-column">
-            @if (isKoordinator) // Viser forskellige links baseret på om brugeren er koordinator
+            @if (isKoordinator) // Viser links baseret på om brugeren er koordinator
             {
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="koordinator-oversigt">
@@ -36,7 +35,7 @@
                     </NavLink>
                 </div>
             }
-            else if (!isKoordinator)
+            else if (!isKoordinator) // Viser links baseret på om brugeren er frivillig
             {
                 <div class="nav-item">
                     <NavLink class="nav-link" href="/frivillig-mine-vagter">
@@ -60,18 +59,21 @@
 
 
 @code {
+    // Fields:
     private bool collapseNavMenu = true;
     private bool isUserLoggedIn;
     private bool isKoordinator;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null; // Auto-generet Blazor ting
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    // ---------------------------------------------------------------------------------------------------------------------------------------
 
-    // Skifter visningen af navigationsmenuen
+    // Skifter visningen af navigationsmenuen (foldet ud/ind)
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
 
+    // Initialiserer og tjekker brugerens login-status samt roller
     protected override async Task OnInitializedAsync()
     {
         isUserLoggedIn = await PersonService.IsUserLoggedInAsync(); // Tjekker om brugeren er logget ind
