@@ -7,7 +7,7 @@
     @if (!IsLoginPage()) // Viser sidebar == hvis brugeren ikke er på login-siden
     {
         <div class="sidebar">
-            <NavMenu /> 
+            <NavMenu />
         </div>
     }
 
@@ -26,16 +26,45 @@
 @code {
     // Fields:
     private bool isUserLoggedIn;
+    private bool isKoordinator;
 
     // ---------------------------------------------------------------------------------------------------------------------------------------
 
     // Initialiserer og tjekker brugerens login-status
     protected override async Task OnInitializedAsync()
     {
-        isUserLoggedIn = await PersonService.IsUserLoggedInAsync(); // Tjekker om brugeren er logget ind
-        if (!isUserLoggedIn && !IsLoginPage()) // Hvis brugeren ikke er logget ind og ikke på login-siden, omdirigeres til login
+        // Kontrollerer, om brugeren er logget ind ved at kalde IsUserLoggedInAsync fra PersonService.
+        isUserLoggedIn = await PersonService.IsUserLoggedInAsync();
+
+        // Tjekker, om den nuværende bruger er en koordinator.
+        isKoordinator = PersonService.IsKoordinator();
+
+        // Får den relative URI fra NavigationManager (fjerner base-path fra URI'en).
+        var uri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+
+        // Hvis brugeren ikke er logget ind:
+        if (!isUserLoggedIn)
         {
-            NavigationManager.NavigateTo("/login");
+            // Hvis den aktuelle URI ikke er 'login', omdiriger brugeren til login-siden.
+            if (uri != "login")
+            {
+                NavigationManager.NavigateTo("/login");
+            }
+        }
+        else // Hvis brugeren er logget ind:
+        {
+            // Hvis brugeren er koordinator, og forsøger at tilgå en frivillig-specifik side:
+            if (isKoordinator && uri.StartsWith("frivillig"))
+            {
+                // Omdiriger til koordinatorens oversigtsside.
+                NavigationManager.NavigateTo("/koordinator-oversigt");
+            }
+            // Hvis brugeren er frivillig, og forsøger at tilgå en koordinator-specifik side:
+            else if (!isKoordinator && uri.StartsWith("koordinator"))
+            {
+                // Omdiriger til frivilligens mine vagter side.
+                NavigationManager.NavigateTo("/frivillig-mine-vagter");
+            }
         }
     }
 

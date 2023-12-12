@@ -1,19 +1,17 @@
 ﻿@page "/koordinator-oversigt"
-@using VagtplanApp.Client.Services
 @using VagtplanApp.Shared.Model
 
 
 <h1 class="mb-3 mt-3">Oversigt over vagter</h1>
 
-<table class="table table-striped">
-
+<table class="table table-striped center-text"> <!-- center-text == centrerer al indhold-->
     <!-- Viser tabel over alle vagter, med CRUD muligheder -->
     <thead>
         <tr>
             <th>Dato</th>
             <th>Start Tid</th>
             <th>Slut Tid</th>
-            <th>Antal Personer (tildelt/total)</th>
+            <th>Antal Personer<a class="oi oi-sort-ascending" @onclick="SortByAssignment"></a></th>
             <th>Prioritet<a class="oi oi-sort-ascending" @onclick="SortPriority"></a></th>
             <th>Rediger Vagt</th>
             <th>Lås Vagt</th>
@@ -95,6 +93,7 @@
     [Inject] // Henter service-klassen
     private IShiftService mService { get; set; }
     private bool sortByPriority = false;
+    private bool sortByAssignment = false;
 
     // Henter alle vagter ved indlæsning af side
     protected override async Task OnInitializedAsync()
@@ -119,19 +118,18 @@
         shiftList = await mService.GetAllShifts();
     }
 
-    /*
-    // slet???????? hvad gør den?????
-    private List<Shift> GetSortedVagterList()
-    {
-        return mService.GetSortedShifts(shiftList, sortByPriority);
-    }
-    */
-
     // Funktion for at sorterer efter prioritet
     private void SortPriority()
     {
         sortByPriority = !sortByPriority;
         shiftList = mService.GetSortedShifts(shiftList, sortByPriority);
+    }
+
+    // 
+    private void SortByAssignment()
+    {
+        sortByAssignment = !sortByAssignment;
+        shiftList = mService.GetShiftsSortedByAssignment(shiftList);
     }
 
     // Funktion for at slette vagt

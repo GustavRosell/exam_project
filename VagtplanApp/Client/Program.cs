@@ -8,7 +8,6 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-
 // For Service ellers virker de ikke:
 builder.Services.AddScoped(sp => new HttpClient
 {

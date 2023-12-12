@@ -3,14 +3,14 @@
 <h3>Vælg Vagter</h3>
 
 <!-- Viser labels for tabel -->
-<table class="table table-striped">
+<table class="table table-striped center-text"> <!-- center-text == centrerer al indhold-->
     <thead>
         <tr>
             <th>Dato</th>
             <th>Start tid</th>
             <th>Slut tid</th>
-            <th>Antal personer (tildelt/total)</th>
-            <th>Prioritet</th>
+            <th>Antal Personer<a class="oi oi-sort-ascending" @onclick="SortByAssignment"></a></th>
+            <th>Prioritet<a class="oi oi-sort-ascending" @onclick="SortPriority"></a></th>
             <th>Tag vagt</th>
         </tr>
 
@@ -30,7 +30,7 @@
             </tr>
 
         }
-        </tbody>
+    </tbody>
 </table>
 
 <!-- Viser fejl hvis dobbelt-valg af vagt i samme tidsrum -->
@@ -48,6 +48,8 @@
     private List<Shift> shiftList = new List<Shift>();
     private string errorMessage = "";
     private bool showError = false;
+    private bool sortByPriority = false;
+    private bool sortByAssignment = false;
     private void HideError()
     {
         showError = false;
@@ -63,6 +65,20 @@
         // Initialiserer listen af shifts og sortere efter prioritet
         shiftList = (await mService.GetAllShifts()).OrderByDescending(s => s.priority).ToList();
         StateHasChanged(); // Opdaterer UI
+    }
+
+    // Funktion for at sorterer efter prioritet
+    private void SortPriority()
+    {
+        sortByPriority = !sortByPriority;
+        shiftList = mService.GetSortedShifts(shiftList, sortByPriority);
+    }
+
+    // 
+    private void SortByAssignment()
+    {
+        sortByAssignment = !sortByAssignment;
+        shiftList = mService.GetShiftsSortedByAssignment(shiftList);
     }
 
     // Håndterer logikken for at tage en vagt og opdatere UI baseret på resultatet.

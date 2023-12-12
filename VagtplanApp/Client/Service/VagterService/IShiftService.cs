@@ -9,6 +9,7 @@ public interface IShiftService
     Task RemovePersonFromShift(string shiftId);
     Task UpdateShift(Shift updatedShift);
     List<Shift> GetSortedShifts(List<Shift> shifts, bool sortByPriority);
+    List<Shift> GetShiftsSortedByAssignment(List<Shift> shifts);
     Task<string> TryTakeShift(string shiftId);
     Task DeleteShift(string shiftId);
 }

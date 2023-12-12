@@ -1,5 +1,4 @@
 ﻿@page "/frivillig-mine-vagter"
-@using VagtplanApp.Client.Services
 
 <h3>Mine vagter</h3>
 
@@ -16,13 +15,15 @@ else if (!vagter.Any())
 else
 {
     // Skaber en tabel, der viser brugerens vagter.
-    <table class="table table-striped">
+    <table class="table table-striped center-text"> <!-- center-text == centrerer al indhold-->
+
         <thead>
             <tr>
                 <th>Dato</th>
                 <th>Start Tid</th>
                 <th>Slut Tid</th>
-                <th>Antal Personer (tildelt/total)</th>
+                <th>Antal Personer</th>
+                <th>Prioritet</th>
                 <th>Fjern vagt</th>
             </tr>
         </thead>
@@ -34,6 +35,7 @@ else
                     <td>@shift.startTime.ToString("HH:mm")</td>
                     <td>@shift.endTime.ToString("HH:mm")</td>
                     <td>@shift.assignedPersons.Count/@shift.numberOfPersons</td>
+                    <td>@shift.priority</td>
                     <td> <svg xmlns="http://www.w3.org/2000/svg" @onclick="() => RemovePersonFromShift(shift.id)" width="24" height="24" viewBox="0 0 8 8"><path fill="#900" d="M4 0C1.79 0 0 1.79 0 4s1.79 4 4 4s4-1.79 4-4s-1.79-4-4-4zM2.5 1.78L4 3.28l1.5-1.5l.72.72L4.72 4l1.5 1.5l-.72.72L4 4.72l-1.5 1.5l-.72-.72L3.28 4l-1.5-1.5l.72-.72z" /></svg></td>
                 </tr>
             }
