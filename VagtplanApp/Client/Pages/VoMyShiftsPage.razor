@@ -1,13 +1,13 @@
-﻿@page "/frivillig-mine-vagter"
+﻿@page "/volunteer-my-shifts"
 
 <h3>Mine vagter</h3>
 
-@if (vagter == null)
+@if (shifts == null)
 {
     // Viser en ventemelding, mens vagter indlæses fra serveren.
     <p><em>Henter vagter...</em></p>
 }
-else if (!vagter.Any())
+else if (!shifts.Any())
 {
     // Viser en besked, hvis brugeren ikke har nogen tildelte vagter.
     <p>Du har ikke ingen vagter.</p>
@@ -28,7 +28,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var shift in vagter)
+            @foreach (var shift in shifts)
             {
                 <tr>
                     <td>@shift.date.ToString("dd:MM")</td>
@@ -52,7 +52,7 @@ else
 
 @code {
     // Fields:
-    private List<Shift>? vagter;
+    private List<Shift>? shifts;
     private string errorMessage = "";
     private bool showError = false;
 
@@ -64,17 +64,17 @@ else
     // Henter alle vagter ved indlæsning af side
     protected override async Task OnInitializedAsync()
     {
-        vagter = await mService.GetShiftsForVolunteer();
+        shifts = await mService.GetShiftsForVolunteer();
     }
 
     // Fjerner en person fra en vagt og opdaterer listen.
     private async Task RemovePersonFromShift(string shiftId)
     {
-        var shift = vagter.FirstOrDefault(s => s.id == shiftId);
+        var shift = shifts.FirstOrDefault(s => s.id == shiftId);
         if (shift != null && !shift.IsLocked)
         {
             await mService.RemovePersonFromShift(shiftId);
-            vagter = await mService.GetShiftsForVolunteer(); // Opdatérer listen af vagter
+            shifts = await mService.GetShiftsForVolunteer(); // Opdatérer listen af vagter
         }
         else
         {

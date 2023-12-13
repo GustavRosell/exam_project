@@ -132,7 +132,7 @@
             // Gemmer brugerdata i local storage og navigerer til relavant side efter brugerrolle
             await localStore.SetItemAsync("currentUser", user);
             mService.SetCurrentUser(user);
-            NavigationManager.NavigateTo(user.isKoordinator ? "/koordinator-oversigt" : "/frivillig-mine-vagter");
+            NavigationManager.NavigateTo(user.isKoordinator ? "/coordinator-all-shifts" : "/volunteer-my-shifts");
         }
         else
         {

@@ -20,17 +20,17 @@
             @if (isKoordinator) // Viser links baseret på om brugeren er koordinator
             {
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="koordinator-oversigt">
+                    <NavLink class="nav-link" href="coordinator-all-shifts">
                         <span class="oi oi-list" aria-hidden="true"></span> Oversigt
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="koordinator-opret-vagter">
+                    <NavLink class="nav-link" href="coordinator-create-shifts">
                         <span class="oi oi-plus" aria-hidden="true"></span> Opret Vagter
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="koordinator-profil">
+                    <NavLink class="nav-link" href="coordinator-profile">
                         <span class="oi oi-person" aria-hidden="true"></span> Profil
                     </NavLink>
                 </div>
@@ -38,17 +38,17 @@
             else if (!isKoordinator) // Viser links baseret på om brugeren er frivillig
             {
                 <div class="nav-item">
-                    <NavLink class="nav-link" href="/frivillig-mine-vagter">
+                    <NavLink class="nav-link" href="volunteer-my-shifts">
                         <span class="oi oi-list" aria-hidden="true"></span> Mine Vagter
                     </NavLink>
                 </div>
                 <div class="nav-item">
-                    <NavLink class="nav-link" href="/frivillig-tag-vagter">
+                    <NavLink class="nav-link" href="volunteer-take-shifts">
                         <span class="oi oi-list" aria-hidden="true"></span> Tag Vagter
                     </NavLink>
                 </div>
                 <div class="nav-item">
-                    <NavLink class="nav-link" href="/frivillig-profil">
+                    <NavLink class="nav-link" href="volunteer-profile">
                         <span class="oi oi-person" aria-hidden="true"></span> Profil
                     </NavLink>
                 </div>

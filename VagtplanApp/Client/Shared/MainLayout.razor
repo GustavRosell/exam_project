@@ -54,16 +54,16 @@
         else // Hvis brugeren er logget ind:
         {
             // Hvis brugeren er koordinator, og forsøger at tilgå en frivillig-specifik side:
-            if (isKoordinator && uri.StartsWith("frivillig"))
+            if (isKoordinator && uri.StartsWith("volunteer"))
             {
                 // Omdiriger til koordinatorens oversigtsside.
-                NavigationManager.NavigateTo("/koordinator-oversigt");
+                NavigationManager.NavigateTo("/coordinator-all-shifts");
             }
             // Hvis brugeren er frivillig, og forsøger at tilgå en koordinator-specifik side:
-            else if (!isKoordinator && uri.StartsWith("koordinator"))
+            else if (!isKoordinator && uri.StartsWith("coordinator"))
             {
                 // Omdiriger til frivilligens mine vagter side.
-                NavigationManager.NavigateTo("/frivillig-mine-vagter");
+                NavigationManager.NavigateTo("/volunteer-my-shifts");
             }
         }
     }
