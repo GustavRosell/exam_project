@@ -8,6 +8,13 @@
 @inject NavigationManager NavigationManager
 
 <h3>Log ind</h3>
+
+<!-- Viser fejlmeddelse ved forkert login -->
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
 <!-- Formular til login. Brugerens indtastede oplysninger bindes til 'logInPerson' -->
 <EditForm Model="@logInPerson" OnValidSubmit="@AuthenticateLogin">
     <DataAnnotationsValidator /> <!--vores form kan læse annotations som [Required] og [EmailAddress] fra vores klasser-->
@@ -27,8 +34,10 @@
 
 </EditForm>
 
+<!-- Knap til opret bruger -->
 <button class="btn btn-secondary" @onclick="ShowModal">Opret bruger</button>
 
+<!-- Åbner ModalDialog for opret person -->
 <ModalDialog @ref="modalRef" Title="Opret ny person">
     <EditForm Model="@newPerson" OnValidSubmit="@CreatePerson">
         <DataAnnotationsValidator />
@@ -93,6 +102,7 @@
     private Person newPerson = new Person();
     private Person logInPerson = new Person();
     private ModalDialog modalRef { get; set; }
+    private string errorMessage = string.Empty; // Tilføjet for fejlhåndtering
 
     [Inject] // Henter service-klassen
     private IPersonService mService { get; set; }
@@ -126,7 +136,8 @@
         }
         else
         {
-            // Håndter fejl ved login
+            // Håndterer fejl ved login
+            errorMessage = "Ugyldig email eller adgangskode.";
         }
     }
 }

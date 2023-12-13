@@ -52,6 +52,12 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
 
+        <!-- Viser fejlmeddelse ved ugyldig tid på vagt -->
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger">@errorMessage</div>
+        }
+
         <div class="col-md-6 mb-3">
             <label for="dato">Dato</label>
             <input type="date" id="dato" @bind="updatedShift.date" class="form-control" required />
@@ -89,6 +95,7 @@
     private List<Shift> shiftList = new List<Shift>();
     private Shift updatedShift = new Shift();
     private ModalDialog modalRef { get; set; }
+    private string errorMessage = string.Empty; // Tilføjet for fejlhåndtering
 
     [Inject] // Henter service-klassen
     private IShiftService mService { get; set; }
@@ -111,6 +118,12 @@
     // Opdaterer vagtoplysninger efter redigering og lukker modalen.
     private async Task UpdateShiftDetails()
     {
+        if (updatedShift.startTime >= updatedShift.endTime)
+        {
+            errorMessage = "Starttiden skal være før sluttiden.";
+            return;
+        }
+
         await mService.UpdateShift(updatedShift); // Antager at denne metode eksisterer og opdaterer en vagt
         modalRef.Close();
 

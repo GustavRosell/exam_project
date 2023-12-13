@@ -3,6 +3,12 @@
 
 <h1 class="mb-3 mt-3">Opret vagt</h1>
 
+<!-- Viser fejlmeddelse ved ugyldig tid på vagt -->
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
 <!-- Formular til at indtaste og indsende oplysninger om en ny vagt -->
 <EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@AddShift">
     <DataAnnotationsValidator />
@@ -44,6 +50,8 @@
     private Shift shift = new Shift();
     private EditContext aEditContext;
     private ModalDialog modalRef { get; set; }
+    private string errorMessage = string.Empty; // Tilføjet for fejlhåndtering
+
 
     [Inject] // Henter service-klassen
     private IShiftService mService { get; set; }
@@ -58,7 +66,14 @@
     // Funktion for opret vagt
     private async Task AddShift()
     {
+        if (shift.startTime >= shift.endTime)
+        {
+            errorMessage = "Starttiden skal være før sluttiden.";
+            return;
+        }
+
         await mService.CreateShift(shift);
         shift = new Shift(); // Resetter objektet for at kunne oprette en ny vagt
+        errorMessage = string.Empty; // Rydder fejlmeddelelsen
     }
 }
