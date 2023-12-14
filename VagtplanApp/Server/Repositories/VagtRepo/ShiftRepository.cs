@@ -7,7 +7,6 @@ namespace VagtplanApp.Server.Repositories
     // ShiftRepository: Håndterer interaktionen med MongoDB for vagt-relateret data.
     public class ShiftRepository : IShiftRepository
     {
-
         private readonly IMongoCollection<Shift> shiftCollection;
 
         public ShiftRepository()
@@ -37,46 +36,54 @@ namespace VagtplanApp.Server.Repositories
         // Tilføjer en person  til en specifik vagt
         public async Task AddPersonToShift(string shiftId, string personId)
         {
-            // Filter der matcher documenter i mongoDB ("_id") med vores parameter vagtId, som skal konverters til et ObjectId pga MongoDB
+            // Opretter et filter, der matcher dokumenter i MongoDB ved at sammenligne "_id" feltet med shiftId. 
+            // Konverterer shiftId til et ObjectId, da MongoDB kræver denne datatype for "_id".
             var filter = new BsonDocument("_id", new ObjectId(shiftId));
 
-            // Tilføjer personId, til assignedPersons i DB
+            // Tilføjer personId til assignedPersons i MongoDB
             var update = new BsonDocument("$addToSet", new BsonDocument("assignedPersons", personId));
             await shiftCollection.UpdateOneAsync(filter, update);
         }
 
-
         // Henter en liste af alle de vagter som en frivillig er tilknyttet
         public async Task<List<Shift>> GetShiftsByPersonId(string personId)
         {
+            // Opretter et filter, der søger efter vagter, hvor 'personId' er til stede i 'assignedPersons' arrayet.
             var filter = new BsonDocument("assignedPersons", new BsonDocument("$eq", personId));
+
+            // Anvender filteret til at finde og returnere en liste af 'Shift' objekter, hvor den angivne person er tildelt.
             var shiftList = await shiftCollection.Find(filter).ToListAsync();
+
             return shiftList;
         }
 
         // Fjerner en person fra en vagt
         public async Task RemovePersonFromShift(string shiftId, string personId)
         {
-            // Filter der matcher dokumenter i MongoDB ("_id") med vores parameter shiftId
+            // Opretter et filter for at identificere det specifikke vagtdokument i databasen ved hjælp af shiftId.
+            // Konverterer shiftId til et ObjectId, som er det krævede format for MongoDB's _id felt.
             var filter = new BsonDocument("_id", new ObjectId(shiftId));
 
-            // Opdateringskommandoen fjerner personId fra listen 'assignedPersons'
+            // Definerer en opdateringsoperation, der fjerner personId fra 'assignedPersons' arrayet i det matchende dokument.
             var update = new BsonDocument("$pull", new BsonDocument("assignedPersons", personId));
 
-            // Udfører opdateringsoperationen
+            // Udfører opdateringen på det identificerede dokument i databasen.
             await shiftCollection.UpdateOneAsync(filter, update);
         }
 
         // Opdaterer en vagts oplysninger
         public async Task UpdateShift(Shift updatedShift)
         {
+            // Opretter et filter for at identificere det specifikke vagtdokument i databasen ved hjælp af dens id.
+            // Konverterer updatedShift.id til et ObjectId, som er det krævede format for MongoDB's _id felt.
             var filter = new BsonDocument("_id", new ObjectId(updatedShift.id));
 
+            // Definerer en opdateringsoperation, der sætter de nye værdier for vagtens forskellige felter.
             var update = new BsonDocument("$set", new BsonDocument
             {
-                { "date", updatedShift.date.ToLocalTime() }, // MongoDB forstår DateTime, men ikke DateOnly
-                { "startTime", updatedShift.startTime }, // Antager at dette allerede er et DateTime objekt
-                { "endTime", updatedShift.endTime }, // Antager at dette allerede er et DateTime objekt
+                { "date", updatedShift.date.ToLocalTime() }, 
+                { "startTime", updatedShift.startTime }, 
+                { "endTime", updatedShift.endTime }, 
                 { "numberOfPersons", updatedShift.numberOfPersons },
                 { "priority", updatedShift.priority },
                 { "IsLocked", updatedShift.IsLocked }
@@ -88,10 +95,11 @@ namespace VagtplanApp.Server.Repositories
         // Sletter en vagt fra databasen
         public async Task DeleteShift(string shiftId)
         {
-            // Filter to match the document with the given shiftId
+            // Opretter et filter til at identificere det specifikke vagtdokument i databasen ved hjælp af shiftId.
+            // Konverterer shiftId til et ObjectId, som er det krævede format for MongoDB's _id felt.
             var filter = new BsonDocument("_id", new ObjectId(shiftId));
 
-            // Delete the document that matches the filter
+            // Udfører sletning af det dokument, der matcher filteret, fra shiftCollection.
             await shiftCollection.DeleteOneAsync(filter);
         }
 

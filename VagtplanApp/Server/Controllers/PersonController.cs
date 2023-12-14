@@ -29,7 +29,7 @@ namespace VagtplanApp.Server.Controllers
         // Tilføjer en ny person 
         [HttpPost]
         [Route("add")]
-        public async Task CreatePerson([FromBody] Person person) // FromBody indikerer at data for booking forventes at blive sendt som en JSON
+        public async Task CreatePerson([FromBody] Person person)
         {
             await mRepo.CreatePerson(person);
         }
@@ -58,7 +58,7 @@ namespace VagtplanApp.Server.Controllers
         public async Task<IActionResult> UpdatePerson([FromBody] Person person)
         {
             await mRepo.UpdatePerson(person);
-            Console.WriteLine($"Received update for person: {person.email}");
+            Console.WriteLine($"Received update for person: {person.email}"); // Tjekker personen som er blevet opdateret
             return Ok();
         }
     }

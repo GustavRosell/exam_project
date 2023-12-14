@@ -27,7 +27,7 @@ namespace VagtplanApp.Server.Repositories
             return personList;
         }
 
-        // Tilføjer en ny person til databaasen
+        // Tilføjer en ny person til MongoDB
         public async Task CreatePerson(Person person)
         {
             await personCollection.InsertOneAsync(person);
@@ -36,7 +36,6 @@ namespace VagtplanApp.Server.Repositories
         // Metode der bliver benyttet i controller, til at matche input Email med Email i MongoDB
         public async Task<Person> GetPersonByEmail(string email)
         {
-            // .FirstOrDefaultAsync skal benyttes her, da Find returnere et IFindFluent interface, men ikke udfører forespørgslen
             // .FirstOrDefaultAsync vælger det første element som matcher i collectionen, ellers Null. 
             return await personCollection.Find(person => person.email == email).FirstOrDefaultAsync();
         }

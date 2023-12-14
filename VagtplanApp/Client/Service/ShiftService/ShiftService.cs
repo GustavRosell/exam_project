@@ -70,7 +70,7 @@ namespace VagtplanApp.Client.Services
                 var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
                 if (currentUser == null) return new List<Shift>();
 
-                var shifts = await httpClient.GetFromJsonAsync<List<Shift>>($"api/shift/person/{currentUser.id}");
+                var shifts = await httpClient.GetFromJsonAsync<List<Shift>>($"api/shift/showvoshifts/{currentUser.id}");
                 return shifts ?? new List<Shift>();
             }
             catch (Exception ex)

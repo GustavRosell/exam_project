@@ -17,7 +17,7 @@ namespace VagtplanApp.Server.Controllers
             mRepo = repo;
         }
 
-        // GetAll vagter
+        // Henter alle vagter
         [HttpGet]
         [Route("getall")]
         public List<Shift> GetAll()
@@ -43,7 +43,7 @@ namespace VagtplanApp.Server.Controllers
 
         // Viser frivilliges vagter
         [HttpGet]
-        [Route("person/{personId}")] // SKAL ÆNDRES TIL AT VÆRE shift/shifts
+        [Route("showvoshifts/{personId}")]
         public async Task<ActionResult<List<Shift>>> GetShiftsByPersonId(string personId)
         {
             var shifts = await mRepo.GetShiftsByPersonId(personId);
@@ -55,7 +55,7 @@ namespace VagtplanApp.Server.Controllers
             return shifts;
         }
 
-        // 
+        // Fjerner en person fra en vagt
         [HttpPut]
         [Route("removeperson/{shiftId}/{personId}")]
         public async Task<IActionResult> RemovePersonFromShift(string shiftId, string personId)
@@ -64,7 +64,7 @@ namespace VagtplanApp.Server.Controllers
             return Ok();
         }
 
-        // 
+        // Opdatere data for en vagt
         [HttpPut]
         [Route("updateshift")]
         public async Task<IActionResult> UpdatePerson([FromBody] Shift shift)
@@ -73,7 +73,7 @@ namespace VagtplanApp.Server.Controllers
             return Ok();
         }
 
-        // 
+        // Sletter en vagt
         [HttpDelete]
         [Route("deleteshift/{shiftId}")]
         public async Task DeleteShift(string shiftId)

@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-//????????????????????
+// Registrerer repositories som singleton-tjenester for at sikre en enkelt, delt instans igennem applikationens livscyklus.
 builder.Services.AddSingleton<IPersonRepository, PersonRepository>();
 builder.Services.AddSingleton<IShiftRepository, ShiftRepository>();
 

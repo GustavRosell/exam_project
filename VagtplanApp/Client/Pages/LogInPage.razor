@@ -46,38 +46,38 @@
 
         <div class="form-group">
             <label for="newEmail">E-mail:</label>
-            <InputText id="newEmail" class="form-control" @bind-Value="@newPerson.email" />
+            <InputText id="newEmail" class="form-control" @bind-Value="@newPerson.email" required />
         </div>
 
         <div class="form-group">
             <label for="newAdgangskode">Adgangskode:</label>
-            <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@newPerson.password" />
+            <InputText id="newAdgangskode" type="password" class="form-control" @bind-Value="@newPerson.password" required />
         </div>
 
         <div class="form-group">
             <label for="tlfnr">Telefonnummer:</label>
-            <InputNumber id="tlfnr" class="form-control" @bind-Value="@newPerson.phonenumber" />
+            <InputNumber id="tlfnr" class="form-control" @bind-Value="@newPerson.phonenumber" required/>
 
         </div>
 
         <div class="form-group">
             <label for="forNavn">Fornavn:</label>
-            <InputText id="forNavn" class="form-control" @bind-Value="@newPerson.firstName" />
+            <InputText id="forNavn" class="form-control" @bind-Value="@newPerson.firstName" required />
         </div>
 
         <div class="form-group">
             <label for="efterNavn">Efternavn:</label>
-            <InputText id="efterNavn" class="form-control" @bind-Value="@newPerson.lastName" />
+            <InputText id="efterNavn" class="form-control" @bind-Value="@newPerson.lastName" required />
         </div>
 
         <div class="form-group">
             <label for="fødselsDato">Fødselsdato:</label>
-            <InputDate id="fødselsDato" class="form-control" @bind-Value="@newPerson.birthdate" />
+            <InputDate id="fødselsDato" class="form-control" @bind-Value="@newPerson.birthdate" required />
         </div>
 
         <div class="form-group">
             <label for="køn">Køn:</label>
-            <InputSelect id="køn" class="form-control" @bind-Value="@newPerson.gender">
+            <InputSelect id="køn" class="form-control" @bind-Value="@newPerson.gender" required>
                 <option value="">Vælg køn...</option>
                 <option value="Mand">Mand</option>
                 <option value="Kvinde">Kvinde</option>
@@ -87,7 +87,7 @@
 
         <div class="form-group">
             <label for="rolle">Rolle:</label>
-            <InputRadioGroup id="rolle" class="form-control" @bind-Value="@newPerson.isKoordinator">
+            <InputRadioGroup id="rolle" class="form-control" @bind-Value="@newPerson.isKoordinator" required>
                 <InputRadio id="isFrivillig" Value="false" /> Frivillig
                 <InputRadio is="isKoordinator" Value="true" /> Koordinator
             </InputRadioGroup>
