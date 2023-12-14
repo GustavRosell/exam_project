@@ -59,10 +59,10 @@
 
 
 @code { 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null; // Auto-generet Blazor ting
-    private bool collapseNavMenu = true;
-    private bool isUserLoggedIn;
-    private bool isKoordinator;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null; // Kommer med blazor
+    private bool collapseNavMenu = true; // Kommer med blazor
+    private bool isUserLoggedIn; // Bool til at se om brugeren er logget ind
+    private bool isKoordinator; // Bool til at se om brugeren er en koordinator
 
     // Skifter visningen af navigationsmenuen (foldet ud/ind)
     private void ToggleNavMenu()

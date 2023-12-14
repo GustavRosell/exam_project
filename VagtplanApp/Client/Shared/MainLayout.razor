@@ -24,8 +24,8 @@
 </div>
 
 @code {    
-    private bool isUserLoggedIn;
-    private bool isKoordinator;
+    private bool isUserLoggedIn; // Bool til at se om brugeren er logget ind
+    private bool isKoordinator; // Bool til at se om brugeren er en koordinator
 
     // Initialiserer og tjekker brugerens login-status
     protected override async Task OnInitializedAsync()

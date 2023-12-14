@@ -13,7 +13,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddSingleton<IPersonRepository, PersonRepository>();
 builder.Services.AddSingleton<IShiftRepository, ShiftRepository>();
 
-
 var app = builder.Build();
 
 // Konfigurerer HTTP request pipeline.
