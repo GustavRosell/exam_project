@@ -27,7 +27,7 @@
                 <td>@shift.endTime.ToString("HH:mm")</td>
                 <td>@shift.assignedPersons.Count/@shift.numberOfPersons</td>
                 <td>@shift.priority</td>
-                <td> <button class="btn btn-outline-secondary" @onclick="() => ShowModal(shift)">Rediger oplysninger</button></td>
+                <td> <button class="btn btn-outline-secondary" @onclick="() => ShowModal(shift)">Rediger vagt</button></td>
                 <td>
                     <button class="btn btn-outline-secondary" @onclick="() => ToggleLock(shift)">
                         @if (shift.IsLocked)
@@ -47,7 +47,7 @@
 </table>
 
 <!-- Modal-komponent for redigér vagt -->
-<ModalDialog @ref="modalRef" Title="Rediger oplysninger">
+<ModalDialog @ref="modalRef" Title="Rediger vagt">
     <EditForm Model="@updatedShift" OnValidSubmit="@UpdateShiftDetails">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -91,13 +91,12 @@
 </ModalDialog>
 
 @code {
-    // Fields:
-    private List<Shift> shiftList = new List<Shift>();
-    private Shift updatedShift = new Shift();
-    private ModalDialog modalRef { get; set; }
+    private List<Shift> shiftList = new List<Shift>(); // Liste af vagter
+    private Shift updatedShift = new Shift(); // Objekt for opdateret vagt
+    private ModalDialog modalRef { get; set; } // Objekt for ModalDialog hvor man ændre data
     private string errorMessage = string.Empty; // Tilføjet for fejlhåndtering
 
-    [Inject] // Henter service-klassen
+    [Inject]
     private IShiftService mService { get; set; }
     private bool sortByPriority = false;
     private bool sortByAssignment = false;
@@ -138,7 +137,7 @@
         shiftList = mService.GetSortedShifts(shiftList, sortByPriority);
     }
 
-    // 
+    // Funktion for at sorterer efter antal tildelte på vagt
     private void SortByAssignment()
     {
         sortByAssignment = !sortByAssignment;

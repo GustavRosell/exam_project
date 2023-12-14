@@ -51,15 +51,12 @@ else
 }
 
 @code {
-    // Fields:
-    private List<Shift>? shifts;
-    private string errorMessage = "";
-    private bool showError = false;
+    private List<Shift>? shifts; // Container for vagter
+    private string errorMessage = ""; // String for fejlbesked
+    private bool showError = false; // bool for om fejl skal vises
 
-    [Inject] // Henter service-klassen
+    [Inject]
     private IShiftService mService { get; set; }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------
 
     // Henter alle vagter ved indlæsning af side
     protected override async Task OnInitializedAsync()

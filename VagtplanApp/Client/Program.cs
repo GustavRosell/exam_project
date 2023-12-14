@@ -14,11 +14,13 @@ builder.Services.AddScoped(sp => new HttpClient
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 });
 
+// 
 builder.Services.AddHttpClient<IPersonService, PersonService>(client =>
 {
     client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
 });
 
+// 
 builder.Services.AddHttpClient<IShiftService, ShiftService>(client =>
 {
     client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);

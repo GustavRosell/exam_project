@@ -4,7 +4,7 @@
 @using VagtplanApp.Client.Services;
 
 <div class="page">
-    @if (!IsLoginPage()) // Viser sidebar == hvis brugeren ikke er på login-siden
+    @if (!IsLoginPage()) // Viser sidebar hvis brugeren ikke er på login-siden
     {
         <div class="sidebar">
             <NavMenu />
@@ -23,12 +23,9 @@
     </main>
 </div>
 
-@code {
-    // Fields:
+@code {    
     private bool isUserLoggedIn;
     private bool isKoordinator;
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------
 
     // Initialiserer og tjekker brugerens login-status
     protected override async Task OnInitializedAsync()
@@ -45,7 +42,7 @@
         // Hvis brugeren ikke er logget ind:
         if (!isUserLoggedIn)
         {
-            // Hvis den aktuelle URI ikke er 'login', omdiriger brugeren til login-siden.
+            // Hvis den aktuelle URL ikke er 'login', omdiriger brugeren til login-siden.
             if (uri != "login")
             {
                 NavigationManager.NavigateTo("/login");

@@ -18,8 +18,6 @@ namespace VagtplanApp.Client.Services
             this.localStore = localStore;
         }
 
-        // ---------------------------------------------------------------------------------------------------------------------------------------
-
         // Tilføjer en ny bruger via API anmodning
         public async Task<bool> AddPerson(Person person) // Task<bool>??
         {
@@ -45,17 +43,19 @@ namespace VagtplanApp.Client.Services
             var loginPerson = new Person { email = email, password = password };
             var response = await httpClient.PostAsJsonAsync("api/persons/authenticate", loginPerson);
 
+            // Kontrollerer om serverens svar var en succes (HTTP statuskode 200).
             if (response.IsSuccessStatusCode)
             {
                 CurrentUser = await response.Content.ReadFromJsonAsync<Person>();
 
-                // Gemmer den nuværende bruger i local storage for at opretholde tilstanden
+                // Gemmer den nuværende bruger i local storage for at opretholde brugerens tilstand på tværs af sessioner.
                 await localStore.SetItemAsync("currentUser", CurrentUser);
 
                 return CurrentUser;
             }
             else
             {
+                // Hvis serverens respons ikke var en succes, returneres null for at indikere, at autentificeringen mislykkedes.
                 return null;
             }
         }
@@ -79,16 +79,16 @@ namespace VagtplanApp.Client.Services
 
             // Rydder brugerdata fra local storage
             await localStore.RemoveItemAsync("currentUser");
-
         }
 
         // Opdaterer en brugers oplysninger
         public async Task UpdatePerson(Person updatedPerson)
         {
+            // Logger en besked til konsollen med ID for den person, der bliver opdateret.
             Console.WriteLine($"Sending update for person with ID: {updatedPerson.id}");
             var response = await httpClient.PutAsJsonAsync("api/persons/updateperson", updatedPerson);
 
-
+            // Logger en fejlmeddelelse til konsollen med HTTP-statuskoden for fejlen.
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine($"Failed to update person: {response.StatusCode}");

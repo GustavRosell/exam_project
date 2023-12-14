@@ -98,10 +98,9 @@
 </ModalDialog>
 
 @code {
-    // Fields:
-    private Person newPerson = new Person();
-    private Person logInPerson = new Person();
-    private ModalDialog modalRef { get; set; }
+    private Person newPerson = new Person(); // Objekt for ny opretter person
+    private Person logInPerson = new Person(); // Objekt for bruger som logger ind
+    private ModalDialog modalRef { get; set; } // Objekt for ModalDialog hvor man ændre data
     private string errorMessage = string.Empty; // Tilføjet for fejlhåndtering
 
     [Inject] // Henter service-klassen

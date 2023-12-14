@@ -58,14 +58,11 @@
 }
 
 
-@code {
-    // Fields:
+@code { 
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null; // Auto-generet Blazor ting
     private bool collapseNavMenu = true;
     private bool isUserLoggedIn;
     private bool isKoordinator;
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null; // Auto-generet Blazor ting
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------
 
     // Skifter visningen af navigationsmenuen (foldet ud/ind)
     private void ToggleNavMenu()

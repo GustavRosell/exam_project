@@ -6,7 +6,7 @@ namespace VagtplanApp.Client.Services
 {
     // ShiftService: Håndterer operationer relateret til vagter
     public class ShiftService : IShiftService
-    {        
+    {
         private readonly HttpClient httpClient; // HTTP klient bruges til at lave web requests
         private readonly ILocalStorageService localStorage; // LocalStorage bruges til at gemme og hente data lokalt
 
@@ -17,8 +17,6 @@ namespace VagtplanApp.Client.Services
             this.localStorage = localStorage;
         }
 
-        // ---------------------------------------------------------------------------------------------------------------------------------------
-
         // Henter alle vagter fra serveren
         public async Task<List<Shift>> GetAllShifts()
         {
@@ -27,23 +25,25 @@ namespace VagtplanApp.Client.Services
             return shifts;
         }
 
-        // Sorterer alle shifts på prioritet
+        // Sorterer alle shifts baseret på prioritet, hvis sortByPriority er true
         public List<Shift> GetSortedShifts(List<Shift> shifts, bool sortByPriority)
         {
-            return sortByPriority
-                ? shifts.OrderByDescending(shift => shift.priority).ToList()
-                : shifts.ToList();
+            if (sortByPriority)
+            {
+                shifts.Sort((shift1, shift2) => shift2.priority.CompareTo(shift1.priority));
+            }
+
+            return shifts;
         }
 
         // Sorterer alle shifts på antal tildelte
         public List<Shift> GetShiftsSortedByAssignment(List<Shift> shifts)
         {
-            // Sorterer listen således, at vagter med færrest tildelte personer kommer først
-            return shifts.OrderBy(shift => shift.assignedPersons.Count).ToList();
+            // Sorterer listen således, at vagten som mangler flest frivillige kommer først på oversigten
+            return shifts.OrderByDescending(shift => shift.numberOfPersons - shift.assignedPersons.Count).ToList();
         }
 
-
-        // Opretter en ny vagt ved at sende data til serveren
+        // Opretter en ny vagt
         public async Task CreateShift(Shift shift)
         {
             await httpClient.PostAsJsonAsync("api/shift/add", shift);
@@ -62,22 +62,22 @@ namespace VagtplanApp.Client.Services
             return response.IsSuccessStatusCode;
         }
 
-        // Henter vagter tildelt til den nuværende bruger
+        // Asynkron metode til at hente en liste over vagter tildelt den nuværende frivillige bruger.
         public async Task<List<Shift>> GetShiftsForVolunteer()
         {
-            try
-            {
-                var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
-                if (currentUser == null) return new List<Shift>();
+            // Henter den nuværende bruger fra local storage
+            var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
 
-                var shifts = await httpClient.GetFromJsonAsync<List<Shift>>($"api/shift/showvoshifts/{currentUser.id}");
-                return shifts ?? new List<Shift>();
-            }
-            catch (Exception ex)
+            // Henter vagter for nuværende bruger
+            var shifts = await httpClient.GetFromJsonAsync<List<Shift>>($"api/shift/showvoshifts/{currentUser.id}");
+
+            if (shifts == null)
             {
-                // Log fejl eller håndter den på anden måde
+                // Hvis ingen vagter tildelt, laver tom liste
                 return new List<Shift>();
             }
+            // Viser vagt liste
+            return shifts;
         }
 
         // Fjerner den nuværende bruger fra en vagt
@@ -85,9 +85,8 @@ namespace VagtplanApp.Client.Services
         {
             var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
 
-            // Sender en anmodning til serveren for at fjerne den nuværende bruger fra en vagt
-            await httpClient.PutAsync($"api/shift/removeperson/{shiftId}/{currentUser.id}", null);
-
+            // Sender en DELETE anmodning til serveren for at fjerne den nuværende bruger fra en vagt
+            await httpClient.DeleteAsync($"api/shift/removeperson/{shiftId}/{currentUser.id}");
         }
 
         // Opdaterer detaljer om en vagt
@@ -99,29 +98,41 @@ namespace VagtplanApp.Client.Services
         // Kontroller om tidsrummet for den ønskede vagt overlapper med nogen af brugerens eksisterende vagter
         private bool ShiftsOverlap(Shift attemptToTakeShift, Shift userShift)
         {
-
             return attemptToTakeShift.startTime < userShift.endTime && attemptToTakeShift.endTime > userShift.startTime;
         }
 
-        // "forsåger" at tage en vagt --> Håndterer forskellige scenarier som overlapning
+        // "forsøger" at tage en vagt --> Håndterer forskellige scenarier som overlapning og fuld vagt
         public async Task<string> TryTakeShift(string shiftId)
         {
+            // Henter den nuværende bruger fra lokal lagring.
             var currentUser = await localStorage.GetItemAsync<Person>("currentUser");
 
+            // Henter en liste over alle vagter.
             var allShifts = await GetAllShifts();
-            var attemptToTakeShift = allShifts.FirstOrDefault(s => s.id == shiftId);
-            if (attemptToTakeShift.assignedPersons.Count >= attemptToTakeShift.numberOfPersons)
-                return "FullyBooked";
 
+            // Finder den specifikke vagt, brugeren forsøger at tage, baseret på det givne ID.
+            var attemptToTakeShift = allShifts.FirstOrDefault(s => s.id == shiftId);
+
+            // Kontrollerer, om vagten allerede har nået det maksimale antal tildelte personer.
+            if (attemptToTakeShift.assignedPersons.Count >= attemptToTakeShift.numberOfPersons)
+                return "FullyBooked"; // Returnerer en indikator for, at vagten er fuldt booket.
+
+            // Henter en liste over vagter, som den nuværende bruger allerede er tildelt.
             var userShifts = await GetShiftsForVolunteer();
+
+            // Tjekker for tidsmæssige overlap mellem den ønskede vagt og brugerens eksisterende vagter.
             foreach (var userShift in userShifts)
             {
+                // Hvis der findes et overlap, returneres en indikator for dette.
                 if (ShiftsOverlap(attemptToTakeShift, userShift))
                     return "TimeOverlap";
             }
 
+            // Forsøger at tage den ønskede vagt.
             var takeSuccess = await TakeShift(shiftId);
-            return takeSuccess ? "Success" : "Error";
+
+            // Returnerer en succesindikator, hvis vagten blev taget, ellers returnerer en fejlindikator.
+            return takeSuccess ? "Success" : "Error"; 
         }
 
         // Sletter en vagt.

@@ -46,14 +46,12 @@
 </EditForm>
 
 @code {
-    // Fields:
-    private Shift shift = new Shift();
-    private EditContext aEditContext;
-    private ModalDialog modalRef { get; set; }
+    private EditContext aEditContext; // Kontekst for formen
+    private ModalDialog modalRef { get; set; } // Objekt for ModalDialog hvor man ændre data
+    private Shift shift = new Shift(); // Opretter objekt for ny vagt
     private string errorMessage = string.Empty; // Tilføjet for fejlhåndtering
 
-
-    [Inject] // Henter service-klassen
+    [Inject]
     private IShiftService mService { get; set; }
 
     // Initialiserer en ny vagt og dens tilhørende EditContext ved indlæsning af siden.

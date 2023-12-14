@@ -50,14 +50,12 @@ else // Viser den nuværende brugers profiloplysninger.
 }
 
 @code {
-    // Fields:
-    private Person updatedPerson = new Person();
-    private ModalDialog modalRef { get; set; }
-    private Person currentUser;
+    private Person updatedPerson = new Person(); // Bruges til opdatering af bruger-oplysninger
+    private ModalDialog modalRef { get; set; } // Objekt for ModalDialog hvor man ændre data
+    private Person currentUser; // Objekt af bruger, som er logget ind
 
-    [Inject] // Henter service-klassen
+    [Inject]
     private IPersonService mService { get; set; }
-
 
     // Henter den nuværende brugers profiloplysninger ved indlæsning af side
     protected override async Task OnInitializedAsync()

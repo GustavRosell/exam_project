@@ -44,13 +44,12 @@
 
 
 @code {
-    // Fields:
-    private List<Shift> shiftList = new List<Shift>();
-    private string errorMessage = "";
-    private bool showError = false;
-    private bool sortByPriority = false;
-    private bool sortByAssignment = false;
-    private void HideError()
+    private List<Shift> shiftList = new List<Shift>(); // Liste af vagter
+    private string errorMessage = ""; // String for fejlbesked
+    private bool showError = false; // bool for om fejl skal vises
+    private bool sortByPriority = false; // bool for sortering af prioritet
+    private bool sortByAssignment = false; // bool for sortering af antal personer til vagt
+    private void HideError() // Lukker fejlmeddelelse
     {
         showError = false;
         errorMessage = "";

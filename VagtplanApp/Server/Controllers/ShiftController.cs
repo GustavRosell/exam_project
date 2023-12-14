@@ -56,7 +56,7 @@ namespace VagtplanApp.Server.Controllers
         }
 
         // Fjerner en person fra en vagt
-        [HttpPut]
+        [HttpDelete]
         [Route("removeperson/{shiftId}/{personId}")]
         public async Task<IActionResult> RemovePersonFromShift(string shiftId, string personId)
         {
